@@ -29,6 +29,7 @@ public class LeituraParametros
 					case "-dMin": config.setDistMMin(getDMin(args[i+1]));break;
 					case "-gamma": config.setNumIterUpdate(getGamma(args[i+1]));break;
 					case "-varphi": config.setLimiteAdj(getVarphi(args[i+1]));break;
+					
 				}
 			}
 		} 
@@ -63,6 +64,7 @@ public class LeituraParametros
 	
 	public boolean getRound(String texto)
 	{
+		rounded=true;
 		try 
 		{
 			if(texto.equals("false")||texto.equals("true"))

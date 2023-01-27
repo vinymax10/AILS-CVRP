@@ -163,6 +163,8 @@ public class AILS
 		}
 		
 		tempoTotal=(double)(System.currentTimeMillis()-inicio)/1000;
+		
+//		System.out.println("Cost "+melhorF+" Time "+tempoMF);
 	}
 	
 	public void analisaSolucao()

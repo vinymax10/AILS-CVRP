@@ -6,8 +6,6 @@ import java.io.IOException;
 
 import Dados.Arquivo;
 import Dados.Instancia;
-import Dados.InstanciaMatriz;
-import Dados.Instancias;
 import Dados.Ponto;
 import Improvement.BuscaLocalIntra;
 import MetodoBusca.Config;
@@ -376,22 +374,4 @@ public class Solucao
 		arq.finalizar();
 	}
 	
-	public static void main(String[] args) 
-	{
-		Instancias instancias=new Instancias();
-
-		int pos=105;	
-
-		Config config =new Config();
-		Instancia instancia=new InstanciaMatriz(
-		"Instancias//"+instancias.instancias[pos].nome+".vrp",
-		config,
-		instancias.instancias[pos].rounded);
-
-		Solucao solucao=new Solucao(instancia,config);
-		
-		solucao.carregaSolution1("Otimos//"+instancias.instancias[pos].nome+".sol");
-		solucao.auditoria("Carregamento", true, true);
-		System.out.println(solucao.toStringMeu());
-	}
 }

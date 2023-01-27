@@ -239,19 +239,8 @@ public class AILS
 		
 		int pos=24;	
 		Config config =new Config();
-		Instancia instancia=null;
-		try 
-		{
-			instancia=(Instancia) Class.forName("Dados.Instancia"+config.getTipoInstancia()).
-					getConstructor(String.class, Config.class,boolean.class).
-					newInstance("Instancias//"+instancias.instancias[pos].nome+".vrp",
-							config,instancias.instancias[pos].rounded);
-			
-		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
-				| InvocationTargetException | NoSuchMethodException | SecurityException
-				| ClassNotFoundException e) {
-			e.printStackTrace();
-		}
+		Instancia instancia=new Instancia("Instancias//"+instancias.instancias[pos].nome+".vrp",
+		config,instancias.instancias[pos].rounded);
 		
 		System.out.print(instancias.instancias[pos].nome
 		+" otimo: "+instancias.instancias[pos].bestSolution.getOtimo());

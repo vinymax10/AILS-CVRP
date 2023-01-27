@@ -11,14 +11,14 @@ import Solucao.Solucao;
 
 //Remocao sequencial todos de uma vez depois adiciona o restante
 
-public class Perturbacao27 extends Perturbacao
+public class Sequential extends Perturbacao
 {
 	
-	public Perturbacao27(Instancia instancia, Config config, 
+	public Sequential(Instancia instancia, Config config, 
 	HashMap<String, AjusteOmega> configuradoresOmega, BuscaLocalIntra buscaLocalIntra)
 	{
 		super(instancia, config,configuradoresOmega,buscaLocalIntra);
-		this.tipoPerturbacao=TipoPerturbacao.Perturbacao27;
+		this.tipoPerturbacao=TipoPerturbacao.Sequential;
 	}
 
 	public void perturbar(Solucao s)

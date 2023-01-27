@@ -2,8 +2,8 @@ package Perturbacao;
 
 public enum TipoPerturbacao 
 {
-	Perturbacao27(26),
-	Perturbacao28(27);
+	Sequential(0),
+	Concentric(1);
 	
 	final int tipo;
 	

@@ -2,10 +2,8 @@ package MetodoBusca;
 
 public enum TipoCriterioParada 
 {
-	TempoTotal(1),
-	TempoSemMelhora(2),
-	Iteracao(3),
-	IteracaoSemMelhora(4);
+	Time(1),
+	Iteration(2);
 	
 	final int tipo;
 	

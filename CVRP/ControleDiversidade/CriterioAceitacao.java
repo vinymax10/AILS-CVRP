@@ -56,13 +56,13 @@ public class CriterioAceitacao
 		
 		switch(tipoCriterioParada)
 		{
-			case Iteracao: 	if(iteradorGlobal%numIterUpdate==0)
+			case Iteration: 	if(iteradorGlobal%numIterUpdate==0)
 							{
 								alfa=Math.pow(etaMin/etaMax, (double) 1/limiteMaximoExecucao);
 							}
 							break;
 							
-			case TempoTotal: 	if(iteradorGlobal%numIterUpdate==0)
+			case Time: 	if(iteradorGlobal%numIterUpdate==0)
 								{
 									double tempoMaximo=limiteMaximoExecucao;
 									double atual=(double)(System.currentTimeMillis()-ini)/1000;

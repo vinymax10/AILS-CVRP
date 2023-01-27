@@ -2,8 +2,8 @@ package Perturbacao;
 
 public enum HeuristicaAdicao 
 {
-	DISTGLOBAL(1),
-	BESTGLOBAL(2);
+	Distance(1),
+	Cost(2);
 	
 	final int heuristica;
 	

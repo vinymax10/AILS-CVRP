@@ -11,7 +11,6 @@ import ControleDiversidade.AjusteOmega;
 import ControleDiversidade.CriterioAceitacao;
 import ControleDiversidade.DistIdeal;
 import Dados.Instancia;
-import Dados.Instancias;
 import Improvement.BuscaLocal;
 import Improvement.BuscaLocalIntra;
 import Improvement.Factibilizador;
@@ -29,13 +28,11 @@ public class AILS
 	double melhorF;
 	double limiteMaximoExecucao;
 	double otimo;
-	
-	//----------IGAS------------
 	Config config;
 	
 	//----------caculoLimiar------------
 	int numIterUpdate;
-	double fBL,fHeu,fConstr;
+
 	//----------Metricas------------
 	int iterador,iteradorMF;
 	long inicio,ini;
@@ -55,14 +52,13 @@ public class AILS
 	
 	BuscaLocal buscaLocal;
 
-	boolean aceitoCriterio,isMelhorSolucao;
+	boolean aceitoCriterio;
 	HeuristicaAdicao heuristicaAdicao;
 	BuscaLocalIntra buscaLocalIntra;
 	CriterioAceitacao criterioAceitacao;
 //	----------Mare------------
 	AjusteDist ajusteDist;
 //	---------Print----------
-	boolean dimacs=false;
 	boolean print=true;
 	DistIdeal distIdeal;
 	
@@ -141,35 +137,20 @@ public class AILS
 		{
 			iterador++;
 
-			isMelhorSolucao=false;
-			
-//			Escolhe referencia
-			
 			solucao.clone(solucaoReferencia);
 			
-//			Perturbacao
 			perturbacaoEscolhida=perturbadores[rand.nextInt(perturbadores.length)];
-			
 			perturbacaoEscolhida.perturbar(solucao);
-			fHeu=solucao.f;
-			
-//			FAC
 			factibilizador.factibilizar(solucao);
-			fConstr=solucao.f;
-			
-//			BL
 			buscaLocal.buscaLocal(solucao,true);
-			fBL=solucao.f;
 			distanciaBLEdge=distEntreSolucoes.distanciaEdge(solucao,solucaoReferencia);
-			
 			
 //			Analise solucao
 			analisaSolucao();
 			ajusteDist.ajusteDist();
 			
 //			update
-			perturbacaoEscolhida.getConfiguradorOmegaEscolhido().setDistancia(
-			distanciaBLEdge);
+			perturbacaoEscolhida.getConfiguradorOmegaEscolhido().setDistancia(distanciaBLEdge);
 			
 //			criterio aceitacao
 			if(criterioAceitacao.aceitaSolucao(solucao,distanciaBLEdge))
@@ -188,7 +169,6 @@ public class AILS
 	{
 		if((solucao.f-melhorF)<-epsilon)
 		{		
-			isMelhorSolucao=true;
 			melhorF=solucao.f;
 			
 			melhorSolucao.clone(solucao);
@@ -197,13 +177,13 @@ public class AILS
 				
 			if(print)
 			{
-				System.out.println("melhorF: "+melhorF
-				+" gap: "+getGap()
+				System.out.println("solution quality: "+melhorF
+				+" gap: "+deci.format(getGap())+"%"
 				+" K: "+solucao.NumRotas
-				+" iterador: "+iterador
-				+" eta: "+criterioAceitacao.getEta()
-				+" omega: "+perturbacaoEscolhida.omega
-				+" tempoMF: "+tempoMF
+				+" iteration: "+iterador
+				+" eta: "+deci.format(criterioAceitacao.getEta())
+				+" omega: "+deci.format(perturbacaoEscolhida.omega)
+				+" time: "+tempoMF
 				);
 			}
 		}
@@ -213,45 +193,27 @@ public class AILS
 	{
 		switch(tipoCriterioParada)
 		{
-			case Iteracao: 	if(melhorF<=otimo||limiteMaximoExecucao<=iterador)
-								return true;
-							break;
-							
-			case IteracaoSemMelhora: 	if(melhorF<=otimo||limiteMaximoExecucao<=(iterador-iteradorMF))
-											return true;
-										break;
-										
-			case TempoSemMelhora: 	if(melhorF<=otimo||limiteMaximoExecucao<(((System.currentTimeMillis()-inicio)/1000)-tempoMF))
-										return true;
-									break;
-									
-			case TempoTotal: 	if(melhorF<=otimo||limiteMaximoExecucao<(System.currentTimeMillis()-inicio)/1000)
+			case Iteration: 	if(melhorF<=otimo||limiteMaximoExecucao<=iterador)
 									return true;
 								break;
-								
+							
+			case Time: 	if(melhorF<=otimo||limiteMaximoExecucao<(System.currentTimeMillis()-inicio)/1000)
+							return true;
+						break;
 		}
 		return false;
 	}
 	
 	public static void main(String[] args) 
 	{
-		Instancias instancias=new Instancias();
+		LeituraParametros leitor=new LeituraParametros();
+		leitor.lerParametros(args);
 		
-		int pos=24;	
-		Config config =new Config();
-		Instancia instancia=new Instancia("Instancias//"+instancias.instancias[pos].nome+".vrp",
-		config,instancias.instancias[pos].rounded);
+		Instancia instancia=new Instancia(leitor.getFile(),leitor.getConfig(),leitor.isRounded());
 		
-		System.out.print(instancias.instancias[pos].nome
-		+" otimo: "+instancias.instancias[pos].bestSolution.getOtimo());
-		System.out.print(" "+instancia.getSize()/instancia.getNumRotasMin()+"\n");
-
-		AILS igas=new AILS(instancia,config,instancias.instancias[pos].bestSolution.getOtimo(),
-		200);
+		AILS ails=new AILS(instancia,leitor.getConfig(),leitor.getBest(),leitor.getTimeLimit());
 		
-		igas.procurar();
-		System.out.println("tempo: "+igas.tempoTotal+" iterador: "+igas.iterador
-		+" iteradorMF: "+igas.iteradorMF);
+		ails.procurar();
 	}
 	
 	public Solucao getMelhorSolucao() {
@@ -265,7 +227,6 @@ public class AILS
 	public double getGap()
 	{
 		return 100*((melhorF-otimo)/otimo);
-//		return PI;
 	}
 	
 	public boolean isPrint() {
@@ -298,10 +259,6 @@ public class AILS
 		return perturbadores;
 	}
 	
-	public void setDimacs(boolean dimacs) {
-		this.dimacs = dimacs;
-	}
-
 	public double getTempoTotal() {
 		return tempoTotal;
 	}

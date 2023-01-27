@@ -34,8 +34,8 @@ public class AjusteDist
 		
 		switch(tipoCriterioParada)
 		{
-			case Iteracao: 	ajusteIteracao(); break;
-			case TempoTotal: ajusteTempo(); break;
+			case Iteration: 	ajusteIteracao(); break;
+			case Time: ajusteTempo(); break;
 			default:
 				break;
 								

@@ -18,11 +18,8 @@ public class AjusteOmega
 	Media omegaMedio;
 	
 	double omegaReal;
-	double variacao;
 	Random rand=new Random();
 	TipoPerturbacao tipoPerturbacao;
-	double eb;
-	
 	int numIterUpdate;
 	DistIdeal distIdeal;
 	
@@ -30,8 +27,6 @@ public class AjusteOmega
 	{
 		this.tipoPerturbacao = tipoPerturbacao;
 		this.omega = distIdeal.distIdeal;
-		this.variacao=config.getVariacao();
-		this.eb = config.getEbDistM();
 		this.numIterUpdate = config.getNumIterUpdate();
 		this.omegaMin=1;
 		this.omegaMax=size-2;
@@ -45,7 +40,7 @@ public class AjusteOmega
 	{
 		distObtida=distBLMedia.getMediaDinam();
 
-		omega+=eb*((omega/distObtida*distIdeal.distIdeal)-omega);
+		omega+=((omega/distObtida*distIdeal.distIdeal)-omega);
 
 		omega=Math.min(omegaMax, Math.max(omega, omegaMin));
 		
@@ -66,9 +61,8 @@ public class AjusteOmega
 	
 	public double getOmegaReal() 
 	{
-		omegaReal=omega+(variacao*rand.nextDouble()*omega);
+		omegaReal=omega;
 		omegaReal=Math.min(omegaMax, Math.max(omegaReal, omegaMin));
-//		System.out.println("omegaReal: "+omegaReal);
 		return omegaReal;
 	}
 

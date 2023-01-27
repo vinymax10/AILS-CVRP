@@ -45,7 +45,6 @@ public abstract class Perturbacao
 	int limiteAdj;
 	
 	BuscaLocalIntra buscaLocalIntra;
-	double probRemoverRota;
 	
 	public Perturbacao(Instancia instancia,Config config,
 	HashMap<String, AjusteOmega> configuradoresOmega, BuscaLocalIntra buscaLocalIntra) 
@@ -59,7 +58,6 @@ public abstract class Perturbacao
 		this.numIterUpdate=config.getNumIterUpdate();
 		this.limiteAdj=config.getLimiteAdj();
 		this.buscaLocalIntra=buscaLocalIntra;
-		this.probRemoverRota=config.getProbRemoverRota();
 	}
 	
 	public void estabelecerOrdem()
@@ -113,8 +111,8 @@ public abstract class Perturbacao
 	{
 		switch(heuristicaAdicaoEscolhida)
 		{
-			case DISTGLOBAL: return getBestKNNNo2(no,1);
-			case BESTGLOBAL: return getBestKNNNo2(no,limiteAdj);
+			case Distance: return getBestKNNNo2(no,1);
+			case Cost: return getBestKNNNo2(no,limiteAdj);
 		}
 		return null;
 	}

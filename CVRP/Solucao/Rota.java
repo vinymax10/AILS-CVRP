@@ -18,7 +18,6 @@ public class Rota implements Comparable<Rota>
 	public int nomeRota;
 	No ant,prox;
 	int contCaminho;
-	int sizeCaminhoSwap;
 	
 	//busca local best
 	public double menorCusto=0;
@@ -42,7 +41,6 @@ public class Rota implements Comparable<Rota>
 		this.nomeRota=nomeRota;
 		this.inicio=null;
 		this.limiteAdj=config.getLimiteAdj();
-		this.sizeCaminhoSwap=config.getSizeCaminhoSwap();
 		addNoFinal(deposito.clone());
 	}
 	
@@ -154,51 +152,6 @@ public class Rota implements Comparable<Rota>
    		return bestCusto;
    	}
     
-    public No findBestPositionExcetoPath(No no,No excecao)
-   	{
-    	menorCusto=Double.MAX_VALUE;
-    	
-   		bestCusto=inicio;
-   		
-   		if(numElements>sizeCaminhoSwap)
-   		{
-   			aux=excecao.prox;
-   			contCaminho=0;
-   	  		do
-   	  		{
-   	  			contCaminho++;
-   	  			custo=instancia.dist(aux.nome,no.nome)+instancia.dist(no.nome,aux.prox.nome)-instancia.dist(aux.nome,aux.prox.nome);
-   	  			if(custo<menorCusto)
-   	  			{
-   	  				menorCusto=custo;
-   	  				bestCusto=aux;
-   	  			}
-   	  			aux=aux.prox;
-   	  		}
-   	  		while(contCaminho<(sizeCaminhoSwap/2));
-   	  		
-   	  		aux=excecao.ant;
-			contCaminho=0;
-	  		do
-	  		{
-	  			contCaminho++;
-	  			custo=instancia.dist(aux.nome,no.nome)+instancia.dist(no.nome,aux.prox.nome)-instancia.dist(aux.nome,aux.prox.nome);
-	  			if(custo<menorCusto)
-	  			{
-	  				menorCusto=custo;
-	  				bestCusto=aux;
-	  			}
-	  			aux=aux.ant;
-	  		}
-	  		while(contCaminho<(sizeCaminhoSwap/2));
-   		}
-   		else
-   		{
-   			findBestPositionExceto(no,excecao);
-   		}
-   		return bestCusto;
-   	}
-	
 	public void limpar()
 	{
 		inicio.ant=inicio;

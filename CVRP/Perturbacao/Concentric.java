@@ -11,13 +11,13 @@ import Solucao.Solucao;
 
 //Remocao concentrica todos de uma vez e depois adiciona todos
 
-public class Perturbacao28 extends Perturbacao
+public class Concentric extends Perturbacao
 {
-	public Perturbacao28(Instancia instancia, Config config,
+	public Concentric(Instancia instancia, Config config,
 	HashMap<String, AjusteOmega> configuradoresOmega, BuscaLocalIntra buscaLocalIntra)
 	{
 		super(instancia, config, configuradoresOmega,buscaLocalIntra);
-		this.tipoPerturbacao=TipoPerturbacao.Perturbacao28;
+		this.tipoPerturbacao=TipoPerturbacao.Concentric;
 	}
 
 	public void perturbar(Solucao s)

@@ -6,8 +6,5 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="src" path="CVRP"/>
-	<classpathentry kind="lib" path="jcommon-1.0.23.jar"/>
-	<classpathentry kind="lib" path="jfreechart-1.0.19.jar"/>
-	<classpathentry kind="lib" path="jgraphx.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -29,7 +29,7 @@ Run the AILS class that has the following parameters:
 
 **-best** : Indicate the value of the optimal solution. The default value is 0.
 
-**-varphi** : parameter of the feasibility and local search that refers to the maximum cardinality of 𝛿(𝑣) – nearest neighbors of 𝑣. The default value is 20.
+**-varphi** : parameter of the feasibility and local search that refers to the maximum cardinality of 𝛿(𝑣) – nearest neighbors of 𝑣. The default value is 40.
 
 **-gamma** : number of iterations for AILS to perform a new adjustment of variable 𝜔. The default value is 20.
 

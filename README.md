@@ -1,4 +1,4 @@
-# AILS-CVRP: An Adaptive Iterated Local Search Heuristic for the Large-scale Capacitated Vehicle Routing Problem
+variable# AILS-CVRP: An Adaptive Iterated Local Search Heuristic for the Large-scale Capacitated Vehicle Routing Problem
 
 Adaptive Iterated Local Search (AILS) is an iterated local search-based meta-heuristic that embeds adaptive strategies to tune  diversity control parameters. These parameters are the perturbation degree and the acceptance criterion. They are key parameters to ensure that the method escapes from local optima and keeps an adequate level of exploitation and exploration of the method. This algorithm is an adaptation of the AILS-PR [1], but applied to the Heterogeneous Fleet Vehicle Routing Problem. Its implementation is in JAVA language.
 
@@ -31,13 +31,13 @@ Run the AILS class that has the following parameters:
 
 **-varphi** : parameter of the feasibility and local search that refers to the maximum cardinality of 𝛿(𝑣) – nearest neighbors of 𝑣. The default value is 20.
 
-**-gamma** : number of iterations for AILS to perform a new adjustment of parameter 𝜔. The default value is 20.
+**-gamma** : number of iterations for AILS to perform a new adjustment of variable 𝜔. The default value is 20.
 
 **-dMax** : reference starting distance between the reference solution and the current solution obtained after the local search. The default value is 30.
 
 **-dMin** : reference final distance between the reference solution and the current solution obtained after the local search. The default value is 15.
 
-**-stoppingCriterion** : It is possible to use 3 types of stopping criteria. Below is a description of each:
+**-stoppingCriterion** : It is possible to use 2 types of stopping criteria. Below is a description of each:
 * **Time** : The algorithm stops when the total time in seconds is reached.
 * **Iteration** : The algorithm stops when the number of total iterations is reached. 
 

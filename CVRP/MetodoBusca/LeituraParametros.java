@@ -7,7 +7,7 @@ public class LeituraParametros
 {
 	
 	private String file="";
-	private boolean rounded=false;
+	private boolean rounded=true;
 	private double limit=Double.MAX_VALUE;
 	private double best=0;
 	private Config config =new Config();

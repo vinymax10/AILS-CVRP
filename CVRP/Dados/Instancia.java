@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.Arrays;
 
 import MetodoBusca.Config;
+import MetodoBusca.LeituraParametros;
 
 public class Instancia 
 {
@@ -31,11 +32,11 @@ public class Instancia
 	Config config;
 	boolean print = false;
 	
-	public Instancia(String nome,Config config,boolean rounded) 
+	public Instancia(LeituraParametros leitor) 
 	{
-		this.nome=nome;
-		this.config=config;
-		this.rounded=rounded;
+		this.nome=leitor.getFile();
+		this.config=leitor.getConfig();
+		this.rounded=leitor.isRounded();
 		
 		BufferedReader in;
 		try 
@@ -369,11 +370,4 @@ public class Instancia
 		return knn;
 	}
 	
-	public static void main(String[] args) 
-	{
-		Config config =new Config();
-		new Instancia("Vrp-Set-XXL//Brussels2.vrp",config,true);
-		
-	}
-
 }

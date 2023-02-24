@@ -65,21 +65,20 @@ public class AILS
 	DecimalFormat deci=new DecimalFormat("0.0000");
 	TipoCriterioParada tipoCriterioParada;
 	
-	public AILS(Instancia instancia,Config config,double d, double limiteMaximoExecucao)
+	public AILS(Instancia instancia,LeituraParametros leitor)
 	{ 
 		this.instancia=instancia;
+		this.config=leitor.getConfig();
+		this.otimo=leitor.getBest();
+		this.limiteMaximoExecucao=leitor.getTimeLimit();
+		
 		this.epsilon=config.getEpsilon();
 		this.tipoCriterioParada=config.getTipoCriterioParada();
 		this.distIdeal=new DistIdeal();
-
 		this.solucao =new Solucao(instancia,config);
 		this.solucaoReferencia =new Solucao(instancia,config);
 		this.melhorSolucao =new Solucao(instancia,config);
-		
 		this.numIterUpdate=config.getNumIterUpdate();
-		this.config=config;
-		this.otimo=d;
-		this.limiteMaximoExecucao=limiteMaximoExecucao;
 		this.melhorF=Integer.MAX_VALUE;
 		
 		this.distEntreSolucoes=new Distancia();
@@ -203,9 +202,9 @@ public class AILS
 		LeituraParametros leitor=new LeituraParametros();
 		leitor.lerParametros(args);
 		
-		Instancia instancia=new Instancia(leitor.getFile(),leitor.getConfig(),leitor.isRounded());
+		Instancia instancia=new Instancia(leitor);
 		
-		AILS ails=new AILS(instancia,leitor.getConfig(),leitor.getBest(),leitor.getTimeLimit());
+		AILS ails=new AILS(instancia,leitor);
 		
 		ails.procurar();
 	}

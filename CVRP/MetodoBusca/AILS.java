@@ -52,7 +52,6 @@ public class AILS
 	
 	BuscaLocal buscaLocal;
 
-	boolean aceitoCriterio;
 	HeuristicaAdicao heuristicaAdicao;
 	BuscaLocalIntra buscaLocalIntra;
 	CriterioAceitacao criterioAceitacao;
@@ -66,8 +65,8 @@ public class AILS
 	DecimalFormat deci=new DecimalFormat("0.0000");
 	TipoCriterioParada tipoCriterioParada;
 	
-	public AILS(Instancia instancia,Config config,double d,double limiteMaximoExecucao)
-	{
+	public AILS(Instancia instancia,Config config,double d, double limiteMaximoExecucao)
+	{ 
 		this.instancia=instancia;
 		this.epsilon=config.getEpsilon();
 		this.tipoCriterioParada=config.getTipoCriterioParada();
@@ -154,17 +153,10 @@ public class AILS
 			
 //			criterio aceitacao
 			if(criterioAceitacao.aceitaSolucao(solucao,distanciaBLEdge))
-			{
-				aceitoCriterio=true;
 				solucaoReferencia.clone(solucao);
-			}
-			else
-				aceitoCriterio=false;
 		}
 		
 		tempoTotal=(double)(System.currentTimeMillis()-inicio)/1000;
-		
-//		System.out.println("Cost "+melhorF+" Time "+tempoMF);
 	}
 	
 	public void analisaSolucao()

@@ -27,7 +27,7 @@ public abstract class Perturbacao
 	HeuristicaAdicao[]heuristicasAdicao;
 	public HeuristicaAdicao heuristicaAdicaoEscolhida;
 	
-	No no,ant,prox;
+	No no;
 	
 	public TipoPerturbacao tipoPerturbacao;
 	int size;

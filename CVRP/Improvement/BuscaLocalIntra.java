@@ -17,13 +17,11 @@ public class BuscaLocalIntra
 	double menorCusto;
 	double antF;
 	No auxSai,auxEntra;
-	double custo,custoInvertido,custoIdaIda,custoIdaVolta,custoVoltaIda,custoVoltaVolta;
+	double custo;
 	boolean trocou=false;
-	int difCusto;
 	AvaliadorCusto avaliadorCusto;
 	ExecutaMovimento executaMovimento;
 	int limiteAdj;
-	No solucao[];
 	
 	public BuscaLocalIntra(Instancia instancia,Config config)
 	{
@@ -38,7 +36,6 @@ public class BuscaLocalIntra
 		this.antF=rota.fRota;
 		this.inicio=rota.inicio;
 		this.numElements=rota.numElements;
-		this.solucao=solucao;
 	}
 
 	public double buscaLocalIntra(Rota rota,No solucao[])

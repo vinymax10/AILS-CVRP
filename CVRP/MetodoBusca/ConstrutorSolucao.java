@@ -3,7 +3,6 @@ package MetodoBusca;
 import java.util.Random;
 
 import Dados.Instancia;
-import Improvement.BuscaLocalIntra;
 import Solucao.No;
 import Solucao.Rota;
 import Solucao.Solucao;
@@ -21,13 +20,10 @@ public class ConstrutorSolucao
 	No naoInseridos[];
 	int contNaoInseridos=0;
 	
-	BuscaLocalIntra buscaLocalIntra;
-
-	public ConstrutorSolucao(Instancia instancia,Config config, BuscaLocalIntra buscaLocalIntra)
+	public ConstrutorSolucao(Instancia instancia,Config config)
 	{
 		this.instancia=instancia;
 		this.rotas=new Rota[instancia.getNumRotasMax()];
-		this.buscaLocalIntra=buscaLocalIntra;
 		this.size=instancia.getSize()-1;
 		this.naoInseridos=new No[size];
 	}
@@ -130,28 +126,6 @@ public class ConstrutorSolucao
 		}
 		
 		return bestNo;
-	}
-	
-	public void BuscaLocalIntra(Rota rota)
-	{
-		f+=buscaLocalIntra.buscaLocalIntra(rota, solucao);
-	}
-	
-	public void BuscaLocalIntra()
-	{
-		for (int i = 0; i < NumRotas; i++)
-		{
-			if(rotas[i].alterada)
-				f+=buscaLocalIntra.buscaLocalIntra(rotas[i], solucao);
-		}
-	}
-	
-	
-	public void buscaLocalIntra(Solucao solucao)
-	{
-		setSolucao(solucao);
-		BuscaLocalIntra();
-		passaResultado(solucao);
 	}
 	
 }

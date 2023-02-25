@@ -44,34 +44,6 @@ public class Rota implements Comparable<Rota>
 		addNoFinal(deposito.clone());
 	}
 	
-	public No findDistPosition(No no,No solucao[])
-	{
-        bestCusto=inicio;
-        aux=inicio.prox;
-        menorCusto=instancia.dist(inicio.nome,no.nome)+instancia.dist(no.nome,inicio.prox.nome)-instancia.dist(inicio.nome,inicio.prox.nome);
-        int cont=0;
-        for (int i = 0; i < no.knn.length; i++) 
-        {
-            if(no.knn[i]!=0)
-            {
-                aux=solucao[no.knn[i]-1];
-                if(aux.rota.nomeRota==nomeRota)
-                {
-                    custo=instancia.dist(aux.nome,no.nome)+instancia.dist(no.nome,aux.prox.nome)-instancia.dist(aux.nome,aux.prox.nome);
-                    if(custo<menorCusto)
-                    {
-                        menorCusto=custo;
-                        bestCusto=aux;
-                    }
-                    cont++;
-                    if(cont>=3)
-                        break;
-                }
-            }
-        }
-        return bestCusto;
-	}
-        
     public No findBestPosition(No no)
 	{
 		bestCusto=inicio;

@@ -1,6 +1,5 @@
 package ControleDiversidade;
 
-import Auxiliar.Distancia;
 import Auxiliar.Media;
 import Dados.Instancia;
 import MetodoBusca.Config;
@@ -20,7 +19,7 @@ public class CriterioAceitacao
 	double teto=Integer.MAX_VALUE,tetoNovo=Integer.MAX_VALUE;
 	Media mFBL;
 
-	public CriterioAceitacao(Instancia instancia, Config config, Distancia distEntreSolucoes, Double limiteMaximoExecucao)
+	public CriterioAceitacao(Instancia instancia, Config config, Double limiteMaximoExecucao)
 	{
 		this.eta=config.getEtaMax();
 		this.etaMin=config.getEtaMin();

@@ -15,10 +15,10 @@ public class AjusteDist
 	TipoCriterioParada tipoCriterioParada;
 	DistIdeal distIdeal;
 
-	public AjusteDist(DistIdeal distIdeal,Config config,double max) 
+	public AjusteDist(DistIdeal distIdeal,Config config,double limiteMaximoExecucao) 
 	{
 		this.distIdeal=distIdeal;
-		this.limiteMaximoExecucao=max;
+		this.limiteMaximoExecucao=limiteMaximoExecucao;
 		this.distMMin=config.getDistMMin();
 		this.distMMax=config.getDistMMax();
 		this.distIdeal.distIdeal=distMMax;

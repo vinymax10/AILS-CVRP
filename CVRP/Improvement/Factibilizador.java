@@ -22,7 +22,6 @@ public class Factibilizador
 	private int topMelhores=0;
 	private int NumRotas;
 	
-	Rota rotaI,rotaJ;
 	No bestAntNoRotaI,bestAntNoRotaJ;
 
 	double f=0;

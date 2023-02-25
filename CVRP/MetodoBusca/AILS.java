@@ -25,10 +25,9 @@ public class AILS
 	
 	Instancia instancia;
 	Distancia distEntreSolucoes;
-	double melhorF;
+	double melhorF=Double.MAX_VALUE;
 	double limiteMaximoExecucao;
 	double otimo;
-	Config config;
 	
 	//----------caculoLimiar------------
 	int numIterUpdate;
@@ -68,7 +67,7 @@ public class AILS
 	public AILS(Instancia instancia,LeituraParametros leitor)
 	{ 
 		this.instancia=instancia;
-		this.config=leitor.getConfig();
+		Config config=leitor.getConfig();
 		this.otimo=leitor.getBest();
 		this.limiteMaximoExecucao=leitor.getTimeLimit();
 		
@@ -79,7 +78,6 @@ public class AILS
 		this.solucaoReferencia =new Solucao(instancia,config);
 		this.melhorSolucao =new Solucao(instancia,config);
 		this.numIterUpdate=config.getNumIterUpdate();
-		this.melhorF=Integer.MAX_VALUE;
 		
 		this.distEntreSolucoes=new Distancia();
 		
@@ -93,7 +91,7 @@ public class AILS
 		
 		this.factibilizador=new Factibilizador(instancia,config,buscaLocalIntra);
 		
-		this.construtorSolucao=new ConstrutorSolucao(instancia,config,buscaLocalIntra);
+		this.construtorSolucao=new ConstrutorSolucao(instancia,config);
 		
 		AjusteOmega novo;
 		for (int i = 0; i < config.getPerturbacao().length; i++) 
@@ -102,7 +100,7 @@ public class AILS
 			configuradoresOmega.put(config.getPerturbacao()[i]+"", novo);
 		}
 		
-		this.criterioAceitacao=new CriterioAceitacao(instancia,config,distEntreSolucoes,limiteMaximoExecucao);
+		this.criterioAceitacao=new CriterioAceitacao(instancia,config,limiteMaximoExecucao);
 
 		try 
 		{

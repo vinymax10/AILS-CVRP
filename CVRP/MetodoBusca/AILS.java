@@ -42,7 +42,7 @@ public class AILS
 	
 	HashMap<String,AjusteOmega>configuradoresOmega=new HashMap<String,AjusteOmega>();
 
-	double distanciaBLEdge;
+	double distanciaBL;
 	
 	Perturbacao[] perturbadores;
 	Perturbacao perturbacaoEscolhida;
@@ -141,17 +141,14 @@ public class AILS
 			perturbacaoEscolhida.perturbar(solucao);
 			factibilizador.factibilizar(solucao);
 			buscaLocal.buscaLocal(solucao,true);
-			distanciaBLEdge=distEntreSolucoes.distanciaEdge(solucao,solucaoReferencia);
+			distanciaBL=distEntreSolucoes.distanciaEdge(solucao,solucaoReferencia);
 			
-//			Analise solucao
 			analisaSolucao();
 			ajusteDist.ajusteDist();
 			
-//			update
-			perturbacaoEscolhida.getConfiguradorOmegaEscolhido().setDistancia(distanciaBLEdge);
+			perturbacaoEscolhida.getConfiguradorOmegaEscolhido().setDistancia(distanciaBL);//update
 			
-//			criterio aceitacao
-			if(criterioAceitacao.aceitaSolucao(solucao,distanciaBLEdge))
+			if(criterioAceitacao.aceitaSolucao(solucao))
 				solucaoReferencia.clone(solucao);
 		}
 		

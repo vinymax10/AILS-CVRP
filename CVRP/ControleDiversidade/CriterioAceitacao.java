@@ -31,7 +31,7 @@ public class CriterioAceitacao
 		this.limiteMaximoExecucao=limiteMaximoExecucao;
 	}
 	
-	public boolean aceitaSolucao(Solucao solucao, double distanciaBLEdge)
+	public boolean aceitaSolucao(Solucao solucao)
 	{
 		if(iteradorGlobal==0)
 			ini=System.currentTimeMillis();

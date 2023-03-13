@@ -2,14 +2,14 @@ package Improvement;
 
 import java.util.Arrays;
 
-import Avaliadores.AvaliadorCusto;
-import Avaliadores.AvaliadorFac;
-import Avaliadores.ExecutaMovimento;
-import Dados.Instancia;
-import MetodoBusca.Config;
-import Solucao.No;
-import Solucao.Rota;
-import Solucao.Solucao;
+import Data.Instancia;
+import Evaluators.AvaliadorCusto;
+import Evaluators.AvaliadorFac;
+import Evaluators.ExecutaMovimento;
+import SearchMethod.Config;
+import Solution.No;
+import Solution.Rota;
+import Solution.Solucao;
 
 
 public class BuscaLocal 

@@ -1,11 +1,11 @@
 package Improvement;
 
-import Avaliadores.AvaliadorCusto;
-import Avaliadores.ExecutaMovimento;
-import Dados.Instancia;
-import MetodoBusca.Config;
-import Solucao.No;
-import Solucao.Rota;
+import Data.Instancia;
+import Evaluators.AvaliadorCusto;
+import Evaluators.ExecutaMovimento;
+import SearchMethod.Config;
+import Solution.No;
+import Solution.Rota;
 
 public class BuscaLocalIntra 
 {

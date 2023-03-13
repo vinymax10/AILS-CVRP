@@ -1,8 +1,8 @@
 package Improvement;
 
-import Avaliadores.AvaliadorCusto;
-import Solucao.No;
-import Solucao.Rota;
+import Evaluators.AvaliadorCusto;
+import Solution.No;
+import Solution.Rota;
 
 public class NoPosMel implements Comparable<NoPosMel>
 {

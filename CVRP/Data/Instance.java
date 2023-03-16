@@ -6,9 +6,9 @@ import java.io.IOException;
 import java.util.Arrays;
 
 import SearchMethod.Config;
-import SearchMethod.LeituraParametros;
+import SearchMethod.InputParameters;
 
-public class Instancia 
+public class Instance 
 {
 	private int size;
 	private double mediaPorRota;
@@ -32,7 +32,7 @@ public class Instancia
 	Config config;
 	boolean print = false;
 	
-	public Instancia(LeituraParametros leitor) 
+	public Instance(InputParameters leitor) 
 	{
 		this.nome=leitor.getFile();
 		this.config=leitor.getConfig();

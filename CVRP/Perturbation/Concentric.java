@@ -2,7 +2,7 @@ package Perturbation;
 
 import java.util.HashMap;
 
-import Data.Instancia;
+import Data.Instance;
 import DiversityControl.AjusteOmega;
 import Improvement.BuscaLocalIntra;
 import SearchMethod.Config;
@@ -13,7 +13,7 @@ import Solution.Solucao;
 
 public class Concentric extends Perturbacao
 {
-	public Concentric(Instancia instancia, Config config,
+	public Concentric(Instance instancia, Config config,
 	HashMap<String, AjusteOmega> configuradoresOmega, BuscaLocalIntra buscaLocalIntra)
 	{
 		super(instancia, config, configuradoresOmega,buscaLocalIntra);

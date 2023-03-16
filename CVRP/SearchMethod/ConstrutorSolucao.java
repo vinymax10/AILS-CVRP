@@ -2,7 +2,7 @@ package SearchMethod;
 
 import java.util.Random;
 
-import Data.Instancia;
+import Data.Instance;
 import Solution.No;
 import Solution.Rota;
 import Solution.Solucao;
@@ -16,11 +16,11 @@ public class ConstrutorSolucao
 	private No []solucao;
 	protected Random rand=new Random();
 	protected int size;
-	Instancia instancia;
+	Instance instancia;
 	No naoInseridos[];
 	int contNaoInseridos=0;
 	
-	public ConstrutorSolucao(Instancia instancia,Config config)
+	public ConstrutorSolucao(Instance instancia,Config config)
 	{
 		this.instancia=instancia;
 		this.rotas=new Rota[instancia.getNumRotasMax()];

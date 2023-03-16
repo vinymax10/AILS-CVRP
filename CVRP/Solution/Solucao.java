@@ -5,7 +5,7 @@ import java.io.FileReader;
 import java.io.IOException;
 
 import Data.Arquivo;
-import Data.Instancia;
+import Data.Instance;
 import Data.Ponto;
 import Improvement.BuscaLocalIntra;
 import SearchMethod.Config;
@@ -13,7 +13,7 @@ import SearchMethod.Config;
 public class Solucao 
 {
 	private Ponto pontos[];
-	Instancia instancia;
+	Instance instancia;
 	Config config;
 	protected int size;
 	No solucao[];
@@ -32,7 +32,7 @@ public class Solucao
 	
 	BuscaLocalIntra buscaLocalIntra;
 	
-	public Solucao(Instancia instancia,Config config) 
+	public Solucao(Instance instancia,Config config) 
 	{
 		this.instancia=instancia;
 		this.config=config;

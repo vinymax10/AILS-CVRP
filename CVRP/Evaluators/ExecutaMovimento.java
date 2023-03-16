@@ -1,6 +1,6 @@
 package Evaluators;
 
-import Data.Instancia;
+import Data.Instance;
 import Improvement.NoPosMel;
 import Solution.No;
 import Solution.Rota;
@@ -9,9 +9,9 @@ public class ExecutaMovimento
 {
 	Rota aRota, bRota;
 	No aAnt, bAnt, aProx, aProxProx, bProx, bProxProx;
-	Instancia instancia;
+	Instance instancia;
 	
-	public ExecutaMovimento(Instancia instancia)
+	public ExecutaMovimento(Instance instancia)
 	{
 		this.instancia=instancia;
 	}

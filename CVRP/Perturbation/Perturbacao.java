@@ -3,7 +3,7 @@ package Perturbation;
 import java.util.HashMap;
 import java.util.Random;
 
-import Data.Instancia;
+import Data.Instance;
 import DiversityControl.AjusteOmega;
 import Improvement.BuscaLocalIntra;
 import SearchMethod.Config;
@@ -41,12 +41,12 @@ public abstract class Perturbacao
 	double custoAnt;
 	int indexA,indexB;
 	No bestNo,bestNoDist,aux;
-	Instancia instancia;
+	Instance instancia;
 	int limiteAdj;
 	
 	BuscaLocalIntra buscaLocalIntra;
 	
-	public Perturbacao(Instancia instancia,Config config,
+	public Perturbacao(Instance instancia,Config config,
 	HashMap<String, AjusteOmega> configuradoresOmega, BuscaLocalIntra buscaLocalIntra) 
 	{
 		this.config=config;

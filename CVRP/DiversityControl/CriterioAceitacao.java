@@ -1,7 +1,7 @@
 package DiversityControl;
 
 import Auxiliary.Media;
-import Data.Instancia;
+import Data.Instance;
 import SearchMethod.Config;
 import SearchMethod.TipoCriterioParada;
 import Solution.Solucao;
@@ -19,7 +19,7 @@ public class CriterioAceitacao
 	double teto=Integer.MAX_VALUE,tetoNovo=Integer.MAX_VALUE;
 	Media mFBL;
 
-	public CriterioAceitacao(Instancia instancia, Config config, Double limiteMaximoExecucao)
+	public CriterioAceitacao(Instance instancia, Config config, Double limiteMaximoExecucao)
 	{
 		this.eta=config.getEtaMax();
 		this.etaMin=config.getEtaMin();

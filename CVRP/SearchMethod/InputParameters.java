@@ -3,7 +3,7 @@ package SearchMethod;
 import java.io.File;
 import java.util.Arrays;
 
-public class LeituraParametros 
+public class InputParameters 
 {
 	
 	private String file="";
@@ -12,7 +12,7 @@ public class LeituraParametros
 	private double best=0;
 	private Config config =new Config();
 	
-	public void lerParametros(String[] args)
+	public void readingInput(String[] args)
 	{
 		try 
 		{

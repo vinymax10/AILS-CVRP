@@ -1,6 +1,6 @@
 package Solution;
 
-import Data.Instancia;
+import Data.Instance;
 import SearchMethod.Config;
 
 public class Rota implements Comparable<Rota>
@@ -30,10 +30,10 @@ public class Rota implements Comparable<Rota>
 	//------------------------------------------------
 	public boolean update;
 	
-    Instancia instancia;
+    Instance instancia;
     int limiteAdj;
     
-	public Rota(Instancia instancia, Config config, No deposito,int nomeRota) 
+	public Rota(Instance instancia, Config config, No deposito,int nomeRota) 
 	{
 		this.instancia=instancia;
 		this.capacidade = instancia.getCapacidade();

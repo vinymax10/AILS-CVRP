@@ -1,13 +1,13 @@
 package Evaluators;
 
-import Data.Instancia;
+import Data.Instance;
 import Solution.No;
 
 public class AvaliadorCusto 
 {
-	Instancia instancia;
+	Instance instancia;
 	double custo;
-	public AvaliadorCusto(Instancia instancia)
+	public AvaliadorCusto(Instance instancia)
 	{
 		this.instancia=instancia;
 	}

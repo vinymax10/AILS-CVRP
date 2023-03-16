@@ -2,7 +2,7 @@ package Improvement;
 
 import java.util.Arrays;
 
-import Data.Instancia;
+import Data.Instance;
 import Evaluators.AvaliadorCusto;
 import Evaluators.AvaliadorFac;
 import Evaluators.ExecutaMovimento;
@@ -41,7 +41,7 @@ public class Factibilizador
 	double epsilon;
 	int contAtivos;
 	
-	public Factibilizador(Instancia instancia,Config config, BuscaLocalIntra buscaLocalIntra)
+	public Factibilizador(Instance instancia,Config config, BuscaLocalIntra buscaLocalIntra)
 	{
 		this.avaliadorCusto=new AvaliadorCusto(instancia);
 		this.avaliadorFac=new AvaliadorFac();

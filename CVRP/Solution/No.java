@@ -1,6 +1,6 @@
 package Solution;
 
-import Data.Instancia;
+import Data.Instance;
 import Data.Ponto;
 
 public class No implements Cloneable
@@ -18,7 +18,7 @@ public class No implements Cloneable
 	public boolean fixoRota;
 	public boolean fixoPos;
 	Ponto ponto;
-	Instancia instancia;
+	Instance instancia;
 	public boolean alterado;
 	
 	public int nomeRotaDestino;
@@ -26,7 +26,7 @@ public class No implements Cloneable
 	public int priority;
 	public Rota rotaDestino;
 	
-	public No(Ponto ponto, Instancia instancia) 
+	public No(Ponto ponto, Instance instancia) 
 	{
 		this.ponto=ponto;
 		this.instancia=instancia;

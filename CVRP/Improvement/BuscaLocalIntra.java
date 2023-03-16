@@ -1,6 +1,6 @@
 package Improvement;
 
-import Data.Instancia;
+import Data.Instance;
 import Evaluators.AvaliadorCusto;
 import Evaluators.ExecutaMovimento;
 import SearchMethod.Config;
@@ -23,7 +23,7 @@ public class BuscaLocalIntra
 	ExecutaMovimento executaMovimento;
 	int limiteAdj;
 	
-	public BuscaLocalIntra(Instancia instancia,Config config)
+	public BuscaLocalIntra(Instance instancia,Config config)
 	{
 		this.avaliadorCusto=new AvaliadorCusto(instancia);
 		this.executaMovimento=new ExecutaMovimento(instancia);

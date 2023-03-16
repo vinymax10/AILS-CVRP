@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Random;
 
 import Auxiliary.Distancia;
-import Data.Instancia;
+import Data.Instance;
 import DiversityControl.AjusteDist;
 import DiversityControl.AjusteOmega;
 import DiversityControl.CriterioAceitacao;
@@ -23,7 +23,7 @@ public class AILSII
 	//----------Problema------------
 	Solucao solucao,solucaoReferencia,melhorSolucao;
 	
-	Instancia instancia;
+	Instance instancia;
 	Distancia distEntreSolucoes;
 	double melhorF=Double.MAX_VALUE;
 	double limiteMaximoExecucao;
@@ -64,7 +64,7 @@ public class AILSII
 	DecimalFormat deci=new DecimalFormat("0.0000");
 	TipoCriterioParada tipoCriterioParada;
 	
-	public AILSII(Instancia instancia,LeituraParametros leitor)
+	public AILSII(Instance instancia,InputParameters leitor)
 	{ 
 		this.instancia=instancia;
 		Config config=leitor.getConfig();
@@ -107,7 +107,7 @@ public class AILSII
 			for (int i = 0; i < perturbadores.length; i++) 
 			{
 				this.perturbadores[i]=(Perturbacao) Class.forName("Perturbacao."+config.getPerturbacao()[i]).
-				getConstructor(Instancia.class,Config.class,HashMap.class,BuscaLocalIntra.class).
+				getConstructor(Instance.class,Config.class,HashMap.class,BuscaLocalIntra.class).
 				newInstance(instancia,config,configuradoresOmega,buscaLocalIntra);
 			}
 			
@@ -119,7 +119,7 @@ public class AILSII
 		
 	}
 
-	public void procurar()
+	public void search()
 	{
 		iterador=0;
 		inicio=System.currentTimeMillis();
@@ -194,14 +194,14 @@ public class AILSII
 	
 	public static void main(String[] args) 
 	{
-		LeituraParametros leitor=new LeituraParametros();
-		leitor.lerParametros(args);
+		InputParameters reader=new InputParameters();
+		reader.readingInput(args);
 		
-		Instancia instancia=new Instancia(leitor);
+		Instance instance=new Instance(reader);
 		
-		AILSII ails=new AILSII(instancia,leitor);
+		AILSII ails=new AILSII(instance,reader);
 		
-		ails.procurar();
+		ails.search();
 	}
 	
 	public Solucao getMelhorSolucao() {

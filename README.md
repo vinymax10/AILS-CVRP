@@ -21,25 +21,25 @@ java -jar AILS.jar -file Instances/Taillard_20.txt -rounded false -best 4760.67 
 
 Run the AILS class that has the following parameters:
 
-**-file** : Enter the file address of the problem instance.
+**-file** : the file address of the problem instance.
 
-**-rounded** : Indicate whether the instance has rounded distances or not. The options are: [false, true].
+**-rounded** :  A flag that indicates whether the instance has rounded distances or not. The options are: [false, true]. The default value is true.
 
-**-limit** : Enter a value that will be used in the stopping criterion. If the stopping criterion is time, this parameter will be considered as the timeout in seconds. If the stopping criterion is based on the number of iterations then this parameter will indicate the number of iterations. The default value is Double.MAX_VALUE.
+**-stoppingCriterion** : It is possible to use two different stopping criteria:
+* **Time** : The algorithm stops when a given time in seconds has elapsed; 
+* **Iteration** :  The algorithm stops when the given number of iterations has been reached. 
 
-**-best** : Indicate the value of the optimal solution. The default value is 0.
+**-limit** : Refers to the value that will be used in the stopping criterion. If the stopping criterion is a time limit, this parameter is the timeout in seconds. Otherwise, this parameter indicates the number of iterations. The default value is the maximum limit for a double precision number in the JAVA language (Double.MAX_VALUE).
 
-**-varphi** : parameter of the feasibility and local search that refers to the maximum cardinality of 𝛿(𝑣) – nearest neighbors of 𝑣. The default value is 40.
+**-best** :  Indicates the value of the optimal solution. The default value is 0.
 
-**-gamma** : number of iterations for AILS to perform a new adjustment of variable 𝜔. The default value is 20.
+**-varphi** :  Parameter of the feasibility and local search methods that refers to the maximum cardinality of  𝛿(𝑣) – nearest neighbors of  𝑣. The default value is 40. The larger it is, the greater the number of movements under consideration in the methods. 
 
-**-dMax** : reference starting distance between the reference solution and the current solution obtained after the local search. The default value is 30.
+**-gamma** :  Number of iterations for AILS to perform a new adjustment of variable 𝜔. The default value is 20.
 
-**-dMin** : reference final distance between the reference solution and the current solution obtained after the local search. The default value is 15.
+**-dMax** : Initial reference distance between the reference solution and the  solution obtained after the local search. The default value is 30.
 
-**-stoppingCriterion** : It is possible to use 2 types of stopping criteria. Below is a description of each:
-* **Time** : The algorithm stops when the total time in seconds is reached.
-* **Iteration** : The algorithm stops when the number of total iterations is reached. 
+**-dMin** : Final Reference distance between the reference solution and the solution obtained after the local search. The default value is 15.
 
 ## License
 

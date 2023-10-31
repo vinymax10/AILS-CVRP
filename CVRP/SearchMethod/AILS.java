@@ -18,7 +18,7 @@ import Perturbation.HeuristicaAdicao;
 import Perturbation.Perturbacao;
 import Solution.Solucao;
 
-public class AILSII 
+public class AILS 
 {
 	//----------Problema------------
 	Solucao solucao,solucaoReferencia,melhorSolucao;
@@ -64,7 +64,7 @@ public class AILSII
 	DecimalFormat deci=new DecimalFormat("0.0000");
 	TipoCriterioParada tipoCriterioParada;
 	
-	public AILSII(Instance instancia,InputParameters leitor)
+	public AILS(Instance instancia,InputParameters leitor)
 	{ 
 		this.instancia=instancia;
 		Config config=leitor.getConfig();
@@ -199,7 +199,7 @@ public class AILSII
 		
 		Instance instance=new Instance(reader);
 		
-		AILSII ails=new AILSII(instance,reader);
+		AILS ails=new AILS(instance,reader);
 		
 		ails.search();
 	}

@@ -77,7 +77,7 @@ public class AILS
 		this.solucao =new Solucao(instancia,config);
 		this.solucaoReferencia =new Solucao(instancia,config);
 		this.melhorSolucao =new Solucao(instancia,config);
-		this.numIterUpdate=config.getNumIterUpdate();
+		this.numIterUpdate=config.getGamma();
 		
 		this.distEntreSolucoes=new Distancia();
 		

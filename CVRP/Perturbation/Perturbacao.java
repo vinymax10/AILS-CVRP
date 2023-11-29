@@ -55,8 +55,8 @@ public abstract class Perturbacao
 		this.size=instancia.getSize()-1;
 		this.candidatos=new No[size];
 		this.configuradoresOmega=configuradoresOmega;
-		this.numIterUpdate=config.getNumIterUpdate();
-		this.limiteAdj=config.getLimiteAdj();
+		this.numIterUpdate=config.getGamma();
+		this.limiteAdj=config.getVarphi();
 		this.buscaLocalIntra=buscaLocalIntra;
 	}
 	

@@ -58,7 +58,7 @@ public class Factibilizador
 			}
 		}
 		
-		this.limiteAdj=Math.min(config.getLimiteAdj(), instancia.getSize()-1);
+		this.limiteAdj=Math.min(config.getVarphi(), instancia.getSize()-1);
 		
 		this.buscaLocalIntra=buscaLocalIntra;
 		this.epsilon=config.getEpsilon();

@@ -25,10 +25,10 @@ public class InputParameters
 					case "-limit": limit=getLimit(args[i+1]);break;
 					case "-best": best=getBest(args[i+1]);break;
 					case "-stoppingCriterion": config.setTipoCriterioParada(getStoppingCriterion(args[i+1]));break;
-					case "-dMax": config.setDistMMax(getDMax(args[i+1]));break;
-					case "-dMin": config.setDistMMin(getDMin(args[i+1]));break;
-					case "-gamma": config.setNumIterUpdate(getGamma(args[i+1]));break;
-					case "-varphi": config.setLimiteAdj(getVarphi(args[i+1]));break;
+					case "-dMax": config.setDMax(getDMax(args[i+1]));break;
+					case "-dMin": config.setDMin(getDMin(args[i+1]));break;
+					case "-gamma": config.setGamma(getGamma(args[i+1]));break;
+					case "-varphi": config.setVarphi(getVarphi(args[i+1]));break;
 					
 				}
 			}

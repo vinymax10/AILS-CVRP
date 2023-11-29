@@ -27,11 +27,11 @@ public class AjusteOmega
 	{
 		this.tipoPerturbacao = tipoPerturbacao;
 		this.omega = distIdeal.distIdeal;
-		this.numIterUpdate = config.getNumIterUpdate();
+		this.numIterUpdate = config.getGamma();
 		this.omegaMin=1;
 		this.omegaMax=size-2;
-		this.omegaMedio=new Media(config.getNumIterUpdate());
-		this.distBLMedia=new Media(config.getNumIterUpdate());
+		this.omegaMedio=new Media(config.getGamma());
+		this.distBLMedia=new Media(config.getGamma());
 
 		this.distIdeal=distIdeal;
 	}

@@ -40,7 +40,7 @@ public class Rota implements Comparable<Rota>
 		this.deposito=deposito.nome;
 		this.nomeRota=nomeRota;
 		this.inicio=null;
-		this.limiteAdj=config.getLimiteAdj();
+		this.limiteAdj=config.getVarphi();
 		addNoFinal(deposito.clone());
 	}
 	

@@ -28,7 +28,7 @@ public class BuscaLocalIntra
 		this.avaliadorCusto=new AvaliadorCusto(instancia);
 		this.executaMovimento=new ExecutaMovimento(instancia);
 		this.melhora=new NoPosMel(avaliadorCusto);
-		this.limiteAdj=config.getLimiteAdj();
+		this.limiteAdj=config.getVarphi();
 	}
 	
 	private void setRota(Rota rota,No solucao[]) 

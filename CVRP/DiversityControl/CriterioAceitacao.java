@@ -25,8 +25,8 @@ public class CriterioAceitacao
 		this.etaMin=config.getEtaMin();
 		this.etaMax=config.getEtaMax();
 		this.tipoCriterioParada=config.getTipoCriterioParada();
-		this.mFBL=new Media(config.getNumIterUpdate());
-		this.numIterUpdate=config.getNumIterUpdate();
+		this.mFBL=new Media(config.getGamma());
+		this.numIterUpdate=config.getGamma();
 		this.limiteMaximoExecucao=limiteMaximoExecucao;
 	}
 	

@@ -19,8 +19,8 @@ public class AjusteDist
 	{
 		this.distIdeal=distIdeal;
 		this.limiteMaximoExecucao=limiteMaximoExecucao;
-		this.distMMin=config.getDistMMin();
-		this.distMMax=config.getDistMMax();
+		this.distMMin=config.getDMin();
+		this.distMMax=config.getDMax();
 		this.distIdeal.distIdeal=distMMax;
 		this.tipoCriterioParada=config.getTipoCriterioParada();
 	}

@@ -10,13 +10,13 @@ public class Config implements Cloneable
 {
 	DecimalFormat deci=new DecimalFormat("0.000");
 	double etaMin,etaMax;
-	int distMMin,distMMax;	
+	int dMin,dMax;	
 	
-	int numIterUpdate;
+	int gamma;
 	TipoPerturbacao perturbacao[];
 	HeuristicaAdicao[]heuristicasAdicao;
 	//--------------------PR-------------------
-	int limiteAdj;
+	int varphi;
 	double epsilon;
 	int limiteKnn;
 	TipoCriterioParada tipoCriterioParada;
@@ -25,11 +25,11 @@ public class Config implements Cloneable
 	{
 //		----------------------------Main----------------------------
 		this.tipoCriterioParada=TipoCriterioParada.Time;
-		this.distMMin=15;
-		this.distMMax=30;
-		this.numIterUpdate=30; 
+		this.dMin=15;
+		this.dMax=30;
+		this.gamma=30; 
 		this.limiteKnn=100;
-		this.limiteAdj=40;
+		this.varphi=40;
 		
 		
 		this.epsilon=0.01;
@@ -62,10 +62,10 @@ public class Config implements Cloneable
 		+"\ntipoCriterioParada: "+tipoCriterioParada
 		+"\netaMax: "+deci.format(etaMax)
 		+"\netaMin: "+deci.format(etaMin)
-		+"\nnumIterUpdate: "+numIterUpdate
-		+"\ndistMMin: "+distMMin
-		+"\ndistMMax: "+distMMax
-		+"\nlimiteAdj: "+limiteAdj
+		+"\ngamma: "+gamma
+		+"\ndMin: "+dMin
+		+"\ndMax: "+dMax
+		+"\nvarphi: "+varphi
 		+"\nepsilon: " + deci.format(epsilon)
 		+"\nperturbacao: "+Arrays.toString(perturbacao)
 		+"\nheuristicasAdicao: "+Arrays.toString(heuristicasAdicao)
@@ -97,28 +97,28 @@ public class Config implements Cloneable
 		this.etaMax = etaMax;
 	}
 
-	public int getDistMMin() {
-		return distMMin;
+	public int getDMin() {
+		return dMin;
 	}
 
-	public void setDistMMin(int distMMin) {
-		this.distMMin = distMMin;
+	public void setDMin(int dMin) {
+		this.dMin = dMin;
 	}
 
-	public int getDistMMax() {
-		return distMMax;
+	public int getDMax() {
+		return dMax;
 	}
 
-	public void setDistMMax(int distMMax) {
-		this.distMMax = distMMax;
+	public void setDMax(int dMax) {
+		this.dMax = dMax;
 	}
 
-	public int getNumIterUpdate() {
-		return numIterUpdate;
+	public int getGamma() {
+		return gamma;
 	}
 
-	public void setNumIterUpdate(int numIterUpdate) {
-		this.numIterUpdate = numIterUpdate;
+	public void setGamma(int gamma) {
+		this.gamma = gamma;
 	}
 
 	public TipoPerturbacao[] getPerturbacao() {
@@ -137,16 +137,16 @@ public class Config implements Cloneable
 		this.heuristicasAdicao = heuristicasAdicao;
 	}
 
-	public int getLimiteAdj() {
-		return limiteAdj;
+	public int getVarphi() {
+		return varphi;
 	}
 
-	public void setLimiteAdj(int limiteAdj)
+	public void setVarphi(int varphi)
 	{
-		if(limiteKnn<limiteAdj)
-			limiteKnn=limiteAdj;
+		if(limiteKnn<varphi)
+			limiteKnn=varphi;
 		
-		this.limiteAdj = limiteAdj;
+		this.varphi = varphi;
 	}
 
 	public double getEpsilon() {

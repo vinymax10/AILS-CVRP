@@ -106,7 +106,7 @@ public class AILS
 		{
 			for (int i = 0; i < perturbadores.length; i++) 
 			{
-				this.perturbadores[i]=(Perturbacao) Class.forName("Perturbacao."+config.getPerturbacao()[i]).
+				this.perturbadores[i]=(Perturbacao) Class.forName("Perturbation."+config.getPerturbacao()[i]).
 				getConstructor(Instance.class,Config.class,HashMap.class,BuscaLocalIntra.class).
 				newInstance(instancia,config,configuradoresOmega,buscaLocalIntra);
 			}

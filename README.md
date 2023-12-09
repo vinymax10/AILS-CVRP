@@ -19,10 +19,10 @@ https://doi.org/10.1016/j.cor.2022.105954 (also available at [aXiv](https://arxi
 ## To run the algorithm
 
 ```console
-java -jar AILS.jar -file Instances/X-n214-k11.vrp -rounded true -best 10856 -limit 100 -stoppingCriterion Time 
+java -jar AILSII.jar -file Instances/X-n214-k11.vrp -rounded true -best 10856 -limit 100 -stoppingCriterion Time 
 ```
 
-Run the AILS class that has the following parameters:
+Run the AILSII class that has the following parameters:
 
 **-file** : the file address of the problem instance.
 

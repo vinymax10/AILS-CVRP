@@ -36,9 +36,9 @@ Run the AILSII class that has the following parameters:
 
 **-best** :  Indicates the value of the optimal solution. The default value is 0.
 
-**-varphi** :  Parameter of the feasibility and local search methods that refers to the maximum cardinality of  𝛿(𝑣) – nearest neighbors of  𝑣. The default value is 40. The larger it is, the greater the number of movements under consideration in the methods. 
+**-varphi** :  Parameter of the feasibility and local search methods that refers to the maximum cardinality of the set of nearest neighbors of the vertices. The default value is 40. The larger it is, the greater the number of movements under consideration in the methods. 
 
-**-gamma** :  Number of iterations for AILS to perform a new adjustment of variable 𝜔. The default value is 20.
+**-gamma** :  Number of iterations for AILS-II to perform a new adjustment of variable 𝜔. The default value is 30.
 
 **-dMax** : Initial reference distance between the reference solution and the  solution obtained after the local search. The default value is 30.
 

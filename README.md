@@ -7,7 +7,7 @@ AILS-II is an Adaptive Iterated Local Search (AILS) meta-heuristic that embeds a
 Those interested in using any part of this algorithm in academic works must cite the following references:
 
 [1] Máximo, Vinícius R., Cordeau, Jean-François, Nascimento, Mariá C.V. (2023).
-AILS-II: An Adaptive Iterated Local Search Heuristic for the Large-scale Capacitated Vehicle Routing Problem. Under Review. (available at https://chairelogistique.hec.ca/wp-content/uploads/2023/05/AILSII.pdf).
+AILS-II: An Adaptive Iterated Local Search Heuristic for the Large-scale Capacitated Vehicle Routing Problem. Under Review. (available at [https://chairelogistique.hec.ca/wp-content/uploads/2023/05/AILSII.pdf](https://chairelogistique.hec.ca/wp-content/uploads/2023/12/IJOC_Maximoetal2023_withouthighlights.pdf)).
 
 [2] Máximo, Vinícius R., Nascimento, Mariá C.V. (2021).
 A hybrid adaptive iterated local search with diversification control to the capacitated vehicle routing problem. European Journal of Operational Research, Volume 294, p. 1108-1119, https://doi.org/10.1016/j.ejor.2021.02.024 (also available at [aXiv](https://arxiv.org/abs/2012.11021)).

@@ -7,9 +7,9 @@ import Evaluators.AvaliadorCusto;
 import Evaluators.AvaliadorFac;
 import Evaluators.ExecutaMovimento;
 import SearchMethod.Config;
-import Solution.No;
+import Solution.Node;
 import Solution.Rota;
-import Solution.Solucao;
+import Solution.Solution;
 
 
 public class BuscaLocal 
@@ -21,17 +21,17 @@ public class BuscaLocal
 	private int topMelhores=0;
 	private int NumRotas;
 	
-	No bestAntNoRotaI,bestAntNoRotaJ;
+	Node bestAntNoRotaI,bestAntNoRotaJ;
 
 	double f=0;
 	
 	double custo;
-	No auxRotaI,auxRotaJ;
+	Node auxRotaI,auxRotaJ;
 	Rota rotaA,rotaB;
 	AvaliadorCusto avaliadorCusto;
 	AvaliadorFac avaliadorFac;
 	ExecutaMovimento executaMovimento;
-	No solucao[];
+	Node solucao[];
 	int limiteAdj;
 	BuscaLocalIntra buscaLocalIntra;
 	double epsilon;
@@ -59,21 +59,21 @@ public class BuscaLocal
 		this.epsilon=config.getEpsilon();
 	}
 	
-	private void setSolucao(Solucao solucao) 
+	private void setSolucao(Solution solucao) 
 	{
 		this.NumRotas=solucao.NumRotas;
-		this.solucao=solucao.getSolucao();
+		this.solucao=solucao.getSolution();
 		this.f=solucao.f;
 		this.rotas=solucao.rotas;
 	}
 
-	private void passaResultado(Solucao solucao) 
+	private void passaResultado(Solution solucao) 
 	{
 		solucao.NumRotas=this.NumRotas;
 		solucao.f=this.f;
 	}
 
-	public void buscaLocal(Solucao solucao,boolean removerRotasVazias)
+	public void buscaLocal(Solution solucao,boolean removerRotasVazias)
 	{
 		setSolucao(solucao);
 		topMelhores=0;
@@ -143,7 +143,7 @@ public class BuscaLocal
 	
 	private void procuraBestSWAPEstrelaKNN(Rota rota)
 	{
-		auxRotaI=rota.inicio.prox;
+		auxRotaI=rota.inicio.next;
 		do
 		{
 			if(auxRotaI.alterado)
@@ -173,14 +173,14 @@ public class BuscaLocal
 				}
 			}
 			
-			auxRotaI=auxRotaI.prox;
+			auxRotaI=auxRotaI.next;
 		}
 		while(auxRotaI!=rota.inicio);
 	}
 	
 	private void procuraBestSHIFT(Rota rota)
 	{
-		auxRotaI=rota.inicio.prox;
+		auxRotaI=rota.inicio.next;
 		do
 		{
 			if(auxRotaI.alterado)
@@ -244,7 +244,7 @@ public class BuscaLocal
 				}
 			}
 			
-			auxRotaI=auxRotaI.prox;
+			auxRotaI=auxRotaI.next;
 		}
 		while(auxRotaI!=rota.inicio);
 	}
@@ -328,7 +328,7 @@ public class BuscaLocal
 				}
 			}
 			
-			auxRotaI=auxRotaI.prox;
+			auxRotaI=auxRotaI.next;
 		}
 		while(auxRotaI!=rota.inicio);
 	}

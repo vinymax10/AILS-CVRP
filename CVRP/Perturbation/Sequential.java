@@ -6,8 +6,8 @@ import Data.Instance;
 import DiversityControl.AjusteOmega;
 import Improvement.BuscaLocalIntra;
 import SearchMethod.Config;
-import Solution.No;
-import Solution.Solucao;
+import Solution.Node;
+import Solution.Solution;
 
 //Remocao sequencial todos de uma vez depois adiciona o restante
 
@@ -21,14 +21,14 @@ public class Sequential extends Perturbacao
 		this.tipoPerturbacao=TipoPerturbacao.Sequential;
 	}
 
-	public void perturbar(Solucao s)
+	public void perturbar(Solution s)
 	{
 		setSolucao(s);
 		
 //		---------------------------------------------------------------------
 		int contSizeString;
 		double sizeString;
-		No noInicial;
+		Node noInicial;
 		
 		while(contCandidatos<(int)omega)
 		{
@@ -44,18 +44,18 @@ public class Sequential extends Perturbacao
 			do
 			{
 				contSizeString++;
-				no=noInicial.prox;
-				if(no.nome==0)
-					no=no.prox;
+				no=noInicial.next;
+				if(no.name==0)
+					no=no.next;
 				
 				candidatos[contCandidatos++]=no;
 				
-				no.antOld=no.ant;
-				no.proxOld=no.prox;
+				no.antOld=no.prev;
+				no.proxOld=no.next;
 				
 				f+=no.rota.remove(no);
 			}
-			while(noInicial.nome!=no.nome&&contSizeString<sizeString);
+			while(noInicial.name!=no.name&&contSizeString<sizeString);
 		}
 		
 		estabelecerOrdem();

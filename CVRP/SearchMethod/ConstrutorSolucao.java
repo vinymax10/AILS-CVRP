@@ -3,9 +3,9 @@ package SearchMethod;
 import java.util.Random;
 
 import Data.Instance;
-import Solution.No;
+import Solution.Node;
 import Solution.Rota;
-import Solution.Solucao;
+import Solution.Solution;
 
 
 public class ConstrutorSolucao 
@@ -13,11 +13,11 @@ public class ConstrutorSolucao
 	private Rota rotas[];
 	private double f=0;
 	private int NumRotas;
-	private No []solucao;
+	private Node []solucao;
 	protected Random rand=new Random();
 	protected int size;
 	Instance instancia;
-	No naoInseridos[];
+	Node naoInseridos[];
 	int contNaoInseridos=0;
 	
 	public ConstrutorSolucao(Instance instancia,Config config)
@@ -25,19 +25,19 @@ public class ConstrutorSolucao
 		this.instancia=instancia;
 		this.rotas=new Rota[instancia.getNumRotasMax()];
 		this.size=instancia.getSize()-1;
-		this.naoInseridos=new No[size];
+		this.naoInseridos=new Node[size];
 	}
 	
-	private void setSolucao(Solucao solucao) 
+	private void setSolucao(Solution solucao) 
 	{
 		this.NumRotas=solucao.NumRotas;
-		this.solucao=solucao.getSolucao();
+		this.solucao=solucao.getSolution();
 		this.f=solucao.f;
 		for (int i = 0; i < rotas.length; i++) 
 			this.rotas[i]=solucao.rotas[i];
 	}
 
-	private void passaResultado(Solucao solucao) 
+	private void passaResultado(Solution solucao) 
 	{
 		solucao.NumRotas=this.NumRotas;
 		solucao.f=this.f;
@@ -45,7 +45,7 @@ public class ConstrutorSolucao
 			solucao.rotas[i]=this.rotas[i];
 	}
 
-	public void construir(Solucao s)
+	public void construir(Solution s)
 	{
 		setSolucao(s);
 		
@@ -53,7 +53,7 @@ public class ConstrutorSolucao
 			rotas[i].limpar();
 		
 		int index;
-		No no,bestNo;
+		Node no,bestNo;
 		f=0;
 		
 		for (int i = 0; i < size; i++) 
@@ -83,10 +83,10 @@ public class ConstrutorSolucao
 		s.removeRotasVazias();
 	}
 	
-	protected No getBestKNNNo(No no)
+	protected Node getBestKNNNo(Node no)
 	{
 		double bestCusto=Double.MAX_VALUE;
-		No aux,bestNo=null;
+		Node aux,bestNo=null;
 		double custo,custoAnt;
 		
 		for (int i = 0; i < solucao.length; i++) 
@@ -94,7 +94,7 @@ public class ConstrutorSolucao
 			aux=solucao[i];
 			if(aux.jaInserido)
 			{
-				custo=instancia.dist(aux.nome,no.nome)+instancia.dist(no.nome,aux.prox.nome)-instancia.dist(aux.nome,aux.prox.nome);
+				custo=instancia.dist(aux.name,no.name)+instancia.dist(no.name,aux.next.name)-instancia.dist(aux.name,aux.next.name);
 				if(custo<bestCusto)
 				{
 					bestCusto=custo;
@@ -102,18 +102,18 @@ public class ConstrutorSolucao
 				}
 			}
 		}
-		custo=instancia.dist(bestNo.nome,no.nome)+instancia.dist(no.nome,bestNo.prox.nome)-instancia.dist(bestNo.nome,bestNo.prox.nome);
-		custoAnt=instancia.dist(bestNo.ant.nome,no.nome)+instancia.dist(no.nome,bestNo.nome)-instancia.dist(bestNo.ant.nome,bestNo.nome);
+		custo=instancia.dist(bestNo.name,no.name)+instancia.dist(no.name,bestNo.next.name)-instancia.dist(bestNo.name,bestNo.next.name);
+		custoAnt=instancia.dist(bestNo.prev.name,no.name)+instancia.dist(no.name,bestNo.name)-instancia.dist(bestNo.prev.name,bestNo.name);
 		if(custo<custoAnt)
 			return bestNo;
 		
-		return bestNo.ant;
+		return bestNo.prev;
 	}
 	
-	protected No getBestNoRotas(No no)
+	protected Node getBestNoRotas(Node no)
 	{
 		double bestCusto=Double.MAX_VALUE;
-		No aux,bestNo=null;
+		Node aux,bestNo=null;
 		
 		for (int i = 0; i < NumRotas; i++) 
 		{

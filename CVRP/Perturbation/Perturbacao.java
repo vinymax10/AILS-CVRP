@@ -7,27 +7,27 @@ import Data.Instance;
 import DiversityControl.AjusteOmega;
 import Improvement.BuscaLocalIntra;
 import SearchMethod.Config;
-import Solution.No;
+import Solution.Node;
 import Solution.Rota;
-import Solution.Solucao;
+import Solution.Solution;
 
 public abstract class Perturbacao 
 {
 	protected Rota rotas[];
 	protected int NumRotas;
-	protected No solucao[];
+	protected Node solucao[];
 	protected double f=0;
 	protected Random rand=new Random();
 	public double omega;
 	AjusteOmega configuradorOmegaEscolhido;
 	Config config;
-	protected No candidatos[];
+	protected Node candidatos[];
 	protected int contCandidatos;
 
 	HeuristicaAdicao[]heuristicasAdicao;
 	public HeuristicaAdicao heuristicaAdicaoEscolhida;
 	
-	No no;
+	Node no;
 	
 	public TipoPerturbacao tipoPerturbacao;
 	int size;
@@ -40,7 +40,7 @@ public abstract class Perturbacao
 	double custo,dist;
 	double custoAnt;
 	int indexA,indexB;
-	No bestNo,bestNoDist,aux;
+	Node bestNo,bestNoDist,aux;
 	Instance instancia;
 	int limiteAdj;
 	
@@ -53,7 +53,7 @@ public abstract class Perturbacao
 		this.instancia=instancia;
 		this.heuristicasAdicao=config.getHeuristicasAdicao();
 		this.size=instancia.getSize()-1;
-		this.candidatos=new No[size];
+		this.candidatos=new Node[size];
 		this.configuradoresOmega=configuradoresOmega;
 		this.numIterUpdate=config.getGamma();
 		this.limiteAdj=config.getVarphi();
@@ -62,7 +62,7 @@ public abstract class Perturbacao
 	
 	public void estabelecerOrdem()
 	{
-		No aux;
+		Node aux;
 		for (int i = 0; i < contCandidatos; i++)
 		{
 			indexA=rand.nextInt(contCandidatos);
@@ -74,13 +74,13 @@ public abstract class Perturbacao
 		}
 	}
 	
-	public void perturbar(Solucao s){}
+	public void perturbar(Solution s){}
 	
-	protected void setSolucao(Solucao s)
+	protected void setSolucao(Solution s)
 	{
 		this.NumRotas=s.getNumRotas();
 		this.rotas=s.rotas;
-		this.solucao=s.getSolucao();
+		this.solucao=s.getSolution();
 		this.f=s.f;
 		for (int i = 0; i < NumRotas; i++) 
 		{
@@ -101,13 +101,13 @@ public abstract class Perturbacao
 		contCandidatos=0;
 	}
 	
-	protected void passaSolucao(Solucao s)
+	protected void passaSolucao(Solution s)
 	{
 		s.f=f;
 		s.NumRotas=this.NumRotas;
 	}
 	
-	protected No getNo(No no)
+	protected Node getNo(Node no)
 	{
 		switch(heuristicaAdicaoEscolhida)
 		{
@@ -117,7 +117,7 @@ public abstract class Perturbacao
 		return null;
 	}
 	
-	protected No getBestKNNNo2(No no,int limite)
+	protected Node getBestKNNNo2(Node no,int limite)
 	{
 		bestCusto=Double.MAX_VALUE;
 		boolean entrou=false;
@@ -133,7 +133,7 @@ public abstract class Perturbacao
 				{
 					aux=rotas[j].inicio;
 					entrou=true;
-					custo=instancia.dist(aux.nome,no.nome)+instancia.dist(no.nome,aux.prox.nome)-instancia.dist(aux.nome,aux.prox.nome);
+					custo=instancia.dist(aux.name,no.name)+instancia.dist(no.name,aux.next.name)-instancia.dist(aux.name,aux.next.name);
 					if(custo<bestCusto)
 					{
 						bestCusto=custo;
@@ -149,7 +149,7 @@ public abstract class Perturbacao
 				if(aux.jaInserido)
 				{
 					cont++;
-					custo=instancia.dist(aux.nome,no.nome)+instancia.dist(no.nome,aux.prox.nome)-instancia.dist(aux.nome,aux.prox.nome);
+					custo=instancia.dist(aux.name,no.name)+instancia.dist(no.name,aux.next.name)-instancia.dist(aux.name,aux.next.name);
 					if(custo<bestCusto)
 					{
 						bestCusto=custo;
@@ -166,7 +166,7 @@ public abstract class Perturbacao
 				aux=solucao[i];
 				if(aux.jaInserido)
 				{
-					custo=instancia.dist(aux.nome,no.nome)+instancia.dist(no.nome,aux.prox.nome)-instancia.dist(aux.nome,aux.prox.nome);
+					custo=instancia.dist(aux.name,no.name)+instancia.dist(no.name,aux.next.name)-instancia.dist(aux.name,aux.next.name);
 					if(custo<bestCusto)
 					{
 						bestCusto=custo;
@@ -183,7 +183,7 @@ public abstract class Perturbacao
 				aux=solucao[i];
 				if(aux.jaInserido)
 				{
-					custo=instancia.dist(aux.nome,no.nome)+instancia.dist(no.nome,aux.prox.nome)-instancia.dist(aux.nome,aux.prox.nome);
+					custo=instancia.dist(aux.name,no.name)+instancia.dist(no.name,aux.next.name)-instancia.dist(aux.name,aux.next.name);
 					if(custo<bestCusto)
 					{
 						bestCusto=custo;
@@ -193,15 +193,15 @@ public abstract class Perturbacao
 			}
 		}
 		
-		custo=instancia.dist(bestNo.nome,no.nome)+instancia.dist(no.nome,bestNo.prox.nome)-instancia.dist(bestNo.nome,bestNo.prox.nome);
-		custoAnt=instancia.dist(bestNo.ant.nome,no.nome)+instancia.dist(no.nome,bestNo.nome)-instancia.dist(bestNo.ant.nome,bestNo.nome);
+		custo=instancia.dist(bestNo.name,no.name)+instancia.dist(no.name,bestNo.next.name)-instancia.dist(bestNo.name,bestNo.next.name);
+		custoAnt=instancia.dist(bestNo.prev.name,no.name)+instancia.dist(no.name,bestNo.name)-instancia.dist(bestNo.prev.name,bestNo.name);
 		if(custo<custoAnt)
 		{
 			return bestNo;
 		}
 		else
 		{
-			return bestNo.ant;
+			return bestNo.prev;
 		}
 	}
 	

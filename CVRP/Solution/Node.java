@@ -3,13 +3,13 @@ package Solution;
 import Data.Instance;
 import Data.Ponto;
 
-public class No implements Cloneable
+public class Node implements Cloneable
 {
-	public No ant,antOld;
-	public No prox,proxOld;
+	public Node prev,antOld;
+	public Node next,proxOld;
 	
 	public Rota rota;
-	public int nome;
+	public int name;
 	public int demanda;
 
 	public int knn[];
@@ -26,22 +26,22 @@ public class No implements Cloneable
 	public int priority;
 	public Rota rotaDestino;
 	
-	public No(Ponto ponto, Instance instancia) 
+	public Node(Ponto ponto, Instance instancia) 
 	{
 		this.ponto=ponto;
 		this.instancia=instancia;
-		this.nome = ponto.nome;
+		this.name = ponto.nome;
 		this.demanda = ponto.demanda;
 
-		this.prox=null;
-		this.ant=null;
+		this.next=null;
+		this.prev=null;
 		this.rota=null;
-		this.knn=instancia.getKnn()[nome];
+		this.knn=instancia.getKnn()[name];
 	}
 	
-	public double dist(No x)
+	public double dist(Node x)
 	{
-		return instancia.dist(x.nome,this.nome);
+		return instancia.dist(x.name,this.name);
 	}
 	
 	public void limpar()
@@ -50,32 +50,32 @@ public class No implements Cloneable
 		this.rota=null;
 	}
 	
-	 public No clone() 
+	 public Node clone() 
 	 {
-		 No clone = new No(ponto, instancia);
-		 clone.ant=ant;
-		 clone.prox=prox;
+		 Node clone = new Node(ponto, instancia);
+		 clone.prev=prev;
+		 clone.next=next;
 		 clone.rota=rota;
 		 return clone; 
 	 }
 	
 	 public double custoRemocao()
 	 {
-		 return instancia.dist(ant.nome,prox.nome)-instancia.dist(nome,ant.nome)-instancia.dist(nome,prox.nome);
+		 return instancia.dist(prev.name,next.name)-instancia.dist(name,prev.name)-instancia.dist(name,next.name);
 	 }
 	 
-	 public double custoInserirApos(No no)
+	 public double custoInserirApos(Node no)
 	 {
 		 if(no==null)
 			 System.out.println("no null");
 		 
-		 return -instancia.dist(no.nome,no.prox.nome)+instancia.dist(nome,no.nome)+instancia.dist(nome,no.prox.nome);
+		 return -instancia.dist(no.name,no.next.name)+instancia.dist(name,no.name)+instancia.dist(name,no.next.name);
 	 }
 	 
 	@Override
 	public String toString() 
 	{
-		return "|n: "+nome+" d: "+demanda+"|";
+		return "|n: "+name+" d: "+demanda+"|";
 	}
 
 	public int getDemanda() {

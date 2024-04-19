@@ -1,10 +1,10 @@
 package Data;
 
-public class Otimo 
+public class Best 
 {
 	private double otimo;
 
-	public Otimo(double otimo)
+	public Best(double otimo)
 	{
 		this.otimo = otimo;
 	}

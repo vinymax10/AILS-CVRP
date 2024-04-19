@@ -7,9 +7,9 @@ import Evaluators.AvaliadorCusto;
 import Evaluators.AvaliadorFac;
 import Evaluators.ExecutaMovimento;
 import SearchMethod.Config;
-import Solution.No;
+import Solution.Node;
 import Solution.Rota;
-import Solution.Solucao;
+import Solution.Solution;
 
 public class Factibilizador 
 {
@@ -22,11 +22,11 @@ public class Factibilizador
 	private int topMelhores=0;
 	private int NumRotas;
 	
-	No bestAntNoRotaI,bestAntNoRotaJ;
+	Node bestAntNoRotaI,bestAntNoRotaJ;
 
 	double f=0;
 	
-	No auxSai,auxEntra;
+	Node auxSai,auxEntra;
 	int ganho;
 	double custo;
 	double custoAvaliacao;
@@ -35,7 +35,7 @@ public class Factibilizador
 	AvaliadorCusto avaliadorCusto;
 	AvaliadorFac avaliadorFac;
 	ExecutaMovimento executaMovimento;
-	No solucao[];
+	Node solucao[];
 	int limiteAdj;
 	BuscaLocalIntra buscaLocalIntra;
 	double epsilon;
@@ -74,21 +74,21 @@ public class Factibilizador
 		return true;
 	}
 	
-	private void setSolucao(Solucao solucao) 
+	private void setSolucao(Solution solucao) 
 	{
 		this.NumRotas=solucao.NumRotas;
-		this.solucao=solucao.getSolucao();
+		this.solucao=solucao.getSolution();
 		this.f=solucao.f;
 		this.rotas=solucao.rotas;
 	}
 
-	private void passaResultado(Solucao solucao) 
+	private void passaResultado(Solution solucao) 
 	{
 		solucao.NumRotas=this.NumRotas;
 		solucao.f=this.f;
 	}
 
-	public void factibilizar(Solucao solucao)
+	public void factibilizar(Solution solucao)
 	{
 		setSolucao(solucao);
 		boolean factivel=false;
@@ -182,7 +182,7 @@ public class Factibilizador
 	
 	private void procuraBestSWAPEstrelaKNN(Rota rota)
 	{
-		auxSai=rota.inicio.prox;
+		auxSai=rota.inicio.next;
 		do
 		{
 			if(auxSai.alterado)
@@ -215,14 +215,14 @@ public class Factibilizador
 					}
 				}
 			}
-			auxSai=auxSai.prox;
+			auxSai=auxSai.next;
 		}
 		while(auxSai!=rota.inicio);
 	}
 	
 	private void procuraBestSHIFT(Rota rota)
 	{
-		auxSai=rota.inicio.prox;
+		auxSai=rota.inicio.next;
 		do
 		{
 			if(auxSai.alterado)
@@ -294,7 +294,7 @@ public class Factibilizador
 					}
 				}
 			}
-			auxSai=auxSai.prox;
+			auxSai=auxSai.next;
 		}
 		while(auxSai!=rota.inicio);
 	}
@@ -386,7 +386,7 @@ public class Factibilizador
 					}
 				}
 			}
-			auxSai=auxSai.prox;
+			auxSai=auxSai.next;
 		}
 		while(auxSai!=rota.inicio);
 	}

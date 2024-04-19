@@ -1,7 +1,7 @@
 package Improvement;
 
 import Evaluators.AvaliadorCusto;
-import Solution.No;
+import Solution.Node;
 import Solution.Rota;
 
 public class NoPosMel implements Comparable<NoPosMel>
@@ -10,7 +10,7 @@ public class NoPosMel implements Comparable<NoPosMel>
 	public double custo;
 	public double custoAvaliacao;
 	public int tipoMov=0;
-	public No a,b,antA,antB;
+	public Node a,b,antA,antB;
 	public int indexARota, indexBRota;
 	public Rota rotaA,rotaB;
 	public boolean intra;
@@ -23,7 +23,7 @@ public class NoPosMel implements Comparable<NoPosMel>
 		limpar();
 	}
 	
-	public void setNoMelhora(double custo, int tipoMov, No a, No b,int indexARota,int indexBRota,double custoAvaliacao) 
+	public void setNoMelhora(double custo, int tipoMov, Node a, Node b,int indexARota,int indexBRota,double custoAvaliacao) 
 	{
 		this.ativo = true;
 		this.custo = custo;
@@ -35,7 +35,7 @@ public class NoPosMel implements Comparable<NoPosMel>
 		this.custoAvaliacao=custoAvaliacao;
 	}
 	
-	public void setNoMelhora(double custo, int tipoMov, No a, No b,double custoAvaliacao) 
+	public void setNoMelhora(double custo, int tipoMov, Node a, Node b,double custoAvaliacao) 
 	{
 		this.ativo = true;
 		this.custo = custo;
@@ -47,7 +47,7 @@ public class NoPosMel implements Comparable<NoPosMel>
 		this.custoAvaliacao=custoAvaliacao;
 	}
 	
-	public void setNoMelhora(double custo, int tipoMov, No a, No b, No antA, No antB, double custoAvaliacao) 
+	public void setNoMelhora(double custo, int tipoMov, Node a, Node b, Node antA, Node antB, double custoAvaliacao) 
 	{
 		this.ativo = true;
 		this.custo = custo;
@@ -61,7 +61,7 @@ public class NoPosMel implements Comparable<NoPosMel>
 		this.custoAvaliacao=custoAvaliacao;
 	}
 	
-	public void setNoMelhora(double custo, int tipoMov, No a, No b, No antA, No antB, double custoAvaliacao,int ganho) 
+	public void setNoMelhora(double custo, int tipoMov, Node a, Node b, Node antA, Node antB, double custoAvaliacao,int ganho) 
 	{
 		this.ativo = true;
 		this.custo = custo;
@@ -76,7 +76,7 @@ public class NoPosMel implements Comparable<NoPosMel>
 		this.ganho=ganho;
 	}
 	
-	public void setNoMelhora(double custo, int tipoMov, No a, No b,double custoAvaliacao,int ganho) 
+	public void setNoMelhora(double custo, int tipoMov, Node a, Node b,double custoAvaliacao,int ganho) 
 	{
 		this.ativo = true;
 		this.custo = custo;
@@ -115,7 +115,7 @@ public class NoPosMel implements Comparable<NoPosMel>
 		switch(tipoMov)
 		{
 			case 4: 
-					if(b!=a&&b.prox!=a)
+					if(b!=a&&b.next!=a)
 					{
 						custo=avaliadorCusto.custoSWAP(a, b);	
 						if(custo<0)
@@ -128,7 +128,7 @@ public class NoPosMel implements Comparable<NoPosMel>
 					break;
 				
 			case 7: 
-					if(a!=b&&a!=b.prox)
+					if(a!=b&&a!=b.next)
 					{
 						custo=avaliadorCusto.custoSHIFT(a, b);	
 						if(custo<0)
@@ -141,7 +141,7 @@ public class NoPosMel implements Comparable<NoPosMel>
 					break;
 				
 			case 10: 
-					if(a!=b&&b!=a.prox) 
+					if(a!=b&&b!=a.next) 
 					{
 						custo=avaliadorCusto.custo2Opt(a, b);	
 						if(custo<0)

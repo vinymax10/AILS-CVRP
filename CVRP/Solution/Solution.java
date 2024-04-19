@@ -4,22 +4,22 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
-import Data.Arquivo;
+import Data.File;
 import Data.Instance;
 import Data.Ponto;
 import Improvement.BuscaLocalIntra;
 import SearchMethod.Config;
 
-public class Solucao 
+public class Solution 
 {
 	private Ponto pontos[];
 	Instance instancia;
 	Config config;
 	protected int size;
-	No solucao[];
+	Node solucao[];
 
 	protected int inicio;
-	protected No deposito;
+	protected Node deposito;
 	int capacidade;
 	public Rota rotas[];
 	public int NumRotas;
@@ -32,7 +32,7 @@ public class Solucao
 	
 	BuscaLocalIntra buscaLocalIntra;
 	
-	public Solucao(Instance instancia,Config config) 
+	public Solution(Instance instancia,Config config) 
 	{
 		this.instancia=instancia;
 		this.config=config;
@@ -40,11 +40,11 @@ public class Solucao
 		int deposito=instancia.getDeposito();
 		this.capacidade=instancia.getCapacidade();
 		this.size=instancia.getSize()-1;
-		this.solucao=new No[size];
+		this.solucao=new Node[size];
 		this.NumRotasMin=instancia.getNumRotasMin();
 		this.NumRotas=NumRotasMin;
 		this.NumRotasMax=instancia.getNumRotasMax();
-		this.deposito=new No(pontos[deposito],instancia);
+		this.deposito=new Node(pontos[deposito],instancia);
 		this.epsilon=config.getEpsilon();
 
 		this.rotas=new Rota[NumRotasMax];
@@ -57,14 +57,14 @@ public class Solucao
 		{
 			if(i!=deposito)
 			{
-				solucao[cont]=new No(pontos[i],instancia);
+				solucao[cont]=new Node(pontos[i],instancia);
 				cont++;
 			}
 		}
 	}
 
 
-	public void clone(Solucao referencia)
+	public void clone(Solution referencia)
 	{
 		this.NumRotas=referencia.NumRotas;
 		this.f=referencia.f;
@@ -82,19 +82,19 @@ public class Solucao
 			rotas[i].numElements=referencia.rotas[i].numElements;
 			rotas[i].alterada=referencia.rotas[i].alterada;
 
-			if(referencia.rotas[i].inicio.ant==null)
-				rotas[i].inicio.ant=null;
-			else if(referencia.rotas[i].inicio.ant.nome==0)
-				rotas[i].inicio.ant=rotas[i].inicio;
+			if(referencia.rotas[i].inicio.prev==null)
+				rotas[i].inicio.prev=null;
+			else if(referencia.rotas[i].inicio.prev.name==0)
+				rotas[i].inicio.prev=rotas[i].inicio;
 			else
-				rotas[i].inicio.ant=solucao[referencia.rotas[i].inicio.ant.nome-1];
+				rotas[i].inicio.prev=solucao[referencia.rotas[i].inicio.prev.name-1];
 			
-			if(referencia.rotas[i].inicio.prox==null)
-				rotas[i].inicio.prox=null;
-			else if(referencia.rotas[i].inicio.prox.nome==0)
-				rotas[i].inicio.prox=rotas[i].inicio;
+			if(referencia.rotas[i].inicio.next==null)
+				rotas[i].inicio.next=null;
+			else if(referencia.rotas[i].inicio.next.name==0)
+				rotas[i].inicio.next=rotas[i].inicio;
 			else
-				rotas[i].inicio.prox=solucao[referencia.rotas[i].inicio.prox.nome-1];
+				rotas[i].inicio.next=solucao[referencia.rotas[i].inicio.next.name-1];
 		}
 		
 		for (int i = 0; i < solucao.length; i++)
@@ -102,15 +102,15 @@ public class Solucao
 			solucao[i].rota=rotas[referencia.solucao[i].rota.nomeRota];
 			solucao[i].jaInserido=referencia.solucao[i].jaInserido;
 			
-			if(referencia.solucao[i].ant.nome==0)
-				solucao[i].ant=rotas[referencia.solucao[i].ant.rota.nomeRota].inicio;
+			if(referencia.solucao[i].prev.name==0)
+				solucao[i].prev=rotas[referencia.solucao[i].prev.rota.nomeRota].inicio;
 			else
-				solucao[i].ant=solucao[referencia.solucao[i].ant.nome-1];
+				solucao[i].prev=solucao[referencia.solucao[i].prev.name-1];
 				
-			if(referencia.solucao[i].prox.nome==0)
-				solucao[i].prox=rotas[referencia.solucao[i].prox.rota.nomeRota].inicio;
+			if(referencia.solucao[i].next.name==0)
+				solucao[i].next=rotas[referencia.solucao[i].next.rota.nomeRota].inicio;
 			else
-				solucao[i].prox=solucao[referencia.solucao[i].prox.nome-1];
+				solucao[i].next=solucao[referencia.solucao[i].next.name-1];
 		}
 	}
 	
@@ -179,14 +179,14 @@ public class Solucao
 				erro=true;
 			}
 			
-			if(rotaVazia&&rotas[i].inicio==rotas[i].inicio.prox)
+			if(rotaVazia&&rotas[i].inicio==rotas[i].inicio.next)
 			{
 				System.out.println("-------------------"+local+" ERRO-------------------"
 				+"Rota vazia: "+rotas[i].toString());
 				erro=true;
 			}
 			
-			if(rotas[i].inicio.nome!=0)
+			if(rotas[i].inicio.name!=0)
 			{
 				System.out.println("-------------------"+local+" ERRO-------------------"
 				+"Rota iniciando sem deposito: "+rotas[i].toString());
@@ -234,7 +234,7 @@ public class Solucao
 	{
 		for (int i = 0; i < NumRotas; i++) 
 		{
-			if(rotas[i].inicio==rotas[i].inicio.prox)
+			if(rotas[i].inicio==rotas[i].inicio.next)
 			{
 				removeRota(i);
 				i--;
@@ -342,12 +342,12 @@ public class Solucao
 		return NumRotas;
 	}
 
-	public No getDeposito() {
+	public Node getDeposito() {
 		return deposito;
 	}
 
 
-	public No[] getSolucao() {
+	public Node[] getSolution() {
 		return solucao;
 	}
 
@@ -369,9 +369,9 @@ public class Solucao
 
 	public void escrecerSolucao(String end)
 	{
-		Arquivo arq=new Arquivo(end);
-		arq.escrever(this.toString());
-		arq.finalizar();
+		File arq=new File(end);
+		arq.write(this.toString());
+		arq.finish();
 	}
 	
 }

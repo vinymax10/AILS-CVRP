@@ -1,10 +1,10 @@
 package DiversityControl;
 
-import Auxiliary.Media;
+import Auxiliary.Mean;
 import Data.Instance;
 import SearchMethod.Config;
 import SearchMethod.TipoCriterioParada;
-import Solution.Solucao;
+import Solution.Solution;
 
 public class CriterioAceitacao 
 {
@@ -17,7 +17,7 @@ public class CriterioAceitacao
 	double limiteMaximoExecucao;
 	int numIterUpdate;
 	double teto=Integer.MAX_VALUE,tetoNovo=Integer.MAX_VALUE;
-	Media mFBL;
+	Mean mFBL;
 
 	public CriterioAceitacao(Instance instancia, Config config, Double limiteMaximoExecucao)
 	{
@@ -25,12 +25,12 @@ public class CriterioAceitacao
 		this.etaMin=config.getEtaMin();
 		this.etaMax=config.getEtaMax();
 		this.tipoCriterioParada=config.getTipoCriterioParada();
-		this.mFBL=new Media(config.getGamma());
+		this.mFBL=new Mean(config.getGamma());
 		this.numIterUpdate=config.getGamma();
 		this.limiteMaximoExecucao=limiteMaximoExecucao;
 	}
 	
-	public boolean aceitaSolucao(Solucao solucao)
+	public boolean aceitaSolucao(Solution solucao)
 	{
 		if(iteradorGlobal==0)
 			ini=System.currentTimeMillis();

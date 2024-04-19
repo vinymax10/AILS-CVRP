@@ -4,19 +4,19 @@ import Data.Instance;
 import Evaluators.AvaliadorCusto;
 import Evaluators.ExecutaMovimento;
 import SearchMethod.Config;
-import Solution.No;
+import Solution.Node;
 import Solution.Rota;
 
 public class BuscaLocalIntra 
 {
 	private  NoPosMel melhora;
-	No inicio;
+	Node inicio;
 	int numElements=0;
 	int tipoMov;
 	int iterador;
 	double menorCusto;
 	double antF;
-	No auxSai,auxEntra;
+	Node auxSai,auxEntra;
 	double custo;
 	boolean trocou=false;
 	AvaliadorCusto avaliadorCusto;
@@ -31,14 +31,14 @@ public class BuscaLocalIntra
 		this.limiteAdj=config.getVarphi();
 	}
 	
-	private void setRota(Rota rota,No solucao[]) 
+	private void setRota(Rota rota,Node solucao[]) 
 	{
 		this.antF=rota.fRota;
 		this.inicio=rota.inicio;
 		this.numElements=rota.numElements;
 	}
 
-	public double buscaLocalIntra(Rota rota,No solucao[])
+	public double buscaLocalIntra(Rota rota,Node solucao[])
 	{
 		setRota(rota,solucao);
 		
@@ -64,7 +64,7 @@ public class BuscaLocalIntra
 						if(auxSai.rota.nomeRota==auxEntra.rota.nomeRota)
 						{
 							//2Opt
-							if(auxSai!=auxEntra&&auxEntra!=auxSai.prox)
+							if(auxSai!=auxEntra&&auxEntra!=auxSai.next)
 							{
 								custo=avaliadorCusto.custo2Opt(auxSai,auxEntra);
 								if(menorCusto>custo)
@@ -77,7 +77,7 @@ public class BuscaLocalIntra
 							}
 							
 							//SHIFT
-							if(numElements>2&&auxSai!=auxEntra&&auxSai!=auxEntra.prox)
+							if(numElements>2&&auxSai!=auxEntra&&auxSai!=auxEntra.next)
 							{
 								custo=avaliadorCusto.custoSHIFT(auxSai,auxEntra);
 								if(menorCusto>custo)
@@ -88,7 +88,7 @@ public class BuscaLocalIntra
 									trocou=true;
 								}
 								
-								if(auxEntra!=auxSai.prox)
+								if(auxEntra!=auxSai.next)
 								{
 									custo=avaliadorCusto.custoSHIFT(auxEntra,auxSai);
 									if(menorCusto>custo)
@@ -102,7 +102,7 @@ public class BuscaLocalIntra
 							}
 							
 							//SWAP
-							if(numElements>2&&auxEntra!=auxSai&&auxEntra.prox!=auxSai)
+							if(numElements>2&&auxEntra!=auxSai&&auxEntra.next!=auxSai)
 							{
 								custo=avaliadorCusto.custoSWAP(auxSai,auxEntra);
 								if(menorCusto>custo)
@@ -117,7 +117,7 @@ public class BuscaLocalIntra
 					}
 				}
 				
-				auxSai=auxSai.prox;
+				auxSai=auxSai.next;
 			}
 			while(auxSai!=inicio);
 			

@@ -5,7 +5,7 @@ import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Random;
 
-import Auxiliary.Distancia;
+import Auxiliary.Distance;
 import Data.Instance;
 import DiversityControl.AjusteDist;
 import DiversityControl.AjusteOmega;
@@ -16,15 +16,15 @@ import Improvement.BuscaLocalIntra;
 import Improvement.Factibilizador;
 import Perturbation.HeuristicaAdicao;
 import Perturbation.Perturbacao;
-import Solution.Solucao;
+import Solution.Solution;
 
 public class AILSII 
 {
 	//----------Problema------------
-	Solucao solucao,solucaoReferencia,melhorSolucao;
+	Solution solucao,solucaoReferencia,melhorSolucao;
 	
 	Instance instancia;
-	Distancia distEntreSolucoes;
+	Distance distEntreSolucoes;
 	double melhorF=Double.MAX_VALUE;
 	double limiteMaximoExecucao;
 	double otimo;
@@ -74,12 +74,12 @@ public class AILSII
 		this.epsilon=config.getEpsilon();
 		this.tipoCriterioParada=config.getTipoCriterioParada();
 		this.distIdeal=new DistIdeal();
-		this.solucao =new Solucao(instancia,config);
-		this.solucaoReferencia =new Solucao(instancia,config);
-		this.melhorSolucao =new Solucao(instancia,config);
+		this.solucao =new Solution(instancia,config);
+		this.solucaoReferencia =new Solution(instancia,config);
+		this.melhorSolucao =new Solution(instancia,config);
 		this.numIterUpdate=config.getGamma();
 		
-		this.distEntreSolucoes=new Distancia();
+		this.distEntreSolucoes=new Distance();
 		
 		this.perturbadores=new Perturbacao[config.getPerturbacao().length];
 		
@@ -139,7 +139,7 @@ public class AILSII
 			perturbacaoEscolhida.perturbar(solucao);
 			factibilizador.factibilizar(solucao);
 			buscaLocal.buscaLocal(solucao,true);
-			distanciaBL=distEntreSolucoes.distanciaEdge(solucao,solucaoReferencia);
+			distanciaBL=distEntreSolucoes.pairwiseSolutionDistance(solucao,solucaoReferencia);
 			
 			analisaSolucao();
 			ajusteDist.ajusteDist();
@@ -204,7 +204,7 @@ public class AILSII
 		ailsII.search();
 	}
 	
-	public Solucao getMelhorSolucao() {
+	public Solution getMelhorSolucao() {
 		return melhorSolucao;
 	}
 
@@ -225,7 +225,7 @@ public class AILSII
 		this.print = print;
 	}
 
-	public Solucao getSolucao() {
+	public Solution getSolucao() {
 		return solucao;
 	}
 

@@ -1,6 +1,6 @@
 package Evaluators;
 
-import Solution.No;
+import Solution.Node;
 
 public class AvaliadorFac 
 {
@@ -9,7 +9,7 @@ public class AvaliadorFac
 	 
 //	-------------------------------SHIFT------------------------------
 
-	public int ganhoSHIFT(No a, No b)
+	public int ganhoSHIFT(Node a, Node b)
 	{
 		 infac=0;
 		 newinfac=0;
@@ -29,7 +29,7 @@ public class AvaliadorFac
 		 return -infac+newinfac;
 	}
 	
-	public int ganhoSHIFT2Adj(No a, No b)
+	public int ganhoSHIFT2Adj(Node a, Node b)
 	{
 		 infac=0;
 		 newinfac=0;
@@ -40,16 +40,16 @@ public class AvaliadorFac
 		 if(b.rota.espacoLivre()<0)
 			infac+=b.rota.espacoLivre();
 		 
-		 if(a.rota.espacoLivre()+(a.demanda+a.prox.demanda)<0)
-			 newinfac+=a.rota.espacoLivre()+(a.demanda+a.prox.demanda);
+		 if(a.rota.espacoLivre()+(a.demanda+a.next.demanda)<0)
+			 newinfac+=a.rota.espacoLivre()+(a.demanda+a.next.demanda);
 			 
-		 if(b.rota.espacoLivre()-(a.demanda+a.prox.demanda)<0)
-			 newinfac+=b.rota.espacoLivre()-(a.demanda+a.prox.demanda);
+		 if(b.rota.espacoLivre()-(a.demanda+a.next.demanda)<0)
+			 newinfac+=b.rota.espacoLivre()-(a.demanda+a.next.demanda);
 		 
 		 return -infac+newinfac;
 	}
 	
-	public int ganhoSHIFT3Adj(No a, No b)
+	public int ganhoSHIFT3Adj(Node a, Node b)
 	{
 		 infac=0;
 		 newinfac=0;
@@ -60,11 +60,11 @@ public class AvaliadorFac
 		 if(b.rota.espacoLivre()<0)
 			infac+=b.rota.espacoLivre();
 		 
-		 if(a.rota.espacoLivre()+(a.demanda+a.prox.demanda+a.prox.prox.demanda)<0)
-			 newinfac+=a.rota.espacoLivre()+(a.demanda+a.prox.demanda+a.prox.prox.demanda);
+		 if(a.rota.espacoLivre()+(a.demanda+a.next.demanda+a.next.next.demanda)<0)
+			 newinfac+=a.rota.espacoLivre()+(a.demanda+a.next.demanda+a.next.next.demanda);
 			 
-		 if(b.rota.espacoLivre()-(a.demanda+a.prox.demanda+a.prox.prox.demanda)<0)
-			 newinfac+=b.rota.espacoLivre()-(a.demanda+a.prox.demanda+a.prox.prox.demanda);
+		 if(b.rota.espacoLivre()-(a.demanda+a.next.demanda+a.next.next.demanda)<0)
+			 newinfac+=b.rota.espacoLivre()-(a.demanda+a.next.demanda+a.next.next.demanda);
 		 
 		 return -infac+newinfac;
 	}
@@ -72,7 +72,7 @@ public class AvaliadorFac
 	
 //	-------------------------------SWAP------------------------------
 	
-	public int ganhoSWAP(No a, No b)
+	public int ganhoSWAP(Node a, Node b)
 	{
 		 infac=0;
 		 newinfac=0;
@@ -92,7 +92,7 @@ public class AvaliadorFac
 		 return -infac+newinfac;
 	}
 	
-	public int ganhoSWAP2Adj1(No a, No b)
+	public int ganhoSWAP2Adj1(Node a, Node b)
 	{
 		 infac=0;
 		 newinfac=0;
@@ -103,16 +103,16 @@ public class AvaliadorFac
 		 if(b.rota.espacoLivre()<0)
 			infac+=b.rota.espacoLivre();
 		 
-		 if(a.rota.espacoLivre()+(a.demanda+a.prox.demanda-b.demanda)<0)
-			 newinfac+=a.rota.espacoLivre()+(a.demanda+a.prox.demanda-b.demanda);
+		 if(a.rota.espacoLivre()+(a.demanda+a.next.demanda-b.demanda)<0)
+			 newinfac+=a.rota.espacoLivre()+(a.demanda+a.next.demanda-b.demanda);
 			 
-		 if(b.rota.espacoLivre()-(a.demanda+a.prox.demanda-b.demanda)<0)
-			 newinfac+=b.rota.espacoLivre()-(a.demanda+a.prox.demanda-b.demanda);
+		 if(b.rota.espacoLivre()-(a.demanda+a.next.demanda-b.demanda)<0)
+			 newinfac+=b.rota.espacoLivre()-(a.demanda+a.next.demanda-b.demanda);
 		 
 		 return -infac+newinfac;
 	}
 	
-	public int ganhoSWAP2Adj2(No a, No b)
+	public int ganhoSWAP2Adj2(Node a, Node b)
 	{
 		 infac=0;
 		 newinfac=0;
@@ -123,16 +123,16 @@ public class AvaliadorFac
 		 if(b.rota.espacoLivre()<0)
 			infac+=b.rota.espacoLivre();
 		 
-		 if(a.rota.espacoLivre()+(a.demanda+a.prox.demanda-b.demanda-b.prox.demanda)<0)
-			 newinfac+=a.rota.espacoLivre()+(a.demanda+a.prox.demanda-b.demanda-b.prox.demanda);
+		 if(a.rota.espacoLivre()+(a.demanda+a.next.demanda-b.demanda-b.next.demanda)<0)
+			 newinfac+=a.rota.espacoLivre()+(a.demanda+a.next.demanda-b.demanda-b.next.demanda);
 			 
-		 if(b.rota.espacoLivre()-(a.demanda+a.prox.demanda-b.demanda-b.prox.demanda)<0)
-			 newinfac+=b.rota.espacoLivre()-(a.demanda+a.prox.demanda-b.demanda-b.prox.demanda);
+		 if(b.rota.espacoLivre()-(a.demanda+a.next.demanda-b.demanda-b.next.demanda)<0)
+			 newinfac+=b.rota.espacoLivre()-(a.demanda+a.next.demanda-b.demanda-b.next.demanda);
 		 
 		 return -infac+newinfac;
 	}
 	
-	public int ganhoSWAP3Adj1(No a, No b)
+	public int ganhoSWAP3Adj1(Node a, Node b)
 	{
 		 infac=0;
 		 newinfac=0;
@@ -143,16 +143,16 @@ public class AvaliadorFac
 		 if(b.rota.espacoLivre()<0)
 			infac+=b.rota.espacoLivre();
 		 
-		 if(a.rota.espacoLivre()+(a.demanda+a.prox.demanda+a.prox.prox.demanda-b.demanda)<0)
-			 newinfac+=a.rota.espacoLivre()+(a.demanda+a.prox.demanda+a.prox.prox.demanda-b.demanda);
+		 if(a.rota.espacoLivre()+(a.demanda+a.next.demanda+a.next.next.demanda-b.demanda)<0)
+			 newinfac+=a.rota.espacoLivre()+(a.demanda+a.next.demanda+a.next.next.demanda-b.demanda);
 			 
-		 if(b.rota.espacoLivre()-(a.demanda+a.prox.demanda+a.prox.prox.demanda-b.demanda)<0)
-			 newinfac+=b.rota.espacoLivre()-(a.demanda+a.prox.demanda+a.prox.prox.demanda-b.demanda);
+		 if(b.rota.espacoLivre()-(a.demanda+a.next.demanda+a.next.next.demanda-b.demanda)<0)
+			 newinfac+=b.rota.espacoLivre()-(a.demanda+a.next.demanda+a.next.next.demanda-b.demanda);
 		 
 		 return -infac+newinfac;
 	}
 	
-	public int ganhoSWAP3Adj2(No a, No b)
+	public int ganhoSWAP3Adj2(Node a, Node b)
 	{
 		 infac=0;
 		 newinfac=0;
@@ -163,16 +163,16 @@ public class AvaliadorFac
 		 if(b.rota.espacoLivre()<0)
 			infac+=b.rota.espacoLivre();
 		 
-		 if(a.rota.espacoLivre()+(a.demanda+a.prox.demanda+a.prox.prox.demanda-b.demanda-b.prox.demanda)<0)
-			 newinfac+=a.rota.espacoLivre()+(a.demanda+a.prox.demanda+a.prox.prox.demanda-b.demanda-b.prox.demanda);
+		 if(a.rota.espacoLivre()+(a.demanda+a.next.demanda+a.next.next.demanda-b.demanda-b.next.demanda)<0)
+			 newinfac+=a.rota.espacoLivre()+(a.demanda+a.next.demanda+a.next.next.demanda-b.demanda-b.next.demanda);
 			 
-		 if(b.rota.espacoLivre()-(a.demanda+a.prox.demanda+a.prox.prox.demanda-b.demanda-b.prox.demanda)<0)
-			 newinfac+=b.rota.espacoLivre()-(a.demanda+a.prox.demanda+a.prox.prox.demanda-b.demanda-b.prox.demanda);
+		 if(b.rota.espacoLivre()-(a.demanda+a.next.demanda+a.next.next.demanda-b.demanda-b.next.demanda)<0)
+			 newinfac+=b.rota.espacoLivre()-(a.demanda+a.next.demanda+a.next.next.demanda-b.demanda-b.next.demanda);
 		 
 		 return -infac+newinfac;
 	}
 	
-	public int ganhoSWAP3Adj3(No a, No b)
+	public int ganhoSWAP3Adj3(Node a, Node b)
 	{
 		 infac=0;
 		 newinfac=0;
@@ -183,11 +183,11 @@ public class AvaliadorFac
 		 if(b.rota.espacoLivre()<0)
 			infac+=b.rota.espacoLivre();
 		 
-		 if(a.rota.espacoLivre()+(a.demanda+a.prox.demanda+a.prox.prox.demanda-b.demanda-b.prox.demanda-b.prox.prox.demanda)<0)
-			 newinfac+=a.rota.espacoLivre()+(a.demanda+a.prox.demanda+a.prox.prox.demanda-b.demanda-b.prox.demanda-b.prox.prox.demanda);
+		 if(a.rota.espacoLivre()+(a.demanda+a.next.demanda+a.next.next.demanda-b.demanda-b.next.demanda-b.next.next.demanda)<0)
+			 newinfac+=a.rota.espacoLivre()+(a.demanda+a.next.demanda+a.next.next.demanda-b.demanda-b.next.demanda-b.next.next.demanda);
 			 
-		 if(b.rota.espacoLivre()-(a.demanda+a.prox.demanda+a.prox.prox.demanda-b.demanda-b.prox.demanda-b.prox.prox.demanda)<0)
-			 newinfac+=b.rota.espacoLivre()-(a.demanda+a.prox.demanda+a.prox.prox.demanda-b.demanda-b.prox.demanda-b.prox.prox.demanda);
+		 if(b.rota.espacoLivre()-(a.demanda+a.next.demanda+a.next.next.demanda-b.demanda-b.next.demanda-b.next.next.demanda)<0)
+			 newinfac+=b.rota.espacoLivre()-(a.demanda+a.next.demanda+a.next.next.demanda-b.demanda-b.next.demanda-b.next.next.demanda);
 		 
 		 return -infac+newinfac;
 	}
@@ -195,7 +195,7 @@ public class AvaliadorFac
 //	-------------------------------CROSS------------------------------
 
 	
-	public int ganhoCross(No a, No b)
+	public int ganhoCross(Node a, Node b)
 	{
 		 infac=0;
 		 newinfac=0;
@@ -215,7 +215,7 @@ public class AvaliadorFac
 		 return -infac+newinfac;
 	}
 	
-	public int ganhoCrossInvertido(No a, No b)
+	public int ganhoCrossInvertido(Node a, Node b)
 	{
 		 infac=0;
 		 newinfac=0;

@@ -2,13 +2,13 @@ package Evaluators;
 
 import Data.Instance;
 import Improvement.NoPosMel;
-import Solution.No;
+import Solution.Node;
 import Solution.Rota;
 
 public class ExecutaMovimento 
 {
 	Rota aRota, bRota;
-	No aAnt, bAnt, aProx, aProxProx, bProx, bProxProx;
+	Node aAnt, bAnt, aProx, aProxProx, bProx, bProxProx;
 	Instance instancia;
 	
 	public ExecutaMovimento(Instance instancia)
@@ -16,19 +16,19 @@ public class ExecutaMovimento
 		this.instancia=instancia;
 	}
 	
-	public void SWAP2IdaAdj2Ida(No a, No b)
+	public void SWAP2IdaAdj2Ida(Node a, Node b)
 	 {
 		 aRota=a.rota;
 		 bRota=b.rota;
 		 
-		 aAnt=a.ant;
-		 bAnt=b.ant;
-		 aProx=a.prox;
-		 bProx=b.prox;
+		 aAnt=a.prev;
+		 bAnt=b.prev;
+		 aProx=a.next;
+		 bProx=b.next;
 		 
-		 if(a.prox.prox==b||a.ant==b.prox)
+		 if(a.next.next==b||a.prev==b.next)
 		 {
-			 if(a.prox.prox==b)
+			 if(a.next.next==b)
 			 {
 				 aRota.remove(a);
 				 aRota.remove(aProx);
@@ -41,7 +41,7 @@ public class ExecutaMovimento
 				 aRota.remove(a);
 				 aRota.remove(aProx);
 				 
-				 bRota.addDepois(a, b.ant);
+				 bRota.addDepois(a, b.prev);
 				 bRota.addDepois(aProx, a);
 			 }
 		 }
@@ -60,24 +60,24 @@ public class ExecutaMovimento
 		 }
 	 }
 	
-	 public void SWAP2IdaAdj2Volta(No a, No b)
+	 public void SWAP2IdaAdj2Volta(Node a, Node b)
 	 {
 		 aRota=a.rota;
 		 bRota=b.rota;
 		 
-		 aAnt=a.ant;
-		 bAnt=b.ant;
-		 aProx=a.prox;
-		 bProx=b.prox;
+		 aAnt=a.prev;
+		 bAnt=b.prev;
+		 aProx=a.next;
+		 bProx=b.next;
 		 
-		 if(a.prox.prox==b||a.ant==b.prox)
+		 if(a.next.next==b||a.prev==b.next)
 		 {
-			 if(a.prox.prox==b)
+			 if(a.next.next==b)
 			 {
 				 aRota.remove(b);
 				 aRota.remove(bProx);
 				 
-				 bRota.addDepois(bProx, a.ant);
+				 bRota.addDepois(bProx, a.prev);
 				 bRota.addDepois(b, bProx);
 			 }
 			 else
@@ -104,18 +104,18 @@ public class ExecutaMovimento
 		 }
 	 }
 	 
-	 public void SWAP2VoltaAdj2Ida(No a, No b)
+	 public void SWAP2VoltaAdj2Ida(Node a, Node b)
 	 {
 		 aRota=a.rota;
 		 bRota=b.rota;
 		 
-		 aAnt=a.ant;
-		 bAnt=b.ant;
-		 aProx=a.prox;
-		 bProx=b.prox;
-		 if(a.prox.prox==b||a.ant==b.prox)
+		 aAnt=a.prev;
+		 bAnt=b.prev;
+		 aProx=a.next;
+		 bProx=b.next;
+		 if(a.next.next==b||a.prev==b.next)
 		 {
-			 if(a.prox.prox==b)
+			 if(a.next.next==b)
 			 {
 				 aRota.remove(a);
 				 aRota.remove(aProx);
@@ -147,18 +147,18 @@ public class ExecutaMovimento
 		 }
 	 }
 	 
-	 public void SWAP2VoltaAdj2Volta(No a, No b)
+	 public void SWAP2VoltaAdj2Volta(Node a, Node b)
 	 {
 		 aRota=a.rota;
 		 bRota=b.rota;
 		 
-		 aAnt=a.ant;
-		 bAnt=b.ant;
-		 aProx=a.prox;
-		 bProx=b.prox;
-		 if(a.prox.prox==b||a.ant==b.prox)
+		 aAnt=a.prev;
+		 bAnt=b.prev;
+		 aProx=a.next;
+		 bProx=b.next;
+		 if(a.next.next==b||a.prev==b.next)
 		 {
-			 if(a.prox.prox==b)
+			 if(a.next.next==b)
 			 {
 				 aRota.remove(a);
 				 aRota.remove(aProx);
@@ -198,20 +198,20 @@ public class ExecutaMovimento
 		 }
 	 }
 	 
-	 public void SWAP3IdaAdj2Ida(No a, No b)
+	 public void SWAP3IdaAdj2Ida(Node a, Node b)
 	 {
 		 aRota=a.rota;
 		 bRota=b.rota;
 		 
-		 aAnt=a.ant;
-		 bAnt=b.ant;
-		 aProx=a.prox;
-		 aProxProx=a.prox.prox;
-		 bProx=b.prox;
+		 aAnt=a.prev;
+		 bAnt=b.prev;
+		 aProx=a.next;
+		 aProxProx=a.next.next;
+		 bProx=b.next;
 		 
-		 if(a.prox.prox.prox==b||a.ant==b.prox)
+		 if(a.next.next.next==b||a.prev==b.next)
 		 {
-			 if(a.prox.prox.prox==b)
+			 if(a.next.next.next==b)
 			 {
 				 aRota.remove(a);
 				 aRota.remove(aProx);
@@ -227,7 +227,7 @@ public class ExecutaMovimento
 				 aRota.remove(aProx);
 				 aRota.remove(aProxProx);
 
-				 bRota.addDepois(a, b.ant);
+				 bRota.addDepois(a, b.prev);
 				 bRota.addDepois(aProx, a);
 				 bRota.addDepois(aProxProx, aProx);
 			 }
@@ -249,25 +249,25 @@ public class ExecutaMovimento
 		 }
 	 }
 	 
-	 public void SWAP3IdaAdj2Volta(No a, No b)
+	 public void SWAP3IdaAdj2Volta(Node a, Node b)
 	 {
 		 aRota=a.rota;
 		 bRota=b.rota;
 		 
-		 aAnt=a.ant;
-		 bAnt=b.ant;
-		 aProx=a.prox;
-		 aProxProx=a.prox.prox;
-		 bProx=b.prox;
+		 aAnt=a.prev;
+		 bAnt=b.prev;
+		 aProx=a.next;
+		 aProxProx=a.next.next;
+		 bProx=b.next;
 		 
-		 if(a.prox.prox.prox==b||a.ant==b.prox)
+		 if(a.next.next.next==b||a.prev==b.next)
 		 {
-			 if(a.prox.prox.prox==b)
+			 if(a.next.next.next==b)
 			 {
 				 aRota.remove(b);
 				 aRota.remove(bProx);
 				 
-				 bRota.addDepois(bProx, a.ant);
+				 bRota.addDepois(bProx, a.prev);
 				 bRota.addDepois(b, bProx);
 			 }
 			 else
@@ -297,20 +297,20 @@ public class ExecutaMovimento
 		 }
 	 }
 	 
-	 public void SWAP3VoltaAdj2Ida(No a, No b)
+	 public void SWAP3VoltaAdj2Ida(Node a, Node b)
 	 {
 		 aRota=a.rota;
 		 bRota=b.rota;
 		 
-		 aAnt=a.ant;
-		 bAnt=b.ant;
-		 aProx=a.prox;
-		 aProxProx=a.prox.prox;
+		 aAnt=a.prev;
+		 bAnt=b.prev;
+		 aProx=a.next;
+		 aProxProx=a.next.next;
 		 
-		 bProx=b.prox;
-		 if(a.prox.prox.prox==b||a.ant==b.prox)
+		 bProx=b.next;
+		 if(a.next.next.next==b||a.prev==b.next)
 		 {
-			 if(a.prox.prox.prox==b)
+			 if(a.next.next.next==b)
 			 {
 				 aRota.remove(a);
 				 aRota.remove(aProx);
@@ -348,19 +348,19 @@ public class ExecutaMovimento
 		 }
 	 }
 	 
-	 public void SWAP3VoltaAdj2Volta(No a, No b)
+	 public void SWAP3VoltaAdj2Volta(Node a, Node b)
 	 {
 		 aRota=a.rota;
 		 bRota=b.rota;
 		 
-		 aAnt=a.ant;
-		 bAnt=b.ant;
-		 aProx=a.prox;
-		 aProxProx=a.prox.prox;
-		 bProx=b.prox;
-		 if(a.prox.prox.prox==b||a.ant==b.prox)
+		 aAnt=a.prev;
+		 bAnt=b.prev;
+		 aProx=a.next;
+		 aProxProx=a.next.next;
+		 bProx=b.next;
+		 if(a.next.next.next==b||a.prev==b.next)
 		 {
-			 if(a.prox.prox.prox==b)
+			 if(a.next.next.next==b)
 			 {
 				 aRota.remove(a);
 				 aRota.remove(aProx);
@@ -409,21 +409,21 @@ public class ExecutaMovimento
 		 }
 	 }
 	 
-	 public void SWAP3IdaAdj3Ida(No a, No b)
+	 public void SWAP3IdaAdj3Ida(Node a, Node b)
 	 {
 		 aRota=a.rota;
 		 bRota=b.rota;
 		 
-		 aAnt=a.ant;
-		 bAnt=b.ant;
-		 aProx=a.prox;
-		 aProxProx=a.prox.prox;
-		 bProx=b.prox;
-		 bProxProx=b.prox.prox;
+		 aAnt=a.prev;
+		 bAnt=b.prev;
+		 aProx=a.next;
+		 aProxProx=a.next.next;
+		 bProx=b.next;
+		 bProxProx=b.next.next;
 		 
-		 if(a.prox.prox.prox==b||a==b.prox.prox.prox)
+		 if(a.next.next.next==b||a==b.next.next.next)
 		 {
-			 if(a.prox.prox.prox==b)
+			 if(a.next.next.next==b)
 			 {
 				 aRota.remove(a);
 				 aRota.remove(aProx);
@@ -439,7 +439,7 @@ public class ExecutaMovimento
 				 aRota.remove(aProx);
 				 aRota.remove(aProxProx);
 
-				 bRota.addDepois(a, b.ant);
+				 bRota.addDepois(a, b.prev);
 				 bRota.addDepois(aProx, a);
 				 bRota.addDepois(aProxProx, aProx);
 			 }
@@ -463,27 +463,27 @@ public class ExecutaMovimento
 		 }
 	 }
 	 
-	 public void SWAP3IdaAdj3Volta(No a, No b)
+	 public void SWAP3IdaAdj3Volta(Node a, Node b)
 	 {
 		 aRota=a.rota;
 		 bRota=b.rota;
 		 
-		 aAnt=a.ant;
-		 bAnt=b.ant;
-		 aProx=a.prox;
-		 aProxProx=a.prox.prox;
-		 bProx=b.prox;
-		 bProxProx=b.prox.prox;
+		 aAnt=a.prev;
+		 bAnt=b.prev;
+		 aProx=a.next;
+		 aProxProx=a.next.next;
+		 bProx=b.next;
+		 bProxProx=b.next.next;
 
-		 if(a.prox.prox.prox==b||a==b.prox.prox.prox)
+		 if(a.next.next.next==b||a==b.next.next.next)
 		 {
-			 if(a.prox.prox.prox==b)
+			 if(a.next.next.next==b)
 			 {
 				 aRota.remove(b);
 				 aRota.remove(bProx);
 				 aRota.remove(bProxProx);
 
-				 bRota.addDepois(bProxProx, a.ant);
+				 bRota.addDepois(bProxProx, a.prev);
 				 bRota.addDepois(bProx, bProxProx);
 				 bRota.addDepois(b, bProx);
 			 }
@@ -518,22 +518,22 @@ public class ExecutaMovimento
 		 }
 	 }
 	 
-	 public void SWAP3VoltaAdj3Ida(No a, No b)
+	 public void SWAP3VoltaAdj3Ida(Node a, Node b)
 	 {
 		 aRota=a.rota;
 		 bRota=b.rota;
 		 
-		 aAnt=a.ant;
-		 bAnt=b.ant;
-		 aProx=a.prox;
-		 aProxProx=a.prox.prox;
+		 aAnt=a.prev;
+		 bAnt=b.prev;
+		 aProx=a.next;
+		 aProxProx=a.next.next;
 		 
-		 bProx=b.prox;
-		 bProxProx=b.prox.prox;
+		 bProx=b.next;
+		 bProxProx=b.next.next;
 
-		 if(a.prox.prox.prox==b||a==b.prox.prox.prox)
+		 if(a.next.next.next==b||a==b.next.next.next)
 		 {
-			 if(a.prox.prox.prox==b)
+			 if(a.next.next.next==b)
 			 {
 				 aRota.remove(a);
 				 aRota.remove(aProx);
@@ -573,21 +573,21 @@ public class ExecutaMovimento
 		 }
 	 }
 	 
-	 public void SWAP3VoltaAdj3Volta(No a, No b)
+	 public void SWAP3VoltaAdj3Volta(Node a, Node b)
 	 {
 		 aRota=a.rota;
 		 bRota=b.rota;
 		 
-		 aAnt=a.ant;
-		 bAnt=b.ant;
-		 aProx=a.prox;
-		 aProxProx=a.prox.prox;
-		 bProx=b.prox;
-		 bProxProx=b.prox.prox;
+		 aAnt=a.prev;
+		 bAnt=b.prev;
+		 aProx=a.next;
+		 aProxProx=a.next.next;
+		 bProx=b.next;
+		 bProxProx=b.next.next;
 
-		 if(a.prox.prox.prox==b||a==b.prox.prox.prox)
+		 if(a.next.next.next==b||a==b.next.next.next)
 		 {
-			 if(a.prox.prox.prox==b)
+			 if(a.next.next.next==b)
 			 {
 				 aRota.remove(a);
 				 aRota.remove(aProx);
@@ -643,14 +643,14 @@ public class ExecutaMovimento
 		 }
 	 }
 	 
-	 public void SWAP(No a, No b)
+	 public void SWAP(Node a, Node b)
 	 {
 		 aRota=a.rota;
 		 bRota=b.rota;
 		 
-		 if(a.prox==b||a.ant==b)
+		 if(a.next==b||a.prev==b)
 		 {
-			 if(a.prox==b)
+			 if(a.next==b)
 			 {
 				 aRota.remove(a);
 				 aRota.addDepois(a, b);
@@ -663,8 +663,8 @@ public class ExecutaMovimento
 		 }
 		 else
 		 {
-			 No myAnt=a.ant;
-			 No noAnt=b.ant;
+			 Node myAnt=a.prev;
+			 Node noAnt=b.prev;
 			 
 			 aRota.remove(a);
 			 bRota.remove(b);
@@ -674,18 +674,18 @@ public class ExecutaMovimento
 		 }
 	 }
 	 
-	 public void SWAP2Adj1(No a, No b)
+	 public void SWAP2Adj1(Node a, Node b)
 	 {
 		 aRota=a.rota;
 		 bRota=b.rota;
 		 
-		 aAnt=a.ant;
-		 bAnt=b.ant;
-		 aProx=a.prox;
+		 aAnt=a.prev;
+		 bAnt=b.prev;
+		 aProx=a.next;
 		 
-		 if(a.prox.prox==b||a.ant==b)
+		 if(a.next.next==b||a.prev==b)
 		 {
-			 if(a.prox.prox==b)
+			 if(a.next.next==b)
 			 {
 				 aRota.remove(a);
 				 aRota.remove(aProx);
@@ -698,7 +698,7 @@ public class ExecutaMovimento
 				 aRota.remove(a);
 				 aRota.remove(aProx);
 				 
-				 bRota.addDepois(a, b.ant);
+				 bRota.addDepois(a, b.prev);
 				 bRota.addDepois(aProx, a);
 			 }
 		 }
@@ -715,18 +715,18 @@ public class ExecutaMovimento
 		 }
 	 }
 	 
-	 public void SWAP2Adj1Ivertido(No a, No b)
+	 public void SWAP2Adj1Ivertido(Node a, Node b)
 	 {
 		 aRota=a.rota;
 		 bRota=b.rota;
 		 
-		 aAnt=a.ant;
-		 bAnt=b.ant;
-		 aProx=a.prox;
+		 aAnt=a.prev;
+		 bAnt=b.prev;
+		 aProx=a.next;
 		 
-		 if(a.prox.prox==b||a.ant==b)
+		 if(a.next.next==b||a.prev==b)
 		 {
-			 if(a.prox.prox==b)
+			 if(a.next.next==b)
 			 {
 				 aRota.remove(a);
 				 aRota.remove(aProx);
@@ -739,7 +739,7 @@ public class ExecutaMovimento
 				 aRota.remove(a);
 				 aRota.remove(aProx);
 				 
-				 bRota.addDepois(aProx, b.ant);
+				 bRota.addDepois(aProx, b.prev);
 				 bRota.addDepois(a, aProx);
 			 }
 		 }
@@ -756,19 +756,19 @@ public class ExecutaMovimento
 		 }
 	 }
 	 
-	 public void SWAP3Adj1(No a, No b)
+	 public void SWAP3Adj1(Node a, Node b)
 	 {
 		 aRota=a.rota;
 		 bRota=b.rota;
 		 
-		 aAnt=a.ant;
-		 bAnt=b.ant;
-		 aProx=a.prox;
-		 aProxProx=a.prox.prox;
+		 aAnt=a.prev;
+		 bAnt=b.prev;
+		 aProx=a.next;
+		 aProxProx=a.next.next;
 		 
-		 if(a.prox.prox.prox==b||a.ant==b)
+		 if(a.next.next.next==b||a.prev==b)
 		 {
-			 if(a.prox.prox.prox==b)
+			 if(a.next.next.next==b)
 			 {
 				 aRota.remove(a);
 				 aRota.remove(aProx);
@@ -784,7 +784,7 @@ public class ExecutaMovimento
 				 aRota.remove(aProx);
 				 aRota.remove(aProxProx);
 
-				 bRota.addDepois(a, b.ant);
+				 bRota.addDepois(a, b.prev);
 				 bRota.addDepois(aProx, a);
 				 bRota.addDepois(aProxProx, aProx);
 			 }
@@ -805,19 +805,19 @@ public class ExecutaMovimento
 		 }
 	 }
 	 
-	 public void SWAP3Adj1Ivertido(No a, No b)
+	 public void SWAP3Adj1Ivertido(Node a, Node b)
 	 {
 		 aRota=a.rota;
 		 bRota=b.rota;
 		 
-		 aAnt=a.ant;
-		 bAnt=b.ant;
-		 aProx=a.prox;
-		 aProxProx=a.prox.prox;
+		 aAnt=a.prev;
+		 bAnt=b.prev;
+		 aProx=a.next;
+		 aProxProx=a.next.next;
 		 
-		 if(a.prox.prox.prox==b||a.ant==b)
+		 if(a.next.next.next==b||a.prev==b)
 		 {
-			 if(a.prox.prox.prox==b)
+			 if(a.next.next.next==b)
 			 {
 				 aRota.remove(a);
 				 aRota.remove(aProx);
@@ -833,7 +833,7 @@ public class ExecutaMovimento
 				 aRota.remove(aProx);
 				 aRota.remove(aProxProx);
 				 
-				 bRota.addDepois(aProxProx, b.ant);
+				 bRota.addDepois(aProxProx, b.prev);
 				 bRota.addDepois(aProx, aProxProx);
 				 bRota.addDepois(a, aProx);
 				 
@@ -854,7 +854,7 @@ public class ExecutaMovimento
 		 }
 	 }
 	 
-	 public void SHIFT(No a, No b)
+	 public void SHIFT(Node a, Node b)
 	 {
 		 aRota=a.rota;
 		 bRota=b.rota;
@@ -863,12 +863,12 @@ public class ExecutaMovimento
 		 bRota.addDepois(a, b);
 	 }
 	 
-	 public void SHIFT2Adj(No a, No b)
+	 public void SHIFT2Adj(Node a, Node b)
 	 {
 		 aRota=a.rota;
 		 bRota=b.rota;
 		 
-		 aProx=a.prox;
+		 aProx=a.next;
 		 
 		 aRota.remove(a);
 		 aRota.remove(aProx);
@@ -877,13 +877,13 @@ public class ExecutaMovimento
 		 bRota.addDepois(aProx, a);
 	 }
 	 
-	 public void SHIFT3Adj(No a, No b)
+	 public void SHIFT3Adj(Node a, Node b)
 	 {
 		 aRota=a.rota;
 		 bRota=b.rota;
 		 
-		 aProx=a.prox;
-		 aProxProx=a.prox.prox;
+		 aProx=a.next;
+		 aProxProx=a.next.next;
 		 
 		 aRota.remove(a);
 		 aRota.remove(aProx);
@@ -894,12 +894,12 @@ public class ExecutaMovimento
 		 bRota.addDepois(aProxProx, aProx);
 	 }
 	 
-	 public void SHIFT2AdjInvertido(No a, No b)
+	 public void SHIFT2AdjInvertido(Node a, Node b)
 	 {
 		 aRota=a.rota;
 		 bRota=b.rota;
 		 
-		 aProx=a.prox;
+		 aProx=a.next;
 		 
 		 aRota.remove(a);
 		 aRota.remove(aProx);
@@ -908,13 +908,13 @@ public class ExecutaMovimento
 		 bRota.addDepois(a,aProx);
 	 }
 	 
-	 public void SHIFT3AdjInvertido(No a, No b)
+	 public void SHIFT3AdjInvertido(Node a, Node b)
 	 {
 		 aRota=a.rota;
 		 bRota=b.rota;
 		 
-		 aProx=a.prox;
-		 aProxProx=a.prox.prox;
+		 aProx=a.next;
+		 aProxProx=a.next.next;
 
 		 aRota.remove(a);
 		 aRota.remove(aProx);
@@ -925,76 +925,76 @@ public class ExecutaMovimento
 		 bRota.addDepois(a,aProx);
 	 }
 	 
-	 public void executa2Opt(No a, No b)
+	 public void executa2Opt(Node a, Node b)
 	 {
 		 double custo=custo2Opt(a,b);
 		 
-		 aProx=a.prox;
-		 bProx=b.prox;
-		 No aux=a;
-		 aux.prox=b;
-		 No ant=aux.ant;
-		 while(aux.prox!=aProx)
+		 aProx=a.next;
+		 bProx=b.next;
+		 Node aux=a;
+		 aux.next=b;
+		 Node ant=aux.prev;
+		 while(aux.next!=aProx)
 		 {
 			 ant=aux;
-			 aux=aux.prox;
-			 aux.prox=aux.ant;
-			 aux.ant=ant;
+			 aux=aux.next;
+			 aux.next=aux.prev;
+			 aux.prev=ant;
 		 }
 		 
 		 ant=aux;
-		 aux=aux.prox;
-		 aux.prox=bProx;
-		 aux.ant=ant;
+		 aux=aux.next;
+		 aux.next=bProx;
+		 aux.prev=ant;
 
 		 ant=aux;
-		 aux=aux.prox;
-		 aux.ant=ant;
+		 aux=aux.next;
+		 aux.prev=ant;
 		 
 		 a.rota.fRota+=custo;
 		 a.rota.setDemandaAcumulada();
 		 a.rota.alterada=true;
 	 }
 	 
-	public double custo2Opt(No a, No b)
+	public double custo2Opt(Node a, Node b)
 	{
-		return 	-(instancia.dist(a.nome,a.prox.nome)+instancia.dist(b.nome,b.prox.nome))+				
-				(instancia.dist(a.nome,b.nome)+instancia.dist(a.prox.nome,b.prox.nome));
+		return 	-(instancia.dist(a.name,a.next.name)+instancia.dist(b.name,b.next.name))+				
+				(instancia.dist(a.name,b.name)+instancia.dist(a.next.name,b.next.name));
 	}
 	 
-	 public void Cross(No a, No b)
+	 public void Cross(Node a, Node b)
 	 {
 		aRota=a.rota;
 		bRota=b.rota;
 		
-		No aux=a.prox;
-		No ant=b;
+		Node aux=a.next;
+		Node ant=b;
 		
 		while(aux!=aRota.inicio)
 		{
 			aRota.remove(aux);
 			bRota.addDepois(aux, ant);
 			ant=aux;
-			aux=a.prox;
+			aux=a.next;
 		}
 		
-		No ultimo=ant;
-		aux=ultimo.prox;
+		Node ultimo=ant;
+		aux=ultimo.next;
 		ant=a;
 		while(aux!=bRota.inicio)
 		{
 			bRota.remove(aux);
 			aRota.addDepois(aux, ant);
 			ant=aux;
-			aux=ultimo.prox;
+			aux=ultimo.next;
 		}
 	 }
 	 
 	 
-	 public void CrossInvertido(No a, No b)
+	 public void CrossInvertido(Node a, Node b)
 	 {
 		b.rota.inverterRota();
-		Cross(a, b.ant);
+		Cross(a, b.prev);
 	 }
 	 
 	 public double aplicar(NoPosMel no) 

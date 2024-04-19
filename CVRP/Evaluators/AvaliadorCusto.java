@@ -1,7 +1,7 @@
 package Evaluators;
 
 import Data.Instance;
-import Solution.No;
+import Solution.Node;
 
 public class AvaliadorCusto 
 {
@@ -14,34 +14,34 @@ public class AvaliadorCusto
 	
 //	-------------------------------SHIFT------------------------------
 	
-	public double custoSHIFT(No a, No b)
+	public double custoSHIFT(Node a, Node b)
 	{
-		 return instancia.dist(a.ant.nome,a.prox.nome)-instancia.dist(a.nome,a.ant.nome)-instancia.dist(a.nome,a.prox.nome)+
-				instancia.dist(a.nome,b.nome)+instancia.dist(a.nome,b.prox.nome)-instancia.dist(b.nome,b.prox.nome);
+		 return instancia.dist(a.prev.name,a.next.name)-instancia.dist(a.name,a.prev.name)-instancia.dist(a.name,a.next.name)+
+				instancia.dist(a.name,b.name)+instancia.dist(a.name,b.next.name)-instancia.dist(b.name,b.next.name);
 	}
 		
-	public double custoSHIFT2Adj(No a, No b)
+	public double custoSHIFT2Adj(Node a, Node b)
 	{
-	return -instancia.dist(a.ant.nome,a.nome)-instancia.dist(a.prox.nome,a.prox.prox.nome)-instancia.dist(b.nome,b.prox.nome)
-			+instancia.dist(a.ant.nome,a.prox.prox.nome)+instancia.dist(b.nome,a.nome)+instancia.dist(a.prox.nome,b.prox.nome);
+	return -instancia.dist(a.prev.name,a.name)-instancia.dist(a.next.name,a.next.next.name)-instancia.dist(b.name,b.next.name)
+			+instancia.dist(a.prev.name,a.next.next.name)+instancia.dist(b.name,a.name)+instancia.dist(a.next.name,b.next.name);
 	}
 	 
-	public double custoSHIFT2AdjIvertido(No a, No b)
+	public double custoSHIFT2AdjIvertido(Node a, Node b)
 	{
-		return 	-(instancia.dist(a.ant.nome,a.nome)+instancia.dist(a.prox.nome,a.prox.prox.nome)+instancia.dist(b.nome,b.prox.nome))+
-				instancia.dist(a.ant.nome,a.prox.prox.nome)+instancia.dist(b.nome,a.prox.nome)+instancia.dist(a.nome,b.prox.nome);
+		return 	-(instancia.dist(a.prev.name,a.name)+instancia.dist(a.next.name,a.next.next.name)+instancia.dist(b.name,b.next.name))+
+				instancia.dist(a.prev.name,a.next.next.name)+instancia.dist(b.name,a.next.name)+instancia.dist(a.name,b.next.name);
 	}
 	 
-	public double custoSHIFT3Adj(No a, No b)
+	public double custoSHIFT3Adj(Node a, Node b)
 	{
-		return 	-instancia.dist(a.ant.nome,a.nome)-instancia.dist(a.prox.prox.nome,a.prox.prox.prox.nome)-instancia.dist(b.nome,b.prox.nome)
-				+instancia.dist(a.ant.nome,a.prox.prox.prox.nome)+instancia.dist(b.nome,a.nome)+instancia.dist(a.prox.prox.nome,b.prox.nome);
+		return 	-instancia.dist(a.prev.name,a.name)-instancia.dist(a.next.next.name,a.next.next.next.name)-instancia.dist(b.name,b.next.name)
+				+instancia.dist(a.prev.name,a.next.next.next.name)+instancia.dist(b.name,a.name)+instancia.dist(a.next.next.name,b.next.name);
 	}
 	 
-	public double custoSHIFT3AdjIvertido(No a, No b)
+	public double custoSHIFT3AdjIvertido(Node a, Node b)
 	{
-		return 	-(instancia.dist(a.ant.nome,a.nome)+instancia.dist(a.prox.prox.nome,a.prox.prox.prox.nome)+instancia.dist(b.nome,b.prox.nome))+
-				instancia.dist(a.ant.nome,a.prox.prox.prox.nome)+instancia.dist(b.nome,a.prox.prox.nome)+instancia.dist(a.nome,b.prox.nome);
+		return 	-(instancia.dist(a.prev.name,a.name)+instancia.dist(a.next.next.name,a.next.next.next.name)+instancia.dist(b.name,b.next.name))+
+				instancia.dist(a.prev.name,a.next.next.next.name)+instancia.dist(b.name,a.next.next.name)+instancia.dist(a.name,b.next.name);
 	}
 
 //	-------------------------------Dsit SHIFT------------------------------
@@ -56,69 +56,69 @@ public class AvaliadorCusto
 //	-------------------------------SWAP------------------------------
 
 	
-	public double custoSWAP(No a, No b)
+	public double custoSWAP(Node a, Node b)
 	{
-		if(a.prox!=b&&a.ant!=b)
+		if(a.next!=b&&a.prev!=b)
 		{
-			return 	-(instancia.dist(a.nome,a.ant.nome)+instancia.dist(a.nome,a.prox.nome)+
-					instancia.dist(b.nome,b.ant.nome)+instancia.dist(b.nome,b.prox.nome))+				
-					(instancia.dist(a.nome,b.ant.nome)+instancia.dist(a.nome,b.prox.nome)+
-					instancia.dist(b.nome,a.ant.nome)+instancia.dist(b.nome,a.prox.nome));
+			return 	-(instancia.dist(a.name,a.prev.name)+instancia.dist(a.name,a.next.name)+
+					instancia.dist(b.name,b.prev.name)+instancia.dist(b.name,b.next.name))+				
+					(instancia.dist(a.name,b.prev.name)+instancia.dist(a.name,b.next.name)+
+					instancia.dist(b.name,a.prev.name)+instancia.dist(b.name,a.next.name));
 		}
 		else
 		{
-			if(a.prox==b)
-				return 	-(instancia.dist(a.nome,a.ant.nome)+instancia.dist(b.nome,b.prox.nome))+
-					(instancia.dist(a.nome,b.prox.nome)+instancia.dist(b.nome,a.ant.nome));
+			if(a.next==b)
+				return 	-(instancia.dist(a.name,a.prev.name)+instancia.dist(b.name,b.next.name))+
+					(instancia.dist(a.name,b.next.name)+instancia.dist(b.name,a.prev.name));
 			else
-				return 	-(instancia.dist(b.nome,b.ant.nome)+instancia.dist(a.nome,a.prox.nome))+
-						(instancia.dist(b.nome,a.prox.nome)+instancia.dist(a.nome,b.ant.nome));
+				return 	-(instancia.dist(b.name,b.prev.name)+instancia.dist(a.name,a.next.name))+
+						(instancia.dist(b.name,a.next.name)+instancia.dist(a.name,b.prev.name));
 		}
 	}
 	
-	public double custoSwapEstrela(No a, No b,No antA, No antB)
+	public double custoSwapEstrela(Node a, Node b,Node antA, Node antB)
 	{
-		if(antA.prox.nome!=b.nome&&antB.prox.nome!=a.nome)
+		if(antA.next.name!=b.name&&antB.next.name!=a.name)
 		{
 			return custoSHIFT(a,antA)+custoSHIFT(b,antB);
 		}
 		else 
 		{
-			if(antA.prox.nome==b.nome&&antB.prox.nome!=a.nome)
+			if(antA.next.name==b.name&&antB.next.name!=a.name)
 			{
 //				return Double.MAX_VALUE;
 				
-				return	-instancia.dist(antA.nome,b.nome)
-						-instancia.dist(b.nome,b.prox.nome)
-						+instancia.dist(antA.nome,a.nome)
-						+instancia.dist(b.prox.nome,a.nome)
+				return	-instancia.dist(antA.name,b.name)
+						-instancia.dist(b.name,b.next.name)
+						+instancia.dist(antA.name,a.name)
+						+instancia.dist(b.next.name,a.name)
 						
-						-instancia.dist(antB.nome,antB.prox.nome)
-						+instancia.dist(antB.nome,b.nome)
-						+instancia.dist(b.nome,antB.prox.nome)
+						-instancia.dist(antB.name,antB.next.name)
+						+instancia.dist(antB.name,b.name)
+						+instancia.dist(b.name,antB.next.name)
 						
-						-instancia.dist(a.ant.nome,a.nome)
-						-instancia.dist(a.nome,a.prox.nome)
-						+instancia.dist(a.ant.nome,a.prox.nome);
+						-instancia.dist(a.prev.name,a.name)
+						-instancia.dist(a.name,a.next.name)
+						+instancia.dist(a.prev.name,a.next.name);
 						
 			}
 			
-			if(antA.prox.nome!=b.nome&&antB.prox.nome==a.nome)
+			if(antA.next.name!=b.name&&antB.next.name==a.name)
 			{
 //				return Double.MAX_VALUE;
 				
-				return	-instancia.dist(antB.nome,a.nome)
-						-instancia.dist(a.nome,a.prox.nome)
-						+instancia.dist(antB.nome,b.nome)
-						+instancia.dist(a.prox.nome,b.nome)
+				return	-instancia.dist(antB.name,a.name)
+						-instancia.dist(a.name,a.next.name)
+						+instancia.dist(antB.name,b.name)
+						+instancia.dist(a.next.name,b.name)
 						
-						-instancia.dist(antA.nome,antA.prox.nome)
-						+instancia.dist(antA.nome,a.nome)
-						+instancia.dist(a.nome,antA.prox.nome)
+						-instancia.dist(antA.name,antA.next.name)
+						+instancia.dist(antA.name,a.name)
+						+instancia.dist(a.name,antA.next.name)
 						
-						-instancia.dist(b.ant.nome,b.nome)
-						-instancia.dist(b.nome,b.prox.nome)
-						+instancia.dist(b.ant.nome,b.prox.nome);
+						-instancia.dist(b.prev.name,b.name)
+						-instancia.dist(b.name,b.next.name)
+						+instancia.dist(b.prev.name,b.next.name);
 			}
 			
 			custoSWAP(a, b);
@@ -130,319 +130,319 @@ public class AvaliadorCusto
 //				instancia.dist(a.nome,b.nome)+instancia.dist(a.nome,b.prox.nome)-instancia.dist(b.nome,b.prox.nome);
 	}
 	
-	public double custoSWAP2Adj1(No a, No b)
+	public double custoSWAP2Adj1(Node a, Node b)
 	{
-	 	if(a.prox.prox!=b&&a.ant!=b)
+	 	if(a.next.next!=b&&a.prev!=b)
 	 	{
-	 		return 	-(instancia.dist(a.ant.nome,a.nome)+instancia.dist(a.prox.nome,a.prox.prox.nome)+instancia.dist(b.ant.nome,b.nome)+instancia.dist(b.nome,b.prox.nome))+				
-	 				(instancia.dist(b.ant.nome,a.nome)+instancia.dist(a.prox.nome,b.prox.nome)+instancia.dist(a.ant.nome,b.nome)+instancia.dist(b.nome,a.prox.prox.nome));
+	 		return 	-(instancia.dist(a.prev.name,a.name)+instancia.dist(a.next.name,a.next.next.name)+instancia.dist(b.prev.name,b.name)+instancia.dist(b.name,b.next.name))+				
+	 				(instancia.dist(b.prev.name,a.name)+instancia.dist(a.next.name,b.next.name)+instancia.dist(a.prev.name,b.name)+instancia.dist(b.name,a.next.next.name));
 	 	}
 		else
 		{
-			if(a.prox.prox==b)
-				return 	-(instancia.dist(a.nome,a.ant.nome)+instancia.dist(a.prox.nome,a.prox.prox.nome)+instancia.dist(b.nome,b.prox.nome))+
-						(instancia.dist(a.nome,b.nome)+instancia.dist(a.prox.nome,b.prox.nome)+instancia.dist(b.nome,a.ant.nome));
+			if(a.next.next==b)
+				return 	-(instancia.dist(a.name,a.prev.name)+instancia.dist(a.next.name,a.next.next.name)+instancia.dist(b.name,b.next.name))+
+						(instancia.dist(a.name,b.name)+instancia.dist(a.next.name,b.next.name)+instancia.dist(b.name,a.prev.name));
 			else
-				return 	-(instancia.dist(b.nome,b.ant.nome)+instancia.dist(b.nome,a.nome)+instancia.dist(a.prox.nome,a.prox.prox.nome))+
-						(instancia.dist(b.nome,a.prox.nome)+instancia.dist(b.nome,a.prox.prox.nome)+instancia.dist(a.nome,b.ant.nome));
+				return 	-(instancia.dist(b.name,b.prev.name)+instancia.dist(b.name,a.name)+instancia.dist(a.next.name,a.next.next.name))+
+						(instancia.dist(b.name,a.next.name)+instancia.dist(b.name,a.next.next.name)+instancia.dist(a.name,b.prev.name));
 		}
 	}
 	 
-	public double custoSWAP2Adj1Ivertido(No a, No b)
+	public double custoSWAP2Adj1Ivertido(Node a, Node b)
 	{
-		 if(a.prox.prox!=b&&a.ant!=b)
+		 if(a.next.next!=b&&a.prev!=b)
 		 {
-			 return 	-(instancia.dist(a.ant.nome,a.nome)+instancia.dist(a.prox.nome,a.prox.prox.nome)+instancia.dist(b.ant.nome,b.nome)+instancia.dist(b.nome,b.prox.nome))+				
-					 (instancia.dist(b.ant.nome,a.prox.nome)+instancia.dist(a.nome,b.prox.nome)+instancia.dist(a.ant.nome,b.nome)+instancia.dist(b.nome,a.prox.prox.nome));
+			 return 	-(instancia.dist(a.prev.name,a.name)+instancia.dist(a.next.name,a.next.next.name)+instancia.dist(b.prev.name,b.name)+instancia.dist(b.name,b.next.name))+				
+					 (instancia.dist(b.prev.name,a.next.name)+instancia.dist(a.name,b.next.name)+instancia.dist(a.prev.name,b.name)+instancia.dist(b.name,a.next.next.name));
 		 }
 		 else
 		 {
-			 if(a.prox.prox==b)
-					return 	-(instancia.dist(a.nome,a.ant.nome)+instancia.dist(a.prox.nome,a.prox.prox.nome)+instancia.dist(b.nome,b.prox.nome))+
-							(instancia.dist(a.prox.nome,b.nome)+instancia.dist(a.nome,b.prox.nome)+instancia.dist(b.nome,a.ant.nome));
+			 if(a.next.next==b)
+					return 	-(instancia.dist(a.name,a.prev.name)+instancia.dist(a.next.name,a.next.next.name)+instancia.dist(b.name,b.next.name))+
+							(instancia.dist(a.next.name,b.name)+instancia.dist(a.name,b.next.name)+instancia.dist(b.name,a.prev.name));
 				else
-					return 	-(instancia.dist(b.nome,b.ant.nome)+instancia.dist(b.nome,a.nome)+instancia.dist(a.prox.nome,a.prox.prox.nome))+
-							(instancia.dist(b.nome,a.prox.prox.nome)+instancia.dist(b.nome,a.prox.nome)+instancia.dist(a.nome,b.ant.nome));
+					return 	-(instancia.dist(b.name,b.prev.name)+instancia.dist(b.name,a.name)+instancia.dist(a.next.name,a.next.next.name))+
+							(instancia.dist(b.name,a.next.next.name)+instancia.dist(b.name,a.next.name)+instancia.dist(a.name,b.prev.name));
 		 }
 	}
 	 
-	public double custoSWAP2IdaAdj2Ida(No a, No b)
+	public double custoSWAP2IdaAdj2Ida(Node a, Node b)
 	{
 
-		 if(a.prox.prox!=b&&a.ant!=b.prox)
+		 if(a.next.next!=b&&a.prev!=b.next)
 		 {
-			 return -(instancia.dist(a.ant.nome,a.nome)+instancia.dist(a.prox.nome,a.prox.prox.nome)+instancia.dist(b.ant.nome,b.nome)+instancia.dist(b.prox.nome,b.prox.prox.nome))+				
-					 (instancia.dist(b.ant.nome,a.nome)+instancia.dist(a.prox.nome,b.prox.prox.nome)+instancia.dist(a.ant.nome,b.nome)+instancia.dist(b.prox.nome,a.prox.prox.nome));
+			 return -(instancia.dist(a.prev.name,a.name)+instancia.dist(a.next.name,a.next.next.name)+instancia.dist(b.prev.name,b.name)+instancia.dist(b.next.name,b.next.next.name))+				
+					 (instancia.dist(b.prev.name,a.name)+instancia.dist(a.next.name,b.next.next.name)+instancia.dist(a.prev.name,b.name)+instancia.dist(b.next.name,a.next.next.name));
 		 }
 		 else
 		 {
-			 if(a.prox.prox==b)
-				 return -(instancia.dist(a.ant.nome,a.nome)+instancia.dist(a.prox.nome,a.prox.prox.nome)+instancia.dist(b.prox.nome,b.prox.prox.nome))+				
-						(instancia.dist(a.prox.nome,b.prox.prox.nome)+instancia.dist(a.ant.nome,b.nome)+instancia.dist(b.prox.nome,a.nome));
+			 if(a.next.next==b)
+				 return -(instancia.dist(a.prev.name,a.name)+instancia.dist(a.next.name,a.next.next.name)+instancia.dist(b.next.name,b.next.next.name))+				
+						(instancia.dist(a.next.name,b.next.next.name)+instancia.dist(a.prev.name,b.name)+instancia.dist(b.next.name,a.name));
 			 else
-				 return -(instancia.dist(b.ant.nome,b.nome)+instancia.dist(b.prox.nome,b.prox.prox.nome)+instancia.dist(a.prox.nome,a.prox.prox.nome))+				
-							(instancia.dist(b.prox.nome,a.prox.prox.nome)+instancia.dist(b.ant.nome,a.nome)+instancia.dist(a.prox.nome,b.nome));
+				 return -(instancia.dist(b.prev.name,b.name)+instancia.dist(b.next.name,b.next.next.name)+instancia.dist(a.next.name,a.next.next.name))+				
+							(instancia.dist(b.next.name,a.next.next.name)+instancia.dist(b.prev.name,a.name)+instancia.dist(a.next.name,b.name));
 		 }
 	}
 	 
-	public double custoSWAP2IdaAdj2Volta(No a, No b)
+	public double custoSWAP2IdaAdj2Volta(Node a, Node b)
 	{
-		 if(a.prox.prox!=b&&a.ant!=b.prox)
+		 if(a.next.next!=b&&a.prev!=b.next)
 		 {
-			 return -(instancia.dist(a.ant.nome,a.nome)+instancia.dist(a.prox.nome,a.prox.prox.nome)+instancia.dist(b.ant.nome,b.nome)+instancia.dist(b.prox.nome,b.prox.prox.nome))+				
-					 (instancia.dist(b.ant.nome,a.nome)+instancia.dist(a.prox.nome,b.prox.prox.nome)+instancia.dist(a.ant.nome,b.prox.nome)+instancia.dist(b.nome,a.prox.prox.nome));
+			 return -(instancia.dist(a.prev.name,a.name)+instancia.dist(a.next.name,a.next.next.name)+instancia.dist(b.prev.name,b.name)+instancia.dist(b.next.name,b.next.next.name))+				
+					 (instancia.dist(b.prev.name,a.name)+instancia.dist(a.next.name,b.next.next.name)+instancia.dist(a.prev.name,b.next.name)+instancia.dist(b.name,a.next.next.name));
 		 }
 		 else
 		 {
-			 if(a.prox.prox==b)
-				 return -(instancia.dist(a.ant.nome,a.nome)+instancia.dist(a.prox.nome,a.prox.prox.nome)+instancia.dist(b.prox.nome,b.prox.prox.nome))+				
-						(instancia.dist(a.prox.nome,b.prox.prox.nome)+instancia.dist(a.ant.nome,b.prox.nome)+instancia.dist(b.nome,a.nome));
+			 if(a.next.next==b)
+				 return -(instancia.dist(a.prev.name,a.name)+instancia.dist(a.next.name,a.next.next.name)+instancia.dist(b.next.name,b.next.next.name))+				
+						(instancia.dist(a.next.name,b.next.next.name)+instancia.dist(a.prev.name,b.next.name)+instancia.dist(b.name,a.name));
  			 else
- 				 return -(instancia.dist(b.ant.nome,b.nome)+instancia.dist(b.prox.nome,b.prox.prox.nome)+instancia.dist(a.prox.nome,a.prox.prox.nome))+				
- 						(instancia.dist(b.nome,a.prox.prox.nome)+instancia.dist(b.ant.nome,a.nome)+instancia.dist(a.prox.nome,b.prox.nome));
+ 				 return -(instancia.dist(b.prev.name,b.name)+instancia.dist(b.next.name,b.next.next.name)+instancia.dist(a.next.name,a.next.next.name))+				
+ 						(instancia.dist(b.name,a.next.next.name)+instancia.dist(b.prev.name,a.name)+instancia.dist(a.next.name,b.next.name));
 		 }
 	}
 	 
-	public double custoSWAP2VoltaAdj2Ida(No a, No b)
+	public double custoSWAP2VoltaAdj2Ida(Node a, Node b)
 	{
-		 if(a.prox.prox!=b&&a.ant!=b.prox)
+		 if(a.next.next!=b&&a.prev!=b.next)
 		 {
-			return 	-(instancia.dist(a.ant.nome,a.nome)+instancia.dist(a.prox.nome,a.prox.prox.nome)+instancia.dist(b.ant.nome,b.nome)+instancia.dist(b.prox.nome,b.prox.prox.nome))+				
-					(instancia.dist(b.ant.nome,a.prox.nome)+instancia.dist(a.nome,b.prox.prox.nome)+instancia.dist(a.ant.nome,b.nome)+instancia.dist(b.prox.nome,a.prox.prox.nome));
+			return 	-(instancia.dist(a.prev.name,a.name)+instancia.dist(a.next.name,a.next.next.name)+instancia.dist(b.prev.name,b.name)+instancia.dist(b.next.name,b.next.next.name))+				
+					(instancia.dist(b.prev.name,a.next.name)+instancia.dist(a.name,b.next.next.name)+instancia.dist(a.prev.name,b.name)+instancia.dist(b.next.name,a.next.next.name));
 		 }
 		 else
 		 {
-			 if(a.prox.prox==b)
-				 return	-(instancia.dist(a.ant.nome,a.nome)+instancia.dist(a.prox.nome,a.prox.prox.nome)+instancia.dist(b.prox.nome,b.prox.prox.nome))+				
-						(instancia.dist(a.nome,b.prox.prox.nome)+instancia.dist(a.ant.nome,b.nome)+instancia.dist(b.prox.nome,a.prox.nome));
+			 if(a.next.next==b)
+				 return	-(instancia.dist(a.prev.name,a.name)+instancia.dist(a.next.name,a.next.next.name)+instancia.dist(b.next.name,b.next.next.name))+				
+						(instancia.dist(a.name,b.next.next.name)+instancia.dist(a.prev.name,b.name)+instancia.dist(b.next.name,a.next.name));
 			 else
-				 return	-(instancia.dist(b.ant.nome,b.nome)+instancia.dist(b.prox.nome,b.prox.prox.nome)+instancia.dist(a.prox.nome,a.prox.prox.nome))+				
-						(instancia.dist(a.nome,b.nome)+instancia.dist(b.ant.nome,a.prox.nome)+instancia.dist(b.prox.nome,a.prox.prox.nome));
+				 return	-(instancia.dist(b.prev.name,b.name)+instancia.dist(b.next.name,b.next.next.name)+instancia.dist(a.next.name,a.next.next.name))+				
+						(instancia.dist(a.name,b.name)+instancia.dist(b.prev.name,a.next.name)+instancia.dist(b.next.name,a.next.next.name));
 		 }
 	}
 	 
-	public double custoSWAP2VoltaAdj2Volta(No a, No b)
+	public double custoSWAP2VoltaAdj2Volta(Node a, Node b)
 	{
-		 if(a.prox.prox!=b&&a.ant!=b.prox)
+		 if(a.next.next!=b&&a.prev!=b.next)
 		 {
-			 return 	-(instancia.dist(a.ant.nome,a.nome)+instancia.dist(a.prox.nome,a.prox.prox.nome)+instancia.dist(b.ant.nome,b.nome)+instancia.dist(b.prox.nome,b.prox.prox.nome))+				
-					 (instancia.dist(b.ant.nome,a.prox.nome)+instancia.dist(a.nome,b.prox.prox.nome)+instancia.dist(a.ant.nome,b.prox.nome)+instancia.dist(b.nome,a.prox.prox.nome));
+			 return 	-(instancia.dist(a.prev.name,a.name)+instancia.dist(a.next.name,a.next.next.name)+instancia.dist(b.prev.name,b.name)+instancia.dist(b.next.name,b.next.next.name))+				
+					 (instancia.dist(b.prev.name,a.next.name)+instancia.dist(a.name,b.next.next.name)+instancia.dist(a.prev.name,b.next.name)+instancia.dist(b.name,a.next.next.name));
 		 }
 		 else
 		 {
-			 if(a.prox.prox==b)
-				 return -(instancia.dist(a.ant.nome,a.nome)+instancia.dist(a.prox.nome,a.prox.prox.nome)+instancia.dist(b.prox.nome,b.prox.prox.nome))+				
-						(instancia.dist(a.nome,b.prox.prox.nome)+instancia.dist(a.ant.nome,b.prox.nome)+instancia.dist(b.nome,a.prox.nome));
+			 if(a.next.next==b)
+				 return -(instancia.dist(a.prev.name,a.name)+instancia.dist(a.next.name,a.next.next.name)+instancia.dist(b.next.name,b.next.next.name))+				
+						(instancia.dist(a.name,b.next.next.name)+instancia.dist(a.prev.name,b.next.name)+instancia.dist(b.name,a.next.name));
 		 	else
-		 		return -(instancia.dist(b.ant.nome,b.nome)+instancia.dist(b.prox.nome,b.prox.prox.nome)+instancia.dist(a.prox.nome,a.prox.prox.nome))+				
-						(instancia.dist(b.nome,a.prox.prox.nome)+instancia.dist(b.ant.nome,a.prox.nome)+instancia.dist(a.nome,b.prox.nome));
+		 		return -(instancia.dist(b.prev.name,b.name)+instancia.dist(b.next.name,b.next.next.name)+instancia.dist(a.next.name,a.next.next.name))+				
+						(instancia.dist(b.name,a.next.next.name)+instancia.dist(b.prev.name,a.next.name)+instancia.dist(a.name,b.next.name));
 		 }
 	}
 	 
-	public double custoSWAP3Adj1(No a, No b)
+	public double custoSWAP3Adj1(Node a, Node b)
 	{
-	 	if(a.prox.prox.prox!=b&&a.ant!=b)
+	 	if(a.next.next.next!=b&&a.prev!=b)
 	 	{
-	 		return 	-(instancia.dist(a.ant.nome,a.nome)+instancia.dist(a.prox.prox.nome,a.prox.prox.prox.nome)+instancia.dist(b.ant.nome,b.nome)+instancia.dist(b.nome,b.prox.nome))+				
-	 				(instancia.dist(b.ant.nome,a.nome)+instancia.dist(a.prox.prox.nome,b.prox.nome)+instancia.dist(a.ant.nome,b.nome)+instancia.dist(b.nome,a.prox.prox.prox.nome));
+	 		return 	-(instancia.dist(a.prev.name,a.name)+instancia.dist(a.next.next.name,a.next.next.next.name)+instancia.dist(b.prev.name,b.name)+instancia.dist(b.name,b.next.name))+				
+	 				(instancia.dist(b.prev.name,a.name)+instancia.dist(a.next.next.name,b.next.name)+instancia.dist(a.prev.name,b.name)+instancia.dist(b.name,a.next.next.next.name));
 	 	}
 		else
 		{
-			if(a.prox.prox.prox==b)
-				return 	-(instancia.dist(a.nome,a.ant.nome)+instancia.dist(a.prox.prox.nome,a.prox.prox.prox.nome)+instancia.dist(b.nome,b.prox.nome))+
-						(instancia.dist(a.nome,b.nome)+instancia.dist(a.prox.prox.nome,b.prox.nome)+instancia.dist(b.nome,a.ant.nome));
+			if(a.next.next.next==b)
+				return 	-(instancia.dist(a.name,a.prev.name)+instancia.dist(a.next.next.name,a.next.next.next.name)+instancia.dist(b.name,b.next.name))+
+						(instancia.dist(a.name,b.name)+instancia.dist(a.next.next.name,b.next.name)+instancia.dist(b.name,a.prev.name));
 			else
-				return 	-(instancia.dist(b.nome,b.ant.nome)+instancia.dist(a.prox.prox.nome,a.prox.prox.prox.nome)+instancia.dist(a.nome,b.nome))+
-						(instancia.dist(b.nome,a.prox.prox.prox.nome)+instancia.dist(a.prox.prox.nome,b.nome)+instancia.dist(a.nome,b.ant.nome));
+				return 	-(instancia.dist(b.name,b.prev.name)+instancia.dist(a.next.next.name,a.next.next.next.name)+instancia.dist(a.name,b.name))+
+						(instancia.dist(b.name,a.next.next.next.name)+instancia.dist(a.next.next.name,b.name)+instancia.dist(a.name,b.prev.name));
 		}
 	}
 	
-	public double custoSWAP3Adj1Ivertido(No a, No b)
+	public double custoSWAP3Adj1Ivertido(Node a, Node b)
 	{
-		 if(a.prox.prox.prox!=b&&a.ant!=b)
+		 if(a.next.next.next!=b&&a.prev!=b)
 		 {
-			 return 	-(instancia.dist(a.ant.nome,a.nome)+instancia.dist(a.prox.prox.nome,a.prox.prox.prox.nome)+instancia.dist(b.ant.nome,b.nome)+instancia.dist(b.nome,b.prox.nome))+				
-					 (instancia.dist(b.ant.nome,a.prox.prox.nome)+instancia.dist(a.nome,b.prox.nome)+instancia.dist(a.ant.nome,b.nome)+instancia.dist(b.nome,a.prox.prox.prox.nome));
+			 return 	-(instancia.dist(a.prev.name,a.name)+instancia.dist(a.next.next.name,a.next.next.next.name)+instancia.dist(b.prev.name,b.name)+instancia.dist(b.name,b.next.name))+				
+					 (instancia.dist(b.prev.name,a.next.next.name)+instancia.dist(a.name,b.next.name)+instancia.dist(a.prev.name,b.name)+instancia.dist(b.name,a.next.next.next.name));
 		 }
 		 else
 		 {
-			 if(a.prox.prox.prox==b)
-					return 	-(instancia.dist(a.nome,a.ant.nome)+instancia.dist(a.prox.prox.nome,a.prox.prox.prox.nome)+instancia.dist(b.nome,b.prox.nome))+
-							(instancia.dist(a.prox.prox.nome,b.nome)+instancia.dist(a.nome,b.prox.nome)+instancia.dist(b.nome,a.ant.nome));
+			 if(a.next.next.next==b)
+					return 	-(instancia.dist(a.name,a.prev.name)+instancia.dist(a.next.next.name,a.next.next.next.name)+instancia.dist(b.name,b.next.name))+
+							(instancia.dist(a.next.next.name,b.name)+instancia.dist(a.name,b.next.name)+instancia.dist(b.name,a.prev.name));
 				else
-					return 	-(instancia.dist(b.nome,b.ant.nome)+instancia.dist(a.prox.prox.nome,a.prox.prox.prox.nome)+instancia.dist(a.nome,b.nome))+
-							(instancia.dist(b.nome,a.nome)+instancia.dist(b.nome,a.prox.prox.prox.nome)+instancia.dist(a.prox.prox.nome,b.ant.nome));
+					return 	-(instancia.dist(b.name,b.prev.name)+instancia.dist(a.next.next.name,a.next.next.next.name)+instancia.dist(a.name,b.name))+
+							(instancia.dist(b.name,a.name)+instancia.dist(b.name,a.next.next.next.name)+instancia.dist(a.next.next.name,b.prev.name));
 		 }
 	}
 	 
-	public double custoSWAP3IdaAdj2Ida(No a, No b)
+	public double custoSWAP3IdaAdj2Ida(Node a, Node b)
 	{
 
-		 if(a.prox.prox.prox!=b&&a.ant!=b.prox)
+		 if(a.next.next.next!=b&&a.prev!=b.next)
 		 {
-			 return -(instancia.dist(a.ant.nome,a.nome)+instancia.dist(a.prox.prox.nome,a.prox.prox.prox.nome)+instancia.dist(b.ant.nome,b.nome)+instancia.dist(b.prox.nome,b.prox.prox.nome))+				
-					 (instancia.dist(b.ant.nome,a.nome)+instancia.dist(a.prox.prox.nome,b.prox.prox.nome)+instancia.dist(a.ant.nome,b.nome)+instancia.dist(b.prox.nome,a.prox.prox.prox.nome));
+			 return -(instancia.dist(a.prev.name,a.name)+instancia.dist(a.next.next.name,a.next.next.next.name)+instancia.dist(b.prev.name,b.name)+instancia.dist(b.next.name,b.next.next.name))+				
+					 (instancia.dist(b.prev.name,a.name)+instancia.dist(a.next.next.name,b.next.next.name)+instancia.dist(a.prev.name,b.name)+instancia.dist(b.next.name,a.next.next.next.name));
 		 }
 		 else
 		 {
-			 if(a.prox.prox.prox==b)
-				 return -(instancia.dist(a.ant.nome,a.nome)+instancia.dist(a.prox.prox.nome,a.prox.prox.prox.nome)+instancia.dist(b.prox.nome,b.prox.prox.nome))+				
-						(instancia.dist(a.prox.prox.nome,b.prox.prox.nome)+instancia.dist(a.ant.nome,b.nome)+instancia.dist(b.prox.nome,a.nome));
+			 if(a.next.next.next==b)
+				 return -(instancia.dist(a.prev.name,a.name)+instancia.dist(a.next.next.name,a.next.next.next.name)+instancia.dist(b.next.name,b.next.next.name))+				
+						(instancia.dist(a.next.next.name,b.next.next.name)+instancia.dist(a.prev.name,b.name)+instancia.dist(b.next.name,a.name));
 			 else
-				 return -(instancia.dist(b.ant.nome,b.nome)+instancia.dist(b.prox.nome,b.prox.prox.nome)+instancia.dist(a.prox.prox.nome,a.prox.prox.prox.nome))+				
-							(instancia.dist(b.prox.nome,a.prox.prox.prox.nome)+instancia.dist(b.ant.nome,a.nome)+instancia.dist(a.prox.prox.nome,b.nome));
+				 return -(instancia.dist(b.prev.name,b.name)+instancia.dist(b.next.name,b.next.next.name)+instancia.dist(a.next.next.name,a.next.next.next.name))+				
+							(instancia.dist(b.next.name,a.next.next.next.name)+instancia.dist(b.prev.name,a.name)+instancia.dist(a.next.next.name,b.name));
 		 }
 	}
 	 
-	public double custoSWAP3IdaAdj2Volta(No a, No b)
+	public double custoSWAP3IdaAdj2Volta(Node a, Node b)
 	{
-		 if(a.prox.prox.prox!=b&&a.ant!=b.prox)
+		 if(a.next.next.next!=b&&a.prev!=b.next)
 		 {
-			 return -(instancia.dist(a.ant.nome,a.nome)+instancia.dist(a.prox.prox.nome,a.prox.prox.prox.nome)+instancia.dist(b.ant.nome,b.nome)+instancia.dist(b.prox.nome,b.prox.prox.nome))+				
-					 (instancia.dist(b.ant.nome,a.nome)+instancia.dist(a.prox.prox.nome,b.prox.prox.nome)+instancia.dist(a.ant.nome,b.prox.nome)+instancia.dist(b.nome,a.prox.prox.prox.nome));
+			 return -(instancia.dist(a.prev.name,a.name)+instancia.dist(a.next.next.name,a.next.next.next.name)+instancia.dist(b.prev.name,b.name)+instancia.dist(b.next.name,b.next.next.name))+				
+					 (instancia.dist(b.prev.name,a.name)+instancia.dist(a.next.next.name,b.next.next.name)+instancia.dist(a.prev.name,b.next.name)+instancia.dist(b.name,a.next.next.next.name));
 		 }
 		 else
 		 {
-			 if(a.prox.prox.prox==b)
-				 return -(instancia.dist(a.ant.nome,a.nome)+instancia.dist(a.prox.prox.nome,a.prox.prox.prox.nome)+instancia.dist(b.prox.nome,b.prox.prox.nome))+				
-						(instancia.dist(a.prox.prox.nome,b.prox.prox.nome)+instancia.dist(a.ant.nome,b.prox.nome)+instancia.dist(b.nome,a.nome));
+			 if(a.next.next.next==b)
+				 return -(instancia.dist(a.prev.name,a.name)+instancia.dist(a.next.next.name,a.next.next.next.name)+instancia.dist(b.next.name,b.next.next.name))+				
+						(instancia.dist(a.next.next.name,b.next.next.name)+instancia.dist(a.prev.name,b.next.name)+instancia.dist(b.name,a.name));
  			 else
- 				 return -(instancia.dist(b.ant.nome,b.nome)+instancia.dist(b.prox.nome,b.prox.prox.nome)+instancia.dist(a.prox.prox.nome,a.prox.prox.prox.nome))+	
-  						(instancia.dist(b.prox.nome,a.prox.prox.prox.nome)+instancia.dist(b.ant.nome,a.nome)+instancia.dist(a.prox.prox.nome,b.nome));
+ 				 return -(instancia.dist(b.prev.name,b.name)+instancia.dist(b.next.name,b.next.next.name)+instancia.dist(a.next.next.name,a.next.next.next.name))+	
+  						(instancia.dist(b.next.name,a.next.next.next.name)+instancia.dist(b.prev.name,a.name)+instancia.dist(a.next.next.name,b.name));
 
 // 						(instancia.dist(b.nome,a.prox.prox.prox.nome)+instancia.dist(b.ant.nome,a.nome)+instancia.dist(a.prox.prox.nome,b.prox.nome));
 		 }
 	}
 	 
-	public double custoSWAP3VoltaAdj2Ida(No a, No b)
+	public double custoSWAP3VoltaAdj2Ida(Node a, Node b)
 	{
-		 if(a.prox.prox.prox!=b&&a.ant!=b.prox)
+		 if(a.next.next.next!=b&&a.prev!=b.next)
 		 {
-			return 	-(instancia.dist(a.ant.nome,a.nome)+instancia.dist(a.prox.prox.nome,a.prox.prox.prox.nome)+instancia.dist(b.ant.nome,b.nome)+instancia.dist(b.prox.nome,b.prox.prox.nome))+				
-					(instancia.dist(b.ant.nome,a.prox.prox.nome)+instancia.dist(a.nome,b.prox.prox.nome)+instancia.dist(a.ant.nome,b.nome)+instancia.dist(b.prox.nome,a.prox.prox.prox.nome));
+			return 	-(instancia.dist(a.prev.name,a.name)+instancia.dist(a.next.next.name,a.next.next.next.name)+instancia.dist(b.prev.name,b.name)+instancia.dist(b.next.name,b.next.next.name))+				
+					(instancia.dist(b.prev.name,a.next.next.name)+instancia.dist(a.name,b.next.next.name)+instancia.dist(a.prev.name,b.name)+instancia.dist(b.next.name,a.next.next.next.name));
 		 }
 		 else
 		 {
-			 if(a.prox.prox.prox==b)
-				 return	-(instancia.dist(a.ant.nome,a.nome)+instancia.dist(a.prox.prox.nome,a.prox.prox.prox.nome)+instancia.dist(b.prox.nome,b.prox.prox.nome))+				
-						(instancia.dist(a.nome,b.prox.prox.nome)+instancia.dist(a.ant.nome,b.nome)+instancia.dist(b.prox.nome,a.prox.prox.nome));
+			 if(a.next.next.next==b)
+				 return	-(instancia.dist(a.prev.name,a.name)+instancia.dist(a.next.next.name,a.next.next.next.name)+instancia.dist(b.next.name,b.next.next.name))+				
+						(instancia.dist(a.name,b.next.next.name)+instancia.dist(a.prev.name,b.name)+instancia.dist(b.next.name,a.next.next.name));
 			 else
-				 return	-(instancia.dist(b.ant.nome,b.nome)+instancia.dist(b.prox.nome,b.prox.prox.nome)+instancia.dist(a.prox.prox.nome,a.prox.prox.prox.nome))+				
-						(instancia.dist(a.nome,b.nome)+instancia.dist(b.ant.nome,a.prox.prox.nome)+instancia.dist(b.prox.nome,a.prox.prox.prox.nome));
+				 return	-(instancia.dist(b.prev.name,b.name)+instancia.dist(b.next.name,b.next.next.name)+instancia.dist(a.next.next.name,a.next.next.next.name))+				
+						(instancia.dist(a.name,b.name)+instancia.dist(b.prev.name,a.next.next.name)+instancia.dist(b.next.name,a.next.next.next.name));
 		 }
 	}
 	 
-	public double custoSWAP3VoltaAdj2Volta(No a, No b)
+	public double custoSWAP3VoltaAdj2Volta(Node a, Node b)
 	{
-		 if(a.prox.prox.prox!=b&&a.ant!=b.prox)
+		 if(a.next.next.next!=b&&a.prev!=b.next)
 		 {
-			 return 	-(instancia.dist(a.ant.nome,a.nome)+instancia.dist(a.prox.prox.nome,a.prox.prox.prox.nome)+instancia.dist(b.ant.nome,b.nome)+instancia.dist(b.prox.nome,b.prox.prox.nome))+				
-					 (instancia.dist(b.ant.nome,a.prox.prox.nome)+instancia.dist(a.nome,b.prox.prox.nome)+instancia.dist(a.ant.nome,b.prox.nome)+instancia.dist(b.nome,a.prox.prox.prox.nome));
+			 return 	-(instancia.dist(a.prev.name,a.name)+instancia.dist(a.next.next.name,a.next.next.next.name)+instancia.dist(b.prev.name,b.name)+instancia.dist(b.next.name,b.next.next.name))+				
+					 (instancia.dist(b.prev.name,a.next.next.name)+instancia.dist(a.name,b.next.next.name)+instancia.dist(a.prev.name,b.next.name)+instancia.dist(b.name,a.next.next.next.name));
 		 }
 		 else
 		 {
-			 if(a.prox.prox.prox==b)
-				 return -(instancia.dist(a.ant.nome,a.nome)+instancia.dist(a.prox.prox.nome,a.prox.prox.prox.nome)+instancia.dist(b.prox.nome,b.prox.prox.nome))+				
-						(instancia.dist(a.nome,b.prox.prox.nome)+instancia.dist(a.ant.nome,b.prox.nome)+instancia.dist(b.nome,a.prox.prox.nome));
+			 if(a.next.next.next==b)
+				 return -(instancia.dist(a.prev.name,a.name)+instancia.dist(a.next.next.name,a.next.next.next.name)+instancia.dist(b.next.name,b.next.next.name))+				
+						(instancia.dist(a.name,b.next.next.name)+instancia.dist(a.prev.name,b.next.name)+instancia.dist(b.name,a.next.next.name));
 		 	else
-		 		return -(instancia.dist(b.ant.nome,b.nome)+instancia.dist(b.prox.nome,b.prox.prox.nome)+instancia.dist(a.prox.prox.nome,a.prox.prox.prox.nome))+				
-						(instancia.dist(b.nome,a.prox.prox.prox.nome)+instancia.dist(b.ant.nome,a.prox.prox.nome)+instancia.dist(a.nome,b.prox.nome));
+		 		return -(instancia.dist(b.prev.name,b.name)+instancia.dist(b.next.name,b.next.next.name)+instancia.dist(a.next.next.name,a.next.next.next.name))+				
+						(instancia.dist(b.name,a.next.next.next.name)+instancia.dist(b.prev.name,a.next.next.name)+instancia.dist(a.name,b.next.name));
 		 }
 	}
 	
-	public double custoSWAP3IdaAdj3Ida(No a, No b)
+	public double custoSWAP3IdaAdj3Ida(Node a, Node b)
 	{
 
-		 if(a.prox.prox.prox!=b&&a!=b.prox.prox.prox)
+		 if(a.next.next.next!=b&&a!=b.next.next.next)
 		 {
-			 return -(instancia.dist(a.ant.nome,a.nome)+instancia.dist(a.prox.prox.nome,a.prox.prox.prox.nome)+instancia.dist(b.ant.nome,b.nome)+instancia.dist(b.prox.prox.nome,b.prox.prox.prox.nome))+				
-					 (instancia.dist(b.ant.nome,a.nome)+instancia.dist(a.prox.prox.nome,b.prox.prox.prox.nome)+instancia.dist(a.ant.nome,b.nome)+instancia.dist(b.prox.prox.nome,a.prox.prox.prox.nome));
+			 return -(instancia.dist(a.prev.name,a.name)+instancia.dist(a.next.next.name,a.next.next.next.name)+instancia.dist(b.prev.name,b.name)+instancia.dist(b.next.next.name,b.next.next.next.name))+				
+					 (instancia.dist(b.prev.name,a.name)+instancia.dist(a.next.next.name,b.next.next.next.name)+instancia.dist(a.prev.name,b.name)+instancia.dist(b.next.next.name,a.next.next.next.name));
 		 }
 		 else
 		 {
-			 if(a.prox.prox.prox==b)
-				 return -(instancia.dist(a.ant.nome,a.nome)+instancia.dist(a.prox.prox.nome,a.prox.prox.prox.nome)+instancia.dist(b.prox.prox.nome,b.prox.prox.prox.nome))+				
-						(instancia.dist(a.prox.prox.nome,b.prox.prox.prox.nome)+instancia.dist(a.ant.nome,b.nome)+instancia.dist(b.prox.prox.nome,a.nome));
+			 if(a.next.next.next==b)
+				 return -(instancia.dist(a.prev.name,a.name)+instancia.dist(a.next.next.name,a.next.next.next.name)+instancia.dist(b.next.next.name,b.next.next.next.name))+				
+						(instancia.dist(a.next.next.name,b.next.next.next.name)+instancia.dist(a.prev.name,b.name)+instancia.dist(b.next.next.name,a.name));
 			 else
-				 return -(instancia.dist(b.ant.nome,b.nome)+instancia.dist(b.prox.prox.nome,b.prox.prox.prox.nome)+instancia.dist(a.prox.prox.nome,a.prox.prox.prox.nome))+				
-							(instancia.dist(b.prox.prox.nome,a.prox.prox.prox.nome)+instancia.dist(b.ant.nome,a.nome)+instancia.dist(a.prox.prox.nome,b.nome));
+				 return -(instancia.dist(b.prev.name,b.name)+instancia.dist(b.next.next.name,b.next.next.next.name)+instancia.dist(a.next.next.name,a.next.next.next.name))+				
+							(instancia.dist(b.next.next.name,a.next.next.next.name)+instancia.dist(b.prev.name,a.name)+instancia.dist(a.next.next.name,b.name));
 		 }
 	}
 	 
-	public double custoSWAP3IdaAdj3Volta(No a, No b)
+	public double custoSWAP3IdaAdj3Volta(Node a, Node b)
 	{
-		 if(a.prox.prox.prox!=b&&a!=b.prox.prox.prox)
+		 if(a.next.next.next!=b&&a!=b.next.next.next)
 		 {
-			 return -(instancia.dist(a.ant.nome,a.nome)+instancia.dist(a.prox.prox.nome,a.prox.prox.prox.nome)+instancia.dist(b.ant.nome,b.nome)+instancia.dist(b.prox.prox.nome,b.prox.prox.prox.nome))+				
-					 (instancia.dist(b.ant.nome,a.nome)+instancia.dist(a.prox.prox.nome,b.prox.prox.prox.nome)+instancia.dist(a.ant.nome,b.prox.prox.nome)+instancia.dist(b.nome,a.prox.prox.prox.nome));
+			 return -(instancia.dist(a.prev.name,a.name)+instancia.dist(a.next.next.name,a.next.next.next.name)+instancia.dist(b.prev.name,b.name)+instancia.dist(b.next.next.name,b.next.next.next.name))+				
+					 (instancia.dist(b.prev.name,a.name)+instancia.dist(a.next.next.name,b.next.next.next.name)+instancia.dist(a.prev.name,b.next.next.name)+instancia.dist(b.name,a.next.next.next.name));
 		 }
 		 else
 		 {
-			 if(a.prox.prox.prox==b)
-				 return -(instancia.dist(a.ant.nome,a.nome)+instancia.dist(a.prox.prox.nome,a.prox.prox.prox.nome)+instancia.dist(b.prox.prox.nome,b.prox.prox.prox.nome))+				
-						(instancia.dist(a.prox.prox.nome,b.prox.prox.prox.nome)+instancia.dist(a.ant.nome,b.prox.prox.nome)+instancia.dist(b.nome,a.nome));
+			 if(a.next.next.next==b)
+				 return -(instancia.dist(a.prev.name,a.name)+instancia.dist(a.next.next.name,a.next.next.next.name)+instancia.dist(b.next.next.name,b.next.next.next.name))+				
+						(instancia.dist(a.next.next.name,b.next.next.next.name)+instancia.dist(a.prev.name,b.next.next.name)+instancia.dist(b.name,a.name));
  			 else
- 				 return -(instancia.dist(b.ant.nome,b.nome)+instancia.dist(b.prox.prox.nome,b.prox.prox.prox.nome)+instancia.dist(a.prox.prox.nome,a.prox.prox.prox.nome))+				
-   						(instancia.dist(b.prox.prox.nome,a.prox.prox.prox.nome)+instancia.dist(b.ant.nome,a.nome)+instancia.dist(a.prox.prox.nome,b.nome));
+ 				 return -(instancia.dist(b.prev.name,b.name)+instancia.dist(b.next.next.name,b.next.next.next.name)+instancia.dist(a.next.next.name,a.next.next.next.name))+				
+   						(instancia.dist(b.next.next.name,a.next.next.next.name)+instancia.dist(b.prev.name,a.name)+instancia.dist(a.next.next.name,b.name));
 
 // 						 (instancia.dist(b.nome,a.prox.prox.prox.nome)+instancia.dist(b.ant.nome,a.nome)+instancia.dist(a.prox.prox.nome,b.prox.prox.nome));
 		 }
 	}
 	 
-	public double custoSWAP3VoltaAdj3Ida(No a, No b)
+	public double custoSWAP3VoltaAdj3Ida(Node a, Node b)
 	{
-		 if(a.prox.prox.prox!=b&&a!=b.prox.prox.prox)
+		 if(a.next.next.next!=b&&a!=b.next.next.next)
 		 {
-			return 	-(instancia.dist(a.ant.nome,a.nome)+instancia.dist(a.prox.prox.nome,a.prox.prox.prox.nome)+instancia.dist(b.ant.nome,b.nome)+instancia.dist(b.prox.prox.nome,b.prox.prox.prox.nome))+				
-					(instancia.dist(b.ant.nome,a.prox.prox.nome)+instancia.dist(a.nome,b.prox.prox.prox.nome)+instancia.dist(a.ant.nome,b.nome)+instancia.dist(b.prox.prox.nome,a.prox.prox.prox.nome));
+			return 	-(instancia.dist(a.prev.name,a.name)+instancia.dist(a.next.next.name,a.next.next.next.name)+instancia.dist(b.prev.name,b.name)+instancia.dist(b.next.next.name,b.next.next.next.name))+				
+					(instancia.dist(b.prev.name,a.next.next.name)+instancia.dist(a.name,b.next.next.next.name)+instancia.dist(a.prev.name,b.name)+instancia.dist(b.next.next.name,a.next.next.next.name));
 		 }
 		 else
 		 {
-			 if(a.prox.prox.prox==b)
-				 return	-(instancia.dist(a.ant.nome,a.nome)+instancia.dist(a.prox.prox.nome,a.prox.prox.prox.nome)+instancia.dist(b.prox.prox.nome,b.prox.prox.prox.nome))+				
-						(instancia.dist(a.nome,b.prox.prox.prox.nome)+instancia.dist(a.ant.nome,b.nome)+instancia.dist(b.prox.prox.nome,a.prox.prox.nome));
+			 if(a.next.next.next==b)
+				 return	-(instancia.dist(a.prev.name,a.name)+instancia.dist(a.next.next.name,a.next.next.next.name)+instancia.dist(b.next.next.name,b.next.next.next.name))+				
+						(instancia.dist(a.name,b.next.next.next.name)+instancia.dist(a.prev.name,b.name)+instancia.dist(b.next.next.name,a.next.next.name));
 			 else
-				 return	-(instancia.dist(b.ant.nome,b.nome)+instancia.dist(b.prox.prox.nome,b.prox.prox.prox.nome)+instancia.dist(a.prox.prox.nome,a.prox.prox.prox.nome))+				
-						(instancia.dist(a.nome,b.nome)+instancia.dist(b.ant.nome,a.prox.prox.nome)+instancia.dist(b.prox.prox.nome,a.prox.prox.prox.nome));
+				 return	-(instancia.dist(b.prev.name,b.name)+instancia.dist(b.next.next.name,b.next.next.next.name)+instancia.dist(a.next.next.name,a.next.next.next.name))+				
+						(instancia.dist(a.name,b.name)+instancia.dist(b.prev.name,a.next.next.name)+instancia.dist(b.next.next.name,a.next.next.next.name));
 		 }
 	}
 	 
-	public double custoSWAP3VoltaAdj3Volta(No a, No b)
+	public double custoSWAP3VoltaAdj3Volta(Node a, Node b)
 	{
-		 if(a.prox.prox.prox!=b&&a!=b.prox.prox.prox)
+		 if(a.next.next.next!=b&&a!=b.next.next.next)
 		 {
-			 return 	-(instancia.dist(a.ant.nome,a.nome)+instancia.dist(a.prox.prox.nome,a.prox.prox.prox.nome)+instancia.dist(b.ant.nome,b.nome)+instancia.dist(b.prox.prox.nome,b.prox.prox.prox.nome))+				
-					 (instancia.dist(b.ant.nome,a.prox.prox.nome)+instancia.dist(a.nome,b.prox.prox.prox.nome)+instancia.dist(a.ant.nome,b.prox.prox.nome)+instancia.dist(b.nome,a.prox.prox.prox.nome));
+			 return 	-(instancia.dist(a.prev.name,a.name)+instancia.dist(a.next.next.name,a.next.next.next.name)+instancia.dist(b.prev.name,b.name)+instancia.dist(b.next.next.name,b.next.next.next.name))+				
+					 (instancia.dist(b.prev.name,a.next.next.name)+instancia.dist(a.name,b.next.next.next.name)+instancia.dist(a.prev.name,b.next.next.name)+instancia.dist(b.name,a.next.next.next.name));
 		 }
 		 else
 		 {
-			 if(a.prox.prox.prox==b)
-				 return -(instancia.dist(a.ant.nome,a.nome)+instancia.dist(a.prox.prox.nome,a.prox.prox.prox.nome)+instancia.dist(b.prox.prox.nome,b.prox.prox.prox.nome))+				
-						(instancia.dist(a.nome,b.prox.prox.prox.nome)+instancia.dist(a.ant.nome,b.prox.prox.nome)+instancia.dist(b.nome,a.prox.prox.nome));
+			 if(a.next.next.next==b)
+				 return -(instancia.dist(a.prev.name,a.name)+instancia.dist(a.next.next.name,a.next.next.next.name)+instancia.dist(b.next.next.name,b.next.next.next.name))+				
+						(instancia.dist(a.name,b.next.next.next.name)+instancia.dist(a.prev.name,b.next.next.name)+instancia.dist(b.name,a.next.next.name));
 		 	else
-		 		return -(instancia.dist(b.ant.nome,b.nome)+instancia.dist(b.prox.prox.nome,b.prox.prox.prox.nome)+instancia.dist(a.prox.prox.nome,a.prox.prox.prox.nome))+				
-						(instancia.dist(b.nome,a.prox.prox.prox.nome)+instancia.dist(b.ant.nome,a.prox.prox.nome)+instancia.dist(a.nome,b.prox.prox.nome));
+		 		return -(instancia.dist(b.prev.name,b.name)+instancia.dist(b.next.next.name,b.next.next.next.name)+instancia.dist(a.next.next.name,a.next.next.next.name))+				
+						(instancia.dist(b.name,a.next.next.next.name)+instancia.dist(b.prev.name,a.next.next.name)+instancia.dist(a.name,b.next.next.name));
 		 }
 	}
 	
 //		-------------------------------CROSS------------------------------
 
-	public double custoCross(No a, No b)
+	public double custoCross(Node a, Node b)
 	{
-		 return -(instancia.dist(a.nome,a.prox.nome)+instancia.dist(b.nome,b.prox.nome))
-				 +(instancia.dist(a.nome,b.prox.nome)+instancia.dist(b.nome,a.prox.nome));
+		 return -(instancia.dist(a.name,a.next.name)+instancia.dist(b.name,b.next.name))
+				 +(instancia.dist(a.name,b.next.name)+instancia.dist(b.name,a.next.name));
 	}
 	 
-	public double custoCrossInvertido(No a, No b)
+	public double custoCrossInvertido(Node a, Node b)
 	{
-		 return -(instancia.dist(a.nome,a.prox.nome)+instancia.dist(b.nome,b.prox.nome))
-				 +(instancia.dist(a.nome,b.nome)+instancia.dist(b.prox.nome,a.prox.nome));
+		 return -(instancia.dist(a.name,a.next.name)+instancia.dist(b.name,b.next.name))
+				 +(instancia.dist(a.name,b.name)+instancia.dist(b.next.name,a.next.name));
 	}
 	 
-	public double custo2Opt(No a, No b)
+	public double custo2Opt(Node a, Node b)
 	{
-		return 	-(instancia.dist(a.nome,a.prox.nome)+instancia.dist(b.nome,b.prox.nome))+				
-				(instancia.dist(a.nome,b.nome)+instancia.dist(a.prox.nome,b.prox.nome));
+		return 	-(instancia.dist(a.name,a.next.name)+instancia.dist(b.name,b.next.name))+				
+				(instancia.dist(a.name,b.name)+instancia.dist(a.next.name,b.next.name));
 	}
 	 
 }

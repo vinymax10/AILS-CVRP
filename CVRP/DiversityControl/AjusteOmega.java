@@ -3,19 +3,19 @@ package DiversityControl;
 import java.text.DecimalFormat;
 import java.util.Random;
 
-import Auxiliary.Media;
+import Auxiliary.Mean;
 import Perturbation.TipoPerturbacao;
 import SearchMethod.Config;
 
 public class AjusteOmega 
 {
 	double omega,omegaMin,omegaMax;
-	Media distBLMedia;
+	Mean distBLMedia;
 	int iterador=0,lastIteradorMF;
 	DecimalFormat deci2=new DecimalFormat("0.00");
 	double distObtida;
 	
-	Media omegaMedio;
+	Mean omegaMedio;
 	
 	double omegaReal;
 	Random rand=new Random();
@@ -30,8 +30,8 @@ public class AjusteOmega
 		this.numIterUpdate = config.getGamma();
 		this.omegaMin=1;
 		this.omegaMax=size-2;
-		this.omegaMedio=new Media(config.getGamma());
-		this.distBLMedia=new Media(config.getGamma());
+		this.omegaMedio=new Mean(config.getGamma());
+		this.distBLMedia=new Mean(config.getGamma());
 
 		this.distIdeal=distIdeal;
 	}
@@ -77,7 +77,7 @@ public class AjusteOmega
 		+ " oM"+String.valueOf(tipoPerturbacao).substring(4)+": " + omegaMedio;
 	}
 	
-	public Media getOmegaMedio() 
+	public Mean getOmegaMedio() 
 	{
 		return omegaMedio;
 	}

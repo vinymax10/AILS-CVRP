@@ -1,13 +1,13 @@
 package SearchMethod;
 
-public enum TipoCriterioParada 
+public enum StoppingCriterionType 
 {
 	Time(1),
 	Iteration(2);
 	
 	final int tipo;
 	
-	TipoCriterioParada(int tipo)
+	StoppingCriterionType(int tipo)
 	{
 		this.tipo=tipo;
 	}

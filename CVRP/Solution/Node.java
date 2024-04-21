@@ -18,7 +18,7 @@ public class Node implements Cloneable
 	public boolean fixoRota;
 	public boolean fixoPos;
 	Point ponto;
-	Instance instancia;
+	Instance instance;
 	public boolean alterado;
 	
 	public int nomeRotaDestino;
@@ -26,22 +26,22 @@ public class Node implements Cloneable
 	public int priority;
 	public Rota rotaDestino;
 	
-	public Node(Point ponto, Instance instancia) 
+	public Node(Point ponto, Instance instance) 
 	{
 		this.ponto=ponto;
-		this.instancia=instancia;
+		this.instance=instance;
 		this.name = ponto.name;
 		this.demanda = ponto.demand;
 
 		this.next=null;
 		this.prev=null;
 		this.rota=null;
-		this.knn=instancia.getKnn()[name];
+		this.knn=instance.getKnn()[name];
 	}
 	
 	public double dist(Node x)
 	{
-		return instancia.dist(x.name,this.name);
+		return instance.dist(x.name,this.name);
 	}
 	
 	public void limpar()
@@ -52,7 +52,7 @@ public class Node implements Cloneable
 	
 	 public Node clone() 
 	 {
-		 Node clone = new Node(ponto, instancia);
+		 Node clone = new Node(ponto, instance);
 		 clone.prev=prev;
 		 clone.next=next;
 		 clone.rota=rota;
@@ -61,7 +61,7 @@ public class Node implements Cloneable
 	
 	 public double custoRemocao()
 	 {
-		 return instancia.dist(prev.name,next.name)-instancia.dist(name,prev.name)-instancia.dist(name,next.name);
+		 return instance.dist(prev.name,next.name)-instance.dist(name,prev.name)-instance.dist(name,next.name);
 	 }
 	 
 	 public double custoInserirApos(Node no)
@@ -69,7 +69,7 @@ public class Node implements Cloneable
 		 if(no==null)
 			 System.out.println("no null");
 		 
-		 return -instancia.dist(no.name,no.next.name)+instancia.dist(name,no.name)+instancia.dist(name,no.next.name);
+		 return -instance.dist(no.name,no.next.name)+instance.dist(name,no.name)+instance.dist(name,no.next.name);
 	 }
 	 
 	@Override

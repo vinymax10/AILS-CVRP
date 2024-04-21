@@ -62,8 +62,8 @@ public class Instance
 				
 			minNumberRoutes=(int) Math.ceil(sumDemand/capacity);
 			averagePerRoute=(double)size/minNumberRoutes;
-			double porcent=minNumberRoutes*((double)1/averagePerRoute);
-			maxNumberRoutes=minNumberRoutes+(3+(int)Math.ceil(porcent));
+			double percent=minNumberRoutes*((double)1/averagePerRoute);
+			maxNumberRoutes=minNumberRoutes+(3+(int)Math.ceil(percent));
 			
 		} 
 		catch (IOException e) {
@@ -229,10 +229,10 @@ public class Instance
 			e.printStackTrace();
 		}
 		
-		int cont=0;
+		int count=0;
 		for (int i = 0; i < size; i++) 
 		{
-			cont=0;
+			count=0;
 			for (int j = 0; j < size; j++) 
 			{
 				distance=dist[i][j];
@@ -248,9 +248,9 @@ public class Instance
 				
 				if(i!=j)
 				{
-					neighKnn[cont].dist=distance;
-					neighKnn[cont].name=j;
-					cont++;
+					neighKnn[count].dist=distance;
+					neighKnn[count].name=j;
+					count++;
 				}
 			}
 			
@@ -309,24 +309,23 @@ public class Instance
 	
 	@Override
 	public String toString() {
-		return "size=" + size + "\n capacidade=" + capacity
-				+ "\ndeposito="+ depot +" numRotasMin: "+minNumberRoutes;
+		return "size=" + size + "\n capacity=" + capacity
+				+ "\ndepot="+ depot +" minNumberRoutes: "+minNumberRoutes;
 	}
 
-	public Point[] getPontos() {
+	public Point[] getPoints() {
 		return points;
 	}
 
-
-	public void setPontos(Point[] pontos) {
-		this.points = pontos;
+	public void setPoints(Point[] points) {
+		this.points = points;
 	}
 
-	public int getNumRotasMin() {
+	public int getMinNumberRoutes() {
 		return minNumberRoutes;
 	}
 
-	public int getNumRotasMax() {
+	public int getMaxNumberRoutes() {
 		return maxNumberRoutes;
 	}
 
@@ -338,31 +337,31 @@ public class Instance
 		this.size = size;
 	}
 
-	public int getCapacidade() {
+	public int getCapacity() {
 		return capacity;
 	}
 
-	public void setCapacidade(int capacidade) {
-		this.capacity = capacidade;
+	public void setCapacity(int capacity) {
+		this.capacity = capacity;
 	}
 
-	public int getDeposito() {
+	public int getDepot() {
 		return depot;
 	}
 
-	public void setDeposito(int deposito) {
-		this.depot = deposito;
+	public void setDepot(int depot) {
+		this.depot = depot;
 	}
 
-	public double getMaiorDist() {
+	public double getLargestDist() {
 		return largestDist;
 	}
 	
-	public double getMenorDist() {
+	public double getMinDist() {
 		return minDist;
 	}
 
-	public String getNome() {
+	public String getName() {
 		return name;
 	}
 

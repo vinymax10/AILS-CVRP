@@ -13,10 +13,10 @@ import SearchMethod.Config;
 public class Solution 
 {
 	private Point pontos[];
-	Instance instancia;
+	Instance instance;
 	Config config;
 	protected int size;
-	Node solucao[];
+	Node solution[];
 
 	protected int inicio;
 	protected Node deposito;
@@ -32,32 +32,32 @@ public class Solution
 	
 	BuscaLocalIntra buscaLocalIntra;
 	
-	public Solution(Instance instancia,Config config) 
+	public Solution(Instance instance,Config config) 
 	{
-		this.instancia=instancia;
+		this.instance=instance;
 		this.config=config;
-		this.pontos=instancia.getPontos();
-		int deposito=instancia.getDeposito();
-		this.capacidade=instancia.getCapacidade();
-		this.size=instancia.getSize()-1;
-		this.solucao=new Node[size];
-		this.NumRotasMin=instancia.getNumRotasMin();
+		this.pontos=instance.getPoints();
+		int deposito=instance.getDepot();
+		this.capacidade=instance.getCapacity();
+		this.size=instance.getSize()-1;
+		this.solution=new Node[size];
+		this.NumRotasMin=instance.getMinNumberRoutes();
 		this.NumRotas=NumRotasMin;
-		this.NumRotasMax=instancia.getNumRotasMax();
-		this.deposito=new Node(pontos[deposito],instancia);
+		this.NumRotasMax=instance.getMaxNumberRoutes();
+		this.deposito=new Node(pontos[deposito],instance);
 		this.epsilon=config.getEpsilon();
 
 		this.rotas=new Rota[NumRotasMax];
 		
 		for (int i = 0; i < rotas.length; i++) 
-			rotas[i]=new Rota(instancia,config, this.deposito,i);
+			rotas[i]=new Rota(instance,config, this.deposito,i);
 		
 		int cont=0;
-		for (int i = 0; i < (solucao.length+1); i++)
+		for (int i = 0; i < (solution.length+1); i++)
 		{
 			if(i!=deposito)
 			{
-				solucao[cont]=new Node(pontos[i],instancia);
+				solution[cont]=new Node(pontos[i],instance);
 				cont++;
 			}
 		}
@@ -87,30 +87,30 @@ public class Solution
 			else if(referencia.rotas[i].inicio.prev.name==0)
 				rotas[i].inicio.prev=rotas[i].inicio;
 			else
-				rotas[i].inicio.prev=solucao[referencia.rotas[i].inicio.prev.name-1];
+				rotas[i].inicio.prev=solution[referencia.rotas[i].inicio.prev.name-1];
 			
 			if(referencia.rotas[i].inicio.next==null)
 				rotas[i].inicio.next=null;
 			else if(referencia.rotas[i].inicio.next.name==0)
 				rotas[i].inicio.next=rotas[i].inicio;
 			else
-				rotas[i].inicio.next=solucao[referencia.rotas[i].inicio.next.name-1];
+				rotas[i].inicio.next=solution[referencia.rotas[i].inicio.next.name-1];
 		}
 		
-		for (int i = 0; i < solucao.length; i++)
+		for (int i = 0; i < solution.length; i++)
 		{
-			solucao[i].rota=rotas[referencia.solucao[i].rota.nomeRota];
-			solucao[i].jaInserido=referencia.solucao[i].jaInserido;
+			solution[i].rota=rotas[referencia.solution[i].rota.nomeRota];
+			solution[i].jaInserido=referencia.solution[i].jaInserido;
 			
-			if(referencia.solucao[i].prev.name==0)
-				solucao[i].prev=rotas[referencia.solucao[i].prev.rota.nomeRota].inicio;
+			if(referencia.solution[i].prev.name==0)
+				solution[i].prev=rotas[referencia.solution[i].prev.rota.nomeRota].inicio;
 			else
-				solucao[i].prev=solucao[referencia.solucao[i].prev.name-1];
+				solution[i].prev=solution[referencia.solution[i].prev.name-1];
 				
-			if(referencia.solucao[i].next.name==0)
-				solucao[i].next=rotas[referencia.solucao[i].next.rota.nomeRota].inicio;
+			if(referencia.solution[i].next.name==0)
+				solution[i].next=rotas[referencia.solution[i].next.rota.nomeRota].inicio;
 			else
-				solucao[i].next=solucao[referencia.solucao[i].next.name-1];
+				solution[i].next=solution[referencia.solution[i].next.name-1];
 		}
 	}
 	
@@ -288,8 +288,8 @@ public class Solution
 				rotas[indexRota].addNoFinal(deposito.clone());
 				for (int i = 9; i < str.length-1; i++)
 				{
-					System.out.println("add: "+solucao[Integer.valueOf(str[i].trim())-1]+" na rota: "+rotas[indexRota].nomeRota);
-					f+=rotas[indexRota].addNoFinal(solucao[Integer.valueOf(str[i])-1]);
+					System.out.println("add: "+solution[Integer.valueOf(str[i].trim())-1]+" na rota: "+rotas[indexRota].nomeRota);
+					f+=rotas[indexRota].addNoFinal(solution[Integer.valueOf(str[i])-1]);
 				}
 				indexRota++;
 				linha=in.readLine();
@@ -319,15 +319,11 @@ public class Solution
 			{
 				for (int i = 2; i < str.length; i++)
 				{
-//					System.out.println("add: "+solucao[Integer.valueOf(str[i])-1]+" na rota: "+rotas[indexRota].nomeRota);
-					f+=rotas[indexRota].addNoFinal(solucao[Integer.valueOf(str[i])-1]);
+					f+=rotas[indexRota].addNoFinal(solution[Integer.valueOf(str[i])-1]);
 				}
 				indexRota++;
 				str=in.readLine().split(" ");
 			}
-//			int cost=Integer.valueOf(str[1]);
-			
-//			System.out.println("f: "+f+" esperado: "+cost);
 		} 
 		catch (IOException e) {
 	    	System.out.println("Erro ao Ler Arquivo");
@@ -348,7 +344,7 @@ public class Solution
 
 
 	public Node[] getSolution() {
-		return solucao;
+		return solution;
 	}
 
 	public int getNumRotasMax() {

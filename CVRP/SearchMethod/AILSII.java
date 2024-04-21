@@ -7,10 +7,10 @@ import java.util.Random;
 
 import Auxiliary.Distance;
 import Data.Instance;
-import DiversityControl.AjusteDist;
-import DiversityControl.AjusteOmega;
-import DiversityControl.CriterioAceitacao;
-import DiversityControl.DistIdeal;
+import DiversityControl.DistAdjustment;
+import DiversityControl.OmegaAdjustment;
+import DiversityControl.AcceptanceCriterion;
+import DiversityControl.IdealDist;
 import Improvement.BuscaLocal;
 import Improvement.BuscaLocalIntra;
 import Improvement.Factibilizador;
@@ -21,25 +21,25 @@ import Solution.Solution;
 public class AILSII 
 {
 	//----------Problema------------
-	Solution solucao,solucaoReferencia,melhorSolucao;
+	Solution solution,solucaoReferencia,melhorSolucao;
 	
-	Instance instancia;
+	Instance instance;
 	Distance distEntreSolucoes;
 	double melhorF=Double.MAX_VALUE;
-	double limiteMaximoExecucao;
+	double executionMaximumLimit;
 	double otimo;
 	
 	//----------caculoLimiar------------
 	int numIterUpdate;
 
 	//----------Metricas------------
-	int iterador,iteradorMF;
+	int iterator,iteratorMF;
 	long inicio,ini;
 	double tempoMF,tempoTotal,tempo;
 	
 	Random rand=new Random();
 	
-	HashMap<String,AjusteOmega>configuradoresOmega=new HashMap<String,AjusteOmega>();
+	HashMap<String,OmegaAdjustment>configuradoresOmega=new HashMap<String,OmegaAdjustment>();
 
 	double distanciaBL;
 	
@@ -53,54 +53,54 @@ public class AILSII
 
 	HeuristicaAdicao heuristicaAdicao;
 	BuscaLocalIntra buscaLocalIntra;
-	CriterioAceitacao criterioAceitacao;
+	AcceptanceCriterion acceptanceCriterion;
 //	----------Mare------------
-	AjusteDist ajusteDist;
+	DistAdjustment distAdjustment;
 //	---------Print----------
 	boolean print=true;
-	DistIdeal distIdeal;
+	IdealDist idealDist;
 	
 	double epsilon;
 	DecimalFormat deci=new DecimalFormat("0.0000");
-	TipoCriterioParada tipoCriterioParada;
+	StoppingCriterionType stoppingCriterionType;
 	
-	public AILSII(Instance instancia,InputParameters leitor)
+	public AILSII(Instance instance,InputParameters leitor)
 	{ 
-		this.instancia=instancia;
+		this.instance=instance;
 		Config config=leitor.getConfig();
 		this.otimo=leitor.getBest();
-		this.limiteMaximoExecucao=leitor.getTimeLimit();
+		this.executionMaximumLimit=leitor.getTimeLimit();
 		
 		this.epsilon=config.getEpsilon();
-		this.tipoCriterioParada=config.getTipoCriterioParada();
-		this.distIdeal=new DistIdeal();
-		this.solucao =new Solution(instancia,config);
-		this.solucaoReferencia =new Solution(instancia,config);
-		this.melhorSolucao =new Solution(instancia,config);
+		this.stoppingCriterionType=config.getStoppingCriterionType();
+		this.idealDist=new IdealDist();
+		this.solution =new Solution(instance,config);
+		this.solucaoReferencia =new Solution(instance,config);
+		this.melhorSolucao =new Solution(instance,config);
 		this.numIterUpdate=config.getGamma();
 		
 		this.distEntreSolucoes=new Distance();
 		
 		this.perturbadores=new Perturbacao[config.getPerturbacao().length];
 		
-		this.ajusteDist=new AjusteDist( distIdeal, config, limiteMaximoExecucao);
+		this.distAdjustment=new DistAdjustment( idealDist, config, executionMaximumLimit);
 		
-		this.buscaLocalIntra=new BuscaLocalIntra(instancia,config);
+		this.buscaLocalIntra=new BuscaLocalIntra(instance,config);
 		
-		this.buscaLocal=new BuscaLocal(instancia,config,buscaLocalIntra);
+		this.buscaLocal=new BuscaLocal(instance,config,buscaLocalIntra);
 		
-		this.factibilizador=new Factibilizador(instancia,config,buscaLocalIntra);
+		this.factibilizador=new Factibilizador(instance,config,buscaLocalIntra);
 		
-		this.construtorSolucao=new ConstrutorSolucao(instancia,config);
+		this.construtorSolucao=new ConstrutorSolucao(instance,config);
 		
-		AjusteOmega novo;
+		OmegaAdjustment novo;
 		for (int i = 0; i < config.getPerturbacao().length; i++) 
 		{
-			novo=new AjusteOmega(config.getPerturbacao()[i], config,instancia.getSize(),distIdeal);
+			novo=new OmegaAdjustment(config.getPerturbacao()[i], config,instance.getSize(),idealDist);
 			configuradoresOmega.put(config.getPerturbacao()[i]+"", novo);
 		}
 		
-		this.criterioAceitacao=new CriterioAceitacao(instancia,config,limiteMaximoExecucao);
+		this.acceptanceCriterion=new AcceptanceCriterion(instance,config,executionMaximumLimit);
 
 		try 
 		{
@@ -108,7 +108,7 @@ public class AILSII
 			{
 				this.perturbadores[i]=(Perturbacao) Class.forName("Perturbation."+config.getPerturbacao()[i]).
 				getConstructor(Instance.class,Config.class,HashMap.class,BuscaLocalIntra.class).
-				newInstance(instancia,config,configuradoresOmega,buscaLocalIntra);
+				newInstance(instance,config,configuradoresOmega,buscaLocalIntra);
 			}
 			
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
@@ -121,9 +121,9 @@ public class AILSII
 
 	public void search()
 	{
-		iterador=0;
+		iterator=0;
 		inicio=System.currentTimeMillis();
-		solucaoReferencia.NumRotas=instancia.getNumRotasMin();
+		solucaoReferencia.NumRotas=instance.getMinNumberRoutes();
 		construtorSolucao.construir(solucaoReferencia);
 
 		factibilizador.factibilizar(solucaoReferencia);
@@ -131,23 +131,23 @@ public class AILSII
 		melhorSolucao.clone(solucaoReferencia);
 		while(!criterioParada())
 		{
-			iterador++;
+			iterator++;
 
-			solucao.clone(solucaoReferencia);
+			solution.clone(solucaoReferencia);
 			
 			perturbacaoEscolhida=perturbadores[rand.nextInt(perturbadores.length)];
-			perturbacaoEscolhida.perturbar(solucao);
-			factibilizador.factibilizar(solucao);
-			buscaLocal.buscaLocal(solucao,true);
-			distanciaBL=distEntreSolucoes.pairwiseSolutionDistance(solucao,solucaoReferencia);
+			perturbacaoEscolhida.perturbar(solution);
+			factibilizador.factibilizar(solution);
+			buscaLocal.buscaLocal(solution,true);
+			distanciaBL=distEntreSolucoes.pairwiseSolutionDistance(solution,solucaoReferencia);
 			
 			analisaSolucao();
-			ajusteDist.ajusteDist();
+			distAdjustment.distAdjustment();
 			
 			perturbacaoEscolhida.getConfiguradorOmegaEscolhido().setDistancia(distanciaBL);//update
 			
-			if(criterioAceitacao.aceitaSolucao(solucao))
-				solucaoReferencia.clone(solucao);
+			if(acceptanceCriterion.aceitaSolucao(solution))
+				solucaoReferencia.clone(solution);
 		}
 		
 		tempoTotal=(double)(System.currentTimeMillis()-inicio)/1000;
@@ -155,21 +155,21 @@ public class AILSII
 	
 	public void analisaSolucao()
 	{
-		if((solucao.f-melhorF)<-epsilon)
+		if((solution.f-melhorF)<-epsilon)
 		{		
-			melhorF=solucao.f;
+			melhorF=solution.f;
 			
-			melhorSolucao.clone(solucao);
-			iteradorMF=iterador;
+			melhorSolucao.clone(solution);
+			iteratorMF=iterator;
 			tempoMF=(double)(System.currentTimeMillis()-inicio)/1000;
 				
 			if(print)
 			{
 				System.out.println("solution quality: "+melhorF
 				+" gap: "+deci.format(getGap())+"%"
-				+" K: "+solucao.NumRotas
-				+" iteration: "+iterador
-				+" eta: "+deci.format(criterioAceitacao.getEta())
+				+" K: "+solution.NumRotas
+				+" iteration: "+iterator
+				+" eta: "+deci.format(acceptanceCriterion.getEta())
 				+" omega: "+deci.format(perturbacaoEscolhida.omega)
 				+" time: "+tempoMF
 				);
@@ -179,13 +179,13 @@ public class AILSII
 	
 	private boolean criterioParada()
 	{
-		switch(tipoCriterioParada)
+		switch(stoppingCriterionType)
 		{
-			case Iteration: 	if(melhorF<=otimo||limiteMaximoExecucao<=iterador)
+			case Iteration: 	if(melhorF<=otimo||executionMaximumLimit<=iterator)
 									return true;
 								break;
 							
-			case Time: 	if(melhorF<=otimo||limiteMaximoExecucao<(System.currentTimeMillis()-inicio)/1000)
+			case Time: 	if(melhorF<=otimo||executionMaximumLimit<(System.currentTimeMillis()-inicio)/1000)
 							return true;
 						break;
 		}
@@ -225,12 +225,12 @@ public class AILSII
 		this.print = print;
 	}
 
-	public Solution getSolucao() {
-		return solucao;
+	public Solution getSolution() {
+		return solution;
 	}
 
-	public int getIterador() {
-		return iterador;
+	public int getIterator() {
+		return iterator;
 	}
 
 	public String printOmegas()
@@ -238,7 +238,7 @@ public class AILSII
 		String str="";
 		for (int i = 0; i < perturbadores.length; i++) 
 		{
-			str+="\n"+configuradoresOmega.get(this.perturbadores[i].tipoPerturbacao+""+solucaoReferencia.NumRotas);
+			str+="\n"+configuradoresOmega.get(this.perturbadores[i].perturbationType+""+solucaoReferencia.NumRotas);
 		}
 		return str;
 	}
@@ -253,20 +253,20 @@ public class AILSII
 	
 	public double getTemoPorIteracao() 
 	{
-		return tempoTotal/iterador;
+		return tempoTotal/iterator;
 	}
 
 	public double getTempoMF() {
 		return tempoMF;
 	}
 
-	public int getIteradorMF() {
-		return iteradorMF;
+	public int getIteratorMF() {
+		return iteratorMF;
 	}
 	
 	public double getConvergenciaIteracao()
 	{
-		return (double)iteradorMF/iterador;
+		return (double)iteratorMF/iterator;
 	}
 	
 	public double convergenciaTempo()

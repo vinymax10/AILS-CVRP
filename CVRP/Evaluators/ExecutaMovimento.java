@@ -9,11 +9,11 @@ public class ExecutaMovimento
 {
 	Rota aRota, bRota;
 	Node aAnt, bAnt, aProx, aProxProx, bProx, bProxProx;
-	Instance instancia;
+	Instance instance;
 	
-	public ExecutaMovimento(Instance instancia)
+	public ExecutaMovimento(Instance instance)
 	{
-		this.instancia=instancia;
+		this.instance=instance;
 	}
 	
 	public void SWAP2IdaAdj2Ida(Node a, Node b)
@@ -958,8 +958,8 @@ public class ExecutaMovimento
 	 
 	public double custo2Opt(Node a, Node b)
 	{
-		return 	-(instancia.dist(a.name,a.next.name)+instancia.dist(b.name,b.next.name))+				
-				(instancia.dist(a.name,b.name)+instancia.dist(a.next.name,b.next.name));
+		return 	-(instance.dist(a.name,a.next.name)+instance.dist(b.name,b.next.name))+				
+				(instance.dist(a.name,b.name)+instance.dist(a.next.name,b.next.name));
 	}
 	 
 	 public void Cross(Node a, Node b)

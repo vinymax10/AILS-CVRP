@@ -31,19 +31,19 @@ public class BuscaLocal
 	AvaliadorCusto avaliadorCusto;
 	AvaliadorFac avaliadorFac;
 	ExecutaMovimento executaMovimento;
-	Node solucao[];
+	Node solution[];
 	int limiteAdj;
 	BuscaLocalIntra buscaLocalIntra;
 	double epsilon;
 	int contAtivos;
 	
-	public BuscaLocal(Instance instancia,Config config, BuscaLocalIntra buscaLocalIntra)
+	public BuscaLocal(Instance instance,Config config, BuscaLocalIntra buscaLocalIntra)
 	{
-		this.avaliadorCusto=new AvaliadorCusto(instancia);
+		this.avaliadorCusto=new AvaliadorCusto(instance);
 		this.avaliadorFac=new AvaliadorFac();
-		this.executaMovimento=new ExecutaMovimento(instancia);
-		this.melhoras=new NoPosMel[instancia.getNumRotasMax()*(instancia.getNumRotasMax()-1)/2];
-		this.matrixMelhoras=new NoPosMel[instancia.getNumRotasMax()][instancia.getNumRotasMax()];
+		this.executaMovimento=new ExecutaMovimento(instance);
+		this.melhoras=new NoPosMel[instance.getMaxNumberRoutes()*(instance.getMaxNumberRoutes()-1)/2];
+		this.matrixMelhoras=new NoPosMel[instance.getMaxNumberRoutes()][instance.getMaxNumberRoutes()];
 		
 		for (int i = 0; i < matrixMelhoras.length; i++)
 		{
@@ -54,28 +54,28 @@ public class BuscaLocal
 			}
 		}
 		
-		this.limiteAdj=Math.min(config.getVarphi(), instancia.getSize()-1);
+		this.limiteAdj=Math.min(config.getVarphi(), instance.getSize()-1);
 		this.buscaLocalIntra=buscaLocalIntra;
 		this.epsilon=config.getEpsilon();
 	}
 	
-	private void setSolucao(Solution solucao) 
+	private void setSolution(Solution solution) 
 	{
-		this.NumRotas=solucao.NumRotas;
-		this.solucao=solucao.getSolution();
-		this.f=solucao.f;
-		this.rotas=solucao.rotas;
+		this.NumRotas=solution.NumRotas;
+		this.solution=solution.getSolution();
+		this.f=solution.f;
+		this.rotas=solution.rotas;
 	}
 
-	private void passaResultado(Solution solucao) 
+	private void passaResultado(Solution solution) 
 	{
-		solucao.NumRotas=this.NumRotas;
-		solucao.f=this.f;
+		solution.NumRotas=this.NumRotas;
+		solution.f=this.f;
 	}
 
-	public void buscaLocal(Solution solucao,boolean removerRotasVazias)
+	public void buscaLocal(Solution solution,boolean removerRotasVazias)
 	{
-		setSolucao(solucao);
+		setSolution(solution);
 		topMelhores=0;
 			
 		for (int i = 0; i < NumRotas; i++) 
@@ -90,9 +90,9 @@ public class BuscaLocal
 		if(topMelhores>0)
 			executa();
 		
-		passaResultado(solucao);
+		passaResultado(solution);
 		if(removerRotasVazias)
-			solucao.removeRotasVazias();
+			solution.removeRotasVazias();
 	}
 	
 	//-----------------------------------Factibilizando com o Best Improviment-------------------------------------------
@@ -150,13 +150,13 @@ public class BuscaLocal
 			{
 				for (int j = 0; j < limiteAdj; j++) 
 				{
-					if(auxRotaI.getKnn()[j]!=0&&solucao[auxRotaI.getKnn()[j]-1].rota!=rota)
+					if(auxRotaI.getKnn()[j]!=0&&solution[auxRotaI.getKnn()[j]-1].rota!=rota)
 					{
-						auxRotaJ=solucao[auxRotaI.getKnn()[j]-1];
+						auxRotaJ=solution[auxRotaI.getKnn()[j]-1];
 						if(avaliadorFac.ganhoSWAP(auxRotaI, auxRotaJ)>=0)
 						{
-							bestAntNoRotaI=auxRotaJ.rota.findBestPositionExcetoKNN(auxRotaI,auxRotaJ,solucao);
-							bestAntNoRotaJ=auxRotaI.rota.findBestPositionExcetoKNN(auxRotaJ,auxRotaI,solucao);
+							bestAntNoRotaI=auxRotaJ.rota.findBestPositionExcetoKNN(auxRotaI,auxRotaJ,solution);
+							bestAntNoRotaJ=auxRotaI.rota.findBestPositionExcetoKNN(auxRotaJ,auxRotaI,solution);
 							
 							custo=avaliadorCusto.custoSwapEstrela(auxRotaI,auxRotaJ,bestAntNoRotaI,bestAntNoRotaJ);
 							noMelhora=matrixMelhoras[auxRotaI.rota.nomeRota][auxRotaJ.rota.nomeRota];
@@ -210,9 +210,9 @@ public class BuscaLocal
 							}
 						}
 					}
-					else if(solucao[auxRotaI.getKnn()[j]-1].rota!=rota)
+					else if(solution[auxRotaI.getKnn()[j]-1].rota!=rota)
 					{
-						auxRotaJ=solucao[auxRotaI.getKnn()[j]-1];
+						auxRotaJ=solution[auxRotaI.getKnn()[j]-1];
 						if(avaliadorFac.ganhoSHIFT(auxRotaI, auxRotaJ)>=0)
 						{
 							custo=avaliadorCusto.custoSHIFT(auxRotaI,auxRotaJ);
@@ -295,9 +295,9 @@ public class BuscaLocal
 							}
 						}
 					}
-					else if(solucao[auxRotaI.getKnn()[j]-1].rota!=rota)
+					else if(solution[auxRotaI.getKnn()[j]-1].rota!=rota)
 					{
-						auxRotaJ=solucao[auxRotaI.getKnn()[j]-1];
+						auxRotaJ=solution[auxRotaI.getKnn()[j]-1];
 						if(avaliadorFac.ganhoCross(auxRotaI, auxRotaJ)>=0)
 						{
 							custo=avaliadorCusto.custoCross(auxRotaI,auxRotaJ);
@@ -335,7 +335,7 @@ public class BuscaLocal
 	
 	private void BuscaLocalIntra(Rota rota)
 	{
-		f+=buscaLocalIntra.buscaLocalIntra(rota, solucao);
+		f+=buscaLocalIntra.buscaLocalIntra(rota, solution);
 	}
 	
 }

@@ -3,7 +3,7 @@ package Perturbation;
 import java.util.HashMap;
 
 import Data.Instance;
-import DiversityControl.AjusteOmega;
+import DiversityControl.OmegaAdjustment;
 import Improvement.BuscaLocalIntra;
 import SearchMethod.Config;
 import Solution.Node;
@@ -13,24 +13,24 @@ import Solution.Solution;
 
 public class Concentric extends Perturbacao
 {
-	public Concentric(Instance instancia, Config config,
-	HashMap<String, AjusteOmega> configuradoresOmega, BuscaLocalIntra buscaLocalIntra)
+	public Concentric(Instance instance, Config config,
+	HashMap<String, OmegaAdjustment> configuradoresOmega, BuscaLocalIntra buscaLocalIntra)
 	{
-		super(instancia, config, configuradoresOmega,buscaLocalIntra);
-		this.tipoPerturbacao=TipoPerturbacao.Concentric;
+		super(instance, config, configuradoresOmega,buscaLocalIntra);
+		this.perturbationType=PerturbationType.Concentric;
 	}
 
 	public void perturbar(Solution s)
 	{
-		setSolucao(s);
+		setSolution(s);
 		
 //		---------------------------------------------------------------------
-		Node referencia=solucao[rand.nextInt(solucao.length)];
+		Node referencia=solution[rand.nextInt(solution.length)];
 		for (int i = 0; i < omega&&i < referencia.knn.length&&contCandidatos<omega; i++) 
 		{
 			if(referencia.knn[i]!=0)
 			{
-				no=solucao[referencia.knn[i]-1];
+				no=solution[referencia.knn[i]-1];
 				candidatos[contCandidatos]=no;
 				contCandidatos++;
 				no.antOld=no.prev;

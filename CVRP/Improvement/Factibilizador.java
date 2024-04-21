@@ -35,19 +35,19 @@ public class Factibilizador
 	AvaliadorCusto avaliadorCusto;
 	AvaliadorFac avaliadorFac;
 	ExecutaMovimento executaMovimento;
-	Node solucao[];
+	Node solution[];
 	int limiteAdj;
 	BuscaLocalIntra buscaLocalIntra;
 	double epsilon;
 	int contAtivos;
 	
-	public Factibilizador(Instance instancia,Config config, BuscaLocalIntra buscaLocalIntra)
+	public Factibilizador(Instance instance,Config config, BuscaLocalIntra buscaLocalIntra)
 	{
-		this.avaliadorCusto=new AvaliadorCusto(instancia);
+		this.avaliadorCusto=new AvaliadorCusto(instance);
 		this.avaliadorFac=new AvaliadorFac();
-		this.executaMovimento=new ExecutaMovimento(instancia);
-		this.melhoras=new NoPosMel[instancia.getNumRotasMax()*(instancia.getNumRotasMax()-1)/2];
-		this.matrixMelhoras=new NoPosMel[instancia.getNumRotasMax()][instancia.getNumRotasMax()];
+		this.executaMovimento=new ExecutaMovimento(instance);
+		this.melhoras=new NoPosMel[instance.getMaxNumberRoutes()*(instance.getMaxNumberRoutes()-1)/2];
+		this.matrixMelhoras=new NoPosMel[instance.getMaxNumberRoutes()][instance.getMaxNumberRoutes()];
 		
 		for (int i = 0; i < matrixMelhoras.length; i++)
 		{
@@ -58,7 +58,7 @@ public class Factibilizador
 			}
 		}
 		
-		this.limiteAdj=Math.min(config.getVarphi(), instancia.getSize()-1);
+		this.limiteAdj=Math.min(config.getVarphi(), instance.getSize()-1);
 		
 		this.buscaLocalIntra=buscaLocalIntra;
 		this.epsilon=config.getEpsilon();
@@ -74,23 +74,23 @@ public class Factibilizador
 		return true;
 	}
 	
-	private void setSolucao(Solution solucao) 
+	private void setSolution(Solution solution) 
 	{
-		this.NumRotas=solucao.NumRotas;
-		this.solucao=solucao.getSolution();
-		this.f=solucao.f;
-		this.rotas=solucao.rotas;
+		this.NumRotas=solution.NumRotas;
+		this.solution=solution.getSolution();
+		this.f=solution.f;
+		this.rotas=solution.rotas;
 	}
 
-	private void passaResultado(Solution solucao) 
+	private void passaResultado(Solution solution) 
 	{
-		solucao.NumRotas=this.NumRotas;
-		solucao.f=this.f;
+		solution.NumRotas=this.NumRotas;
+		solution.f=this.f;
 	}
 
-	public void factibilizar(Solution solucao)
+	public void factibilizar(Solution solution)
 	{
-		setSolucao(solucao);
+		setSolution(solution);
 		boolean factivel=false;
 		
 		do
@@ -112,8 +112,8 @@ public class Factibilizador
 			{
 				BuscaLocalIntra();
 				
-				passaResultado(solucao);
-				solucao.removeRotasVazias();
+				passaResultado(solution);
+				solution.removeRotasVazias();
 				factivel=true;
 			}
 			else
@@ -189,15 +189,15 @@ public class Factibilizador
 			{
 				for (int j = 0; j < limiteAdj; j++) 
 				{
-					if(auxSai.getKnn()[j]!=0&&auxSai.rota.isFactivel()^solucao[auxSai.getKnn()[j]-1].rota.isFactivel())
+					if(auxSai.getKnn()[j]!=0&&auxSai.rota.isFactivel()^solution[auxSai.getKnn()[j]-1].rota.isFactivel())
 					{
-						auxEntra=solucao[auxSai.getKnn()[j]-1];
+						auxEntra=solution[auxSai.getKnn()[j]-1];
 						ganho=avaliadorFac.ganhoSWAP(auxSai, auxEntra);
 						if(ganho>0)
 						{
 							
-							bestAntNoRotaI=auxEntra.rota.findBestPositionExcetoKNN(auxSai,auxEntra,solucao);
-							bestAntNoRotaJ=auxSai.rota.findBestPositionExcetoKNN(auxEntra,auxSai,solucao);
+							bestAntNoRotaI=auxEntra.rota.findBestPositionExcetoKNN(auxSai,auxEntra,solution);
+							bestAntNoRotaJ=auxSai.rota.findBestPositionExcetoKNN(auxEntra,auxSai,solution);
 							
 							custo=avaliadorCusto.custoSwapEstrela(auxSai,auxEntra,bestAntNoRotaI,bestAntNoRotaJ);
 							calcCusto();
@@ -252,9 +252,9 @@ public class Factibilizador
 				
 				for (int j = 0; j < limiteAdj; j++) 
 				{
-					if(auxSai.getKnn()[j]!=0&&!auxSai.rota.isFactivel()&&solucao[auxSai.getKnn()[j]-1].rota.isFactivel())
+					if(auxSai.getKnn()[j]!=0&&!auxSai.rota.isFactivel()&&solution[auxSai.getKnn()[j]-1].rota.isFactivel())
 					{
-						auxEntra=solucao[auxSai.getKnn()[j]-1];
+						auxEntra=solution[auxSai.getKnn()[j]-1];
 						ganho=avaliadorFac.ganhoSHIFT(auxSai, auxEntra);
 						if(ganho>0)
 						{
@@ -272,9 +272,9 @@ public class Factibilizador
 						}
 					}
 					
-					if(auxSai.getKnn()[j]!=0&&auxSai.rota.isFactivel()&&!solucao[auxSai.getKnn()[j]-1].rota.isFactivel())
+					if(auxSai.getKnn()[j]!=0&&auxSai.rota.isFactivel()&&!solution[auxSai.getKnn()[j]-1].rota.isFactivel())
 					{
-						auxEntra=solucao[auxSai.getKnn()[j]-1];
+						auxEntra=solution[auxSai.getKnn()[j]-1];
 						ganho=avaliadorFac.ganhoSHIFT(auxEntra, auxSai);
 						if(ganho>0)
 						{
@@ -350,9 +350,9 @@ public class Factibilizador
 				
 				for (int j = 0; j < limiteAdj; j++) 
 				{
-					if(auxSai.getKnn()[j]!=0&&auxSai.rota.isFactivel()^solucao[auxSai.getKnn()[j]-1].rota.isFactivel())
+					if(auxSai.getKnn()[j]!=0&&auxSai.rota.isFactivel()^solution[auxSai.getKnn()[j]-1].rota.isFactivel())
 					{
-						auxEntra=solucao[auxSai.getKnn()[j]-1];
+						auxEntra=solution[auxSai.getKnn()[j]-1];
 						ganho=avaliadorFac.ganhoCross(auxSai, auxEntra);
 						if(ganho>0)
 						{
@@ -393,7 +393,7 @@ public class Factibilizador
 	
 	private void BuscaLocalIntra(Rota rota)
 	{
-		f+=buscaLocalIntra.buscaLocalIntra(rota, solucao);
+		f+=buscaLocalIntra.buscaLocalIntra(rota, solution);
 	}
 	
 	private void BuscaLocalIntra()
@@ -401,7 +401,7 @@ public class Factibilizador
 		for (int i = 0; i < NumRotas; i++)
 		{
 			if(rotas[i].alterada)
-				f+=buscaLocalIntra.buscaLocalIntra(rotas[i], solucao);
+				f+=buscaLocalIntra.buscaLocalIntra(rotas[i], solution);
 		}
 	}
 	

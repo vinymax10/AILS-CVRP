@@ -24,7 +24,7 @@ public class InputParameters
 					case "-rounded": rounded=getRound(args[i+1]);break;
 					case "-limit": limit=getLimit(args[i+1]);break;
 					case "-best": best=getBest(args[i+1]);break;
-					case "-stoppingCriterion": config.setTipoCriterioParada(getStoppingCriterion(args[i+1]));break;
+					case "-stoppingCriterion": config.setStoppingCriterionType(getStoppingCriterion(args[i+1]));break;
 					case "-dMax": config.setDMax(getDMax(args[i+1]));break;
 					case "-dMin": config.setDMin(getDMin(args[i+1]));break;
 					case "-gamma": config.setGamma(getGamma(args[i+1]));break;
@@ -154,16 +154,16 @@ public class InputParameters
 		return dMin;
 	}
 	
-	public TipoCriterioParada getStoppingCriterion(String texo)
+	public StoppingCriterionType getStoppingCriterion(String texo)
 	{
-		TipoCriterioParada stoppingCriterion=TipoCriterioParada.Time;
+		StoppingCriterionType stoppingCriterion=StoppingCriterionType.Time;
 		try 
 		{
-			stoppingCriterion=TipoCriterioParada.valueOf(texo);
+			stoppingCriterion=StoppingCriterionType.valueOf(texo);
 		} 
 		catch (java.lang.IllegalArgumentException e) 
 		{
-			System.err.println("The -stoppingCriterion parameter must have the values "+Arrays.toString(TipoCriterioParada.values())+".");
+			System.err.println("The -stoppingCriterion parameter must have the values "+Arrays.toString(StoppingCriterionType.values())+".");
 		}
 		return stoppingCriterion;
 	}

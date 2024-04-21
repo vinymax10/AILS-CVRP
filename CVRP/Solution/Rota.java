@@ -30,13 +30,13 @@ public class Rota implements Comparable<Rota>
 	//------------------------------------------------
 	public boolean update;
 	
-    Instance instancia;
+    Instance instance;
     int limiteAdj;
     
-	public Rota(Instance instancia, Config config, Node deposito,int nomeRota) 
+	public Rota(Instance instance, Config config, Node deposito,int nomeRota) 
 	{
-		this.instancia=instancia;
-		this.capacidade = instancia.getCapacidade();
+		this.instance=instance;
+		this.capacidade = instance.getCapacity();
 		this.deposito=deposito.name;
 		this.nomeRota=nomeRota;
 		this.inicio=null;
@@ -48,10 +48,10 @@ public class Rota implements Comparable<Rota>
 	{
 		bestCusto=inicio;
 		aux=inicio.next;
-		menorCusto=instancia.dist(inicio.name,no.name)+instancia.dist(no.name,inicio.next.name)-instancia.dist(inicio.name,inicio.next.name);
+		menorCusto=instance.dist(inicio.name,no.name)+instance.dist(no.name,inicio.next.name)-instance.dist(inicio.name,inicio.next.name);
 		do
 		{
-			custo=instancia.dist(aux.name,no.name)+instancia.dist(no.name,aux.next.name)-instancia.dist(aux.name,aux.next.name);
+			custo=instance.dist(aux.name,no.name)+instance.dist(no.name,aux.next.name)-instance.dist(aux.name,aux.next.name);
 			if(custo<menorCusto)
 			{
 				menorCusto=custo;
@@ -68,10 +68,10 @@ public class Rota implements Comparable<Rota>
   		bestCusto=inicio;
   		aux=inicio.next;
   		
-  		menorCusto=instancia.dist(inicio.name,no.name)+instancia.dist(no.name,inicio.next.name)-instancia.dist(inicio.name,inicio.next.name);
+  		menorCusto=instance.dist(inicio.name,no.name)+instance.dist(no.name,inicio.next.name)-instance.dist(inicio.name,inicio.next.name);
   		do
   		{
-  			custo=instancia.dist(aux.name,no.name)+instancia.dist(no.name,aux.next.name)-instancia.dist(aux.name,aux.next.name);
+  			custo=instance.dist(aux.name,no.name)+instance.dist(no.name,aux.next.name)-instance.dist(aux.name,aux.next.name);
   			if(custo<menorCusto&&aux.name!=excecao.name)
   			{
   				menorCusto=custo;
@@ -83,7 +83,7 @@ public class Rota implements Comparable<Rota>
   		return bestCusto;
   	}
     
-    public Node findBestPositionExcetoKNN(Node no,Node excecao, Node solucao[])
+    public Node findBestPositionExcetoKNN(Node no,Node excecao, Node solution[])
    	{
     	menorCusto=Double.MAX_VALUE;
     	
@@ -96,17 +96,17 @@ public class Rota implements Comparable<Rota>
    	   			if(no.getKnn()[j]==0)
    	   			{
    	   				aux=inicio;
-   	   				custo=instancia.dist(aux.name,no.name)+instancia.dist(no.name,aux.next.name)-instancia.dist(aux.name,aux.next.name);
+   	   				custo=instance.dist(aux.name,no.name)+instance.dist(no.name,aux.next.name)-instance.dist(aux.name,aux.next.name);
    	   				if(custo<menorCusto)
    	   				{
    	   					menorCusto=custo;
    	   					bestCusto=aux;
    	   				}   				
    	   			}
-   	   			else if(no.getKnn()[j]!=excecao.name&&solucao[no.getKnn()[j]-1].rota==this)
+   	   			else if(no.getKnn()[j]!=excecao.name&&solution[no.getKnn()[j]-1].rota==this)
    	   			{
-   	   				aux=solucao[no.getKnn()[j]-1];
-   	   				custo=instancia.dist(aux.name,no.name)+instancia.dist(no.name,aux.next.name)-instancia.dist(aux.name,aux.next.name);
+   	   				aux=solution[no.getKnn()[j]-1];
+   	   				custo=instance.dist(aux.name,no.name)+instance.dist(no.name,aux.next.name)-instance.dist(aux.name,aux.next.name);
    	   				if(custo<menorCusto)
    	   				{
    	   					menorCusto=custo;
@@ -171,13 +171,13 @@ public class Rota implements Comparable<Rota>
 		Node prox=no.next;
 		do
 		{
-			f+=instancia.dist(no.name,prox.name);
+			f+=instance.dist(no.name,prox.name);
 			no=prox;
 			prox=no.next;
 		}
 		while(prox!=inicio);
 		
-		f+=instancia.dist(no.name,prox.name);
+		f+=instance.dist(no.name,prox.name);
 		return f;
 	}
 	

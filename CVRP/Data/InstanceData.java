@@ -34,7 +34,7 @@ public class InstanceData
 	@Override
 	public String toString()
 	{
-		return "name: " + name + "\tbestSolution: " + bestSolution.getOtimo() + "\totimmo: " + optimal + "\tjaTemosSolucaoSalva: " + savedSolutionFlag;
+		return "name: " + name + "\tbestSolution: " + bestSolution.getOtimo() + "\totimmo: " + optimal + "\tsavedSolutionFlag: " + savedSolutionFlag;
 	}
 
 	public String getName()

@@ -13,7 +13,7 @@ public class BuscaLocalIntra
 	Node inicio;
 	int numElements=0;
 	int tipoMov;
-	int iterador;
+	int iterator;
 	double menorCusto;
 	double antF;
 	Node auxSai,auxEntra;
@@ -23,30 +23,30 @@ public class BuscaLocalIntra
 	ExecutaMovimento executaMovimento;
 	int limiteAdj;
 	
-	public BuscaLocalIntra(Instance instancia,Config config)
+	public BuscaLocalIntra(Instance instance,Config config)
 	{
-		this.avaliadorCusto=new AvaliadorCusto(instancia);
-		this.executaMovimento=new ExecutaMovimento(instancia);
+		this.avaliadorCusto=new AvaliadorCusto(instance);
+		this.executaMovimento=new ExecutaMovimento(instance);
 		this.melhora=new NoPosMel(avaliadorCusto);
 		this.limiteAdj=config.getVarphi();
 	}
 	
-	private void setRota(Rota rota,Node solucao[]) 
+	private void setRota(Rota rota,Node solution[]) 
 	{
 		this.antF=rota.fRota;
 		this.inicio=rota.inicio;
 		this.numElements=rota.numElements;
 	}
 
-	public double buscaLocalIntra(Rota rota,Node solucao[])
+	public double buscaLocalIntra(Rota rota,Node solution[])
 	{
-		setRota(rota,solucao);
+		setRota(rota,solution);
 		
-		iterador=0;
+		iterator=0;
 		trocou=true;
 		while(trocou)
 		{
-			iterador++;
+			iterator++;
 			trocou=false;
 			menorCusto=0;
 			auxSai=inicio;
@@ -59,7 +59,7 @@ public class BuscaLocalIntra
 						if(auxSai.getKnn()[j]==0)
 							auxEntra=inicio;
 						else
-							auxEntra=solucao[auxSai.getKnn()[j]-1];
+							auxEntra=solution[auxSai.getKnn()[j]-1];
 						
 						if(auxSai.rota.nomeRota==auxEntra.rota.nomeRota)
 						{

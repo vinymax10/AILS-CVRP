@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Random;
 
 import Data.Instance;
-import DiversityControl.AjusteOmega;
+import DiversityControl.OmegaAdjustment;
 import Improvement.BuscaLocalIntra;
 import SearchMethod.Config;
 import Solution.Node;
@@ -15,11 +15,11 @@ public abstract class Perturbacao
 {
 	protected Rota rotas[];
 	protected int NumRotas;
-	protected Node solucao[];
+	protected Node solution[];
 	protected double f=0;
 	protected Random rand=new Random();
 	public double omega;
-	AjusteOmega configuradorOmegaEscolhido;
+	OmegaAdjustment configuradorOmegaEscolhido;
 	Config config;
 	protected Node candidatos[];
 	protected int contCandidatos;
@@ -29,9 +29,9 @@ public abstract class Perturbacao
 	
 	Node no;
 	
-	public TipoPerturbacao tipoPerturbacao;
+	public PerturbationType perturbationType;
 	int size;
-	HashMap<String, AjusteOmega> configuradoresOmega;
+	HashMap<String, OmegaAdjustment> configuradoresOmega;
 	
 	double bestCusto,bestDist;
 	int numIterUpdate;
@@ -41,18 +41,18 @@ public abstract class Perturbacao
 	double custoAnt;
 	int indexA,indexB;
 	Node bestNo,bestNoDist,aux;
-	Instance instancia;
+	Instance instance;
 	int limiteAdj;
 	
 	BuscaLocalIntra buscaLocalIntra;
 	
-	public Perturbacao(Instance instancia,Config config,
-	HashMap<String, AjusteOmega> configuradoresOmega, BuscaLocalIntra buscaLocalIntra) 
+	public Perturbacao(Instance instance,Config config,
+	HashMap<String, OmegaAdjustment> configuradoresOmega, BuscaLocalIntra buscaLocalIntra) 
 	{
 		this.config=config;
-		this.instancia=instancia;
+		this.instance=instance;
 		this.heuristicasAdicao=config.getHeuristicasAdicao();
-		this.size=instancia.getSize()-1;
+		this.size=instance.getSize()-1;
 		this.candidatos=new Node[size];
 		this.configuradoresOmega=configuradoresOmega;
 		this.numIterUpdate=config.getGamma();
@@ -76,11 +76,11 @@ public abstract class Perturbacao
 	
 	public void perturbar(Solution s){}
 	
-	protected void setSolucao(Solution s)
+	protected void setSolution(Solution s)
 	{
 		this.NumRotas=s.getNumRotas();
 		this.rotas=s.rotas;
-		this.solucao=s.getSolution();
+		this.solution=s.getSolution();
 		this.f=s.f;
 		for (int i = 0; i < NumRotas; i++) 
 		{
@@ -89,13 +89,13 @@ public abstract class Perturbacao
 		}
 		
 		for (int i = 0; i < size; i++) 
-			solucao[i].alterado=false;
+			solution[i].alterado=false;
 	
 		posHeuEscolhida=rand.nextInt(heuristicasAdicao.length);
 		heuristicaAdicaoEscolhida=heuristicasAdicao[posHeuEscolhida];
 		
-		configuradorOmegaEscolhido=configuradoresOmega.get(tipoPerturbacao+"");
-		omega=configuradorOmegaEscolhido.getOmegaReal();
+		configuradorOmegaEscolhido=configuradoresOmega.get(perturbationType+"");
+		omega=configuradorOmegaEscolhido.getActualOmega();
 		omega=Math.min(omega, size);
 		
 		contCandidatos=0;
@@ -133,7 +133,7 @@ public abstract class Perturbacao
 				{
 					aux=rotas[j].inicio;
 					entrou=true;
-					custo=instancia.dist(aux.name,no.name)+instancia.dist(no.name,aux.next.name)-instancia.dist(aux.name,aux.next.name);
+					custo=instance.dist(aux.name,no.name)+instance.dist(no.name,aux.next.name)-instance.dist(aux.name,aux.next.name);
 					if(custo<bestCusto)
 					{
 						bestCusto=custo;
@@ -145,11 +145,11 @@ public abstract class Perturbacao
 			}
 			else
 			{
-				aux=solucao[no.knn[i]-1];
+				aux=solution[no.knn[i]-1];
 				if(aux.jaInserido)
 				{
 					cont++;
-					custo=instancia.dist(aux.name,no.name)+instancia.dist(no.name,aux.next.name)-instancia.dist(aux.name,aux.next.name);
+					custo=instance.dist(aux.name,no.name)+instance.dist(no.name,aux.next.name)-instance.dist(aux.name,aux.next.name);
 					if(custo<bestCusto)
 					{
 						bestCusto=custo;
@@ -161,12 +161,12 @@ public abstract class Perturbacao
 		
 		if(bestNo==null)
 		{
-			for (int i = 0; i < solucao.length; i++) 
+			for (int i = 0; i < solution.length; i++) 
 			{
-				aux=solucao[i];
+				aux=solution[i];
 				if(aux.jaInserido)
 				{
-					custo=instancia.dist(aux.name,no.name)+instancia.dist(no.name,aux.next.name)-instancia.dist(aux.name,aux.next.name);
+					custo=instance.dist(aux.name,no.name)+instance.dist(no.name,aux.next.name)-instance.dist(aux.name,aux.next.name);
 					if(custo<bestCusto)
 					{
 						bestCusto=custo;
@@ -178,12 +178,12 @@ public abstract class Perturbacao
 		
 		if(bestNo==null)
 		{
-			for (int i = 0; i < solucao.length; i++) 
+			for (int i = 0; i < solution.length; i++) 
 			{
-				aux=solucao[i];
+				aux=solution[i];
 				if(aux.jaInserido)
 				{
-					custo=instancia.dist(aux.name,no.name)+instancia.dist(no.name,aux.next.name)-instancia.dist(aux.name,aux.next.name);
+					custo=instance.dist(aux.name,no.name)+instance.dist(no.name,aux.next.name)-instance.dist(aux.name,aux.next.name);
 					if(custo<bestCusto)
 					{
 						bestCusto=custo;
@@ -193,8 +193,8 @@ public abstract class Perturbacao
 			}
 		}
 		
-		custo=instancia.dist(bestNo.name,no.name)+instancia.dist(no.name,bestNo.next.name)-instancia.dist(bestNo.name,bestNo.next.name);
-		custoAnt=instancia.dist(bestNo.prev.name,no.name)+instancia.dist(no.name,bestNo.name)-instancia.dist(bestNo.prev.name,bestNo.name);
+		custo=instance.dist(bestNo.name,no.name)+instance.dist(no.name,bestNo.next.name)-instance.dist(bestNo.name,bestNo.next.name);
+		custoAnt=instance.dist(bestNo.prev.name,no.name)+instance.dist(no.name,bestNo.name)-instance.dist(bestNo.prev.name,bestNo.name);
 		if(custo<custoAnt)
 		{
 			return bestNo;
@@ -220,12 +220,12 @@ public abstract class Perturbacao
 		return posHeuEscolhida;
 	}
 
-	public AjusteOmega getConfiguradorOmegaEscolhido() {
+	public OmegaAdjustment getConfiguradorOmegaEscolhido() {
 		return configuradorOmegaEscolhido;
 	}
 	
-	public TipoPerturbacao getTipoPerturbacao() {
-		return tipoPerturbacao;
+	public PerturbationType getPerturbationType() {
+		return perturbationType;
 	}
 	
 }

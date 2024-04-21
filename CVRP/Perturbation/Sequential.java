@@ -3,7 +3,7 @@ package Perturbation;
 import java.util.HashMap;
 
 import Data.Instance;
-import DiversityControl.AjusteOmega;
+import DiversityControl.OmegaAdjustment;
 import Improvement.BuscaLocalIntra;
 import SearchMethod.Config;
 import Solution.Node;
@@ -14,16 +14,16 @@ import Solution.Solution;
 public class Sequential extends Perturbacao
 {
 	
-	public Sequential(Instance instancia, Config config, 
-	HashMap<String, AjusteOmega> configuradoresOmega, BuscaLocalIntra buscaLocalIntra)
+	public Sequential(Instance instance, Config config, 
+	HashMap<String, OmegaAdjustment> configuradoresOmega, BuscaLocalIntra buscaLocalIntra)
 	{
-		super(instancia, config,configuradoresOmega,buscaLocalIntra);
-		this.tipoPerturbacao=TipoPerturbacao.Sequential;
+		super(instance, config,configuradoresOmega,buscaLocalIntra);
+		this.perturbationType=PerturbationType.Sequential;
 	}
 
 	public void perturbar(Solution s)
 	{
-		setSolucao(s);
+		setSolution(s);
 		
 //		---------------------------------------------------------------------
 		int contSizeString;
@@ -34,9 +34,9 @@ public class Sequential extends Perturbacao
 		{
 			sizeString=Math.min(Math.max(1, size),(int)omega-contCandidatos);
 			
-			no=solucao[rand.nextInt(size)];
+			no=solution[rand.nextInt(size)];
 			while(!no.jaInserido)
-				no=solucao[rand.nextInt(size)];
+				no=solution[rand.nextInt(size)];
 			
 			noInicial=no;
 			

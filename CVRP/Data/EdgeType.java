@@ -8,9 +8,9 @@ public enum EdgeType
 	
 	final int type;
 	
-	EdgeType(int tipo)
+	EdgeType(int type)
 	{
-		this.type=tipo;
+		this.type=type;
 	}
 
 }

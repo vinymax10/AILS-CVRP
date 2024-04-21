@@ -13,41 +13,41 @@ public class ConstrutorSolucao
 	private Rota rotas[];
 	private double f=0;
 	private int NumRotas;
-	private Node []solucao;
+	private Node []solution;
 	protected Random rand=new Random();
 	protected int size;
-	Instance instancia;
+	Instance instance;
 	Node naoInseridos[];
 	int contNaoInseridos=0;
 	
-	public ConstrutorSolucao(Instance instancia,Config config)
+	public ConstrutorSolucao(Instance instance,Config config)
 	{
-		this.instancia=instancia;
-		this.rotas=new Rota[instancia.getNumRotasMax()];
-		this.size=instancia.getSize()-1;
+		this.instance=instance;
+		this.rotas=new Rota[instance.getMaxNumberRoutes()];
+		this.size=instance.getSize()-1;
 		this.naoInseridos=new Node[size];
 	}
 	
-	private void setSolucao(Solution solucao) 
+	private void setSolution(Solution solution) 
 	{
-		this.NumRotas=solucao.NumRotas;
-		this.solucao=solucao.getSolution();
-		this.f=solucao.f;
+		this.NumRotas=solution.NumRotas;
+		this.solution=solution.getSolution();
+		this.f=solution.f;
 		for (int i = 0; i < rotas.length; i++) 
-			this.rotas[i]=solucao.rotas[i];
+			this.rotas[i]=solution.rotas[i];
 	}
 
-	private void passaResultado(Solution solucao) 
+	private void passaResultado(Solution solution) 
 	{
-		solucao.NumRotas=this.NumRotas;
-		solucao.f=this.f;
+		solution.NumRotas=this.NumRotas;
+		solution.f=this.f;
 		for (int i = 0; i < rotas.length; i++) 
-			solucao.rotas[i]=this.rotas[i];
+			solution.rotas[i]=this.rotas[i];
 	}
 
 	public void construir(Solution s)
 	{
-		setSolucao(s);
+		setSolution(s);
 		
 		for (int i = 0; i < rotas.length; i++)
 			rotas[i].limpar();
@@ -57,7 +57,7 @@ public class ConstrutorSolucao
 		f=0;
 		
 		for (int i = 0; i < size; i++) 
-			naoInseridos[contNaoInseridos++]=solucao[i];
+			naoInseridos[contNaoInseridos++]=solution[i];
 		
 		for (int i = 0; i < NumRotas; i++)
 		{
@@ -89,12 +89,12 @@ public class ConstrutorSolucao
 		Node aux,bestNo=null;
 		double custo,custoAnt;
 		
-		for (int i = 0; i < solucao.length; i++) 
+		for (int i = 0; i < solution.length; i++) 
 		{
-			aux=solucao[i];
+			aux=solution[i];
 			if(aux.jaInserido)
 			{
-				custo=instancia.dist(aux.name,no.name)+instancia.dist(no.name,aux.next.name)-instancia.dist(aux.name,aux.next.name);
+				custo=instance.dist(aux.name,no.name)+instance.dist(no.name,aux.next.name)-instance.dist(aux.name,aux.next.name);
 				if(custo<bestCusto)
 				{
 					bestCusto=custo;
@@ -102,8 +102,8 @@ public class ConstrutorSolucao
 				}
 			}
 		}
-		custo=instancia.dist(bestNo.name,no.name)+instancia.dist(no.name,bestNo.next.name)-instancia.dist(bestNo.name,bestNo.next.name);
-		custoAnt=instancia.dist(bestNo.prev.name,no.name)+instancia.dist(no.name,bestNo.name)-instancia.dist(bestNo.prev.name,bestNo.name);
+		custo=instance.dist(bestNo.name,no.name)+instance.dist(no.name,bestNo.next.name)-instance.dist(bestNo.name,bestNo.next.name);
+		custoAnt=instance.dist(bestNo.prev.name,no.name)+instance.dist(no.name,bestNo.name)-instance.dist(bestNo.prev.name,bestNo.name);
 		if(custo<custoAnt)
 			return bestNo;
 		

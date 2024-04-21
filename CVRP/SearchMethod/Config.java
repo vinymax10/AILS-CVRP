@@ -4,7 +4,7 @@ import java.text.DecimalFormat;
 import java.util.Arrays;
 
 import Perturbation.HeuristicaAdicao;
-import Perturbation.TipoPerturbacao;
+import Perturbation.PerturbationType;
 
 public class Config implements Cloneable
 {
@@ -13,18 +13,18 @@ public class Config implements Cloneable
 	int dMin,dMax;	
 	
 	int gamma;
-	TipoPerturbacao perturbacao[];
+	PerturbationType perturbacao[];
 	HeuristicaAdicao[]heuristicasAdicao;
 	//--------------------PR-------------------
 	int varphi;
 	double epsilon;
 	int knnLimit;
-	TipoCriterioParada tipoCriterioParada;
+	StoppingCriterionType stoppingCriterionType;
 	
 	public Config() 
 	{
 //		----------------------------Main----------------------------
-		this.tipoCriterioParada=TipoCriterioParada.Time;
+		this.stoppingCriterionType=StoppingCriterionType.Time;
 		this.dMin=15;
 		this.dMax=30;
 		this.gamma=30; 
@@ -36,9 +36,9 @@ public class Config implements Cloneable
 		this.etaMin=0.01;
 		this.etaMax=1;
 		
-		this.perturbacao=new TipoPerturbacao[2];
-		this.perturbacao[0]=TipoPerturbacao.Sequential;
-		this.perturbacao[1]=TipoPerturbacao.Concentric;
+		this.perturbacao=new PerturbationType[2];
+		this.perturbacao[0]=PerturbationType.Sequential;
+		this.perturbacao[1]=PerturbationType.Concentric;
 		
 		this.heuristicasAdicao=new HeuristicaAdicao[2];
 		heuristicasAdicao[0]=HeuristicaAdicao.Distance;
@@ -59,7 +59,7 @@ public class Config implements Cloneable
 	public String toString() 
 	{
 		return "Config "
-		+"\ntipoCriterioParada: "+tipoCriterioParada
+		+"\nstoppingCriterionType: "+stoppingCriterionType
 		+"\netaMax: "+deci.format(etaMax)
 		+"\netaMin: "+deci.format(etaMin)
 		+"\ngamma: "+gamma
@@ -121,11 +121,11 @@ public class Config implements Cloneable
 		this.gamma = gamma;
 	}
 
-	public TipoPerturbacao[] getPerturbacao() {
+	public PerturbationType[] getPerturbacao() {
 		return perturbacao;
 	}
 
-	public void setPerturbacao(TipoPerturbacao[] perturbacao) {
+	public void setPerturbacao(PerturbationType[] perturbacao) {
 		this.perturbacao = perturbacao;
 	}
 
@@ -165,12 +165,12 @@ public class Config implements Cloneable
 		this.knnLimit = knnLimit;
 	}
 
-	public TipoCriterioParada getTipoCriterioParada() {
-		return tipoCriterioParada;
+	public StoppingCriterionType getStoppingCriterionType() {
+		return stoppingCriterionType;
 	}
 
-	public void setTipoCriterioParada(TipoCriterioParada tipoCriterioParada) {
-		this.tipoCriterioParada = tipoCriterioParada;
+	public void setStoppingCriterionType(StoppingCriterionType stoppingCriterionType) {
+		this.stoppingCriterionType = stoppingCriterionType;
 	}
 
 

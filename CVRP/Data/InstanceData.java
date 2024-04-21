@@ -4,37 +4,37 @@ public class InstanceData
 {
 	public String name;
 	public Best bestSolution;
-	public Best bestSolutionSave;
-	public boolean best;
-	public boolean alreadyHaveSolution;
+	public Best bestSavedSolution;
+	public boolean optimal;
+	public boolean savedSolutionFlag;
 	public boolean rounded;
 
-	public InstanceData(String name, double bestSolution, boolean rounded, boolean best, int bestSolutionSave, boolean alreadyHaveSolution)
+	public InstanceData(String name, double bestSolution, boolean rounded, boolean optimal, int bestSavedSolution, boolean savedSolutionFlag)
 	{
 		super();
 		this.name = name;
 		this.bestSolution = new Best(bestSolution);
 		this.rounded = rounded;
-		this.best = best;
-		this.alreadyHaveSolution = alreadyHaveSolution;
-		this.bestSolutionSave = new Best(bestSolutionSave);
+		this.optimal = optimal;
+		this.savedSolutionFlag = savedSolutionFlag;
+		this.bestSavedSolution = new Best(bestSavedSolution);
 	}
 
-	public InstanceData(String name, double bestSolution, boolean rounded, boolean best, boolean alreadyHaveSolution)
+	public InstanceData(String name, double bestSolution, boolean rounded, boolean optimal, boolean savedSolutionFlag)
 	{
 		super();
 		this.name = name;
 		this.bestSolution = new Best(bestSolution);
-		this.bestSolutionSave = new Best(bestSolution);
+		this.bestSavedSolution = new Best(bestSolution);
 		this.rounded = rounded;
-		this.best = best;
-		this.alreadyHaveSolution = alreadyHaveSolution;
+		this.optimal = optimal;
+		this.savedSolutionFlag = savedSolutionFlag;
 	}
 
 	@Override
 	public String toString()
 	{
-		return "name: " + name + "\tbestSolution: " + bestSolution.getOtimo() + "\totimmo: " + best + "\tjaTemosSolucaoSalva: " + alreadyHaveSolution;
+		return "name: " + name + "\tbestSolution: " + bestSolution.getOtimo() + "\totimmo: " + optimal + "\tjaTemosSolucaoSalva: " + savedSolutionFlag;
 	}
 
 	public String getName()
@@ -57,34 +57,34 @@ public class InstanceData
 		this.bestSolution = bestSolution;
 	}
 
-	public boolean isBest()
+	public boolean isOptimal()
 	{
-		return best;
+		return optimal;
 	}
 
-	public void setBest(boolean best)
+	public void setOptimal(boolean optimal)
 	{
-		this.best = best;
+		this.optimal = optimal;
 	}
 
-	public boolean isAlreadyHaveSolution()
+	public boolean isSavedSolutionFlag()
 	{
-		return alreadyHaveSolution;
+		return savedSolutionFlag;
 	}
 
-	public void setAlreadyHaveSolution(boolean alreadyHaveSolution)
+	public void setSavedSolutionFlag(boolean savedSolutionFlag)
 	{
-		this.alreadyHaveSolution = alreadyHaveSolution;
+		this.savedSolutionFlag = savedSolutionFlag;
 	}
 
-	public Best getBestSolutionSave()
+	public Best getBestSavedSolution()
 	{
-		return bestSolutionSave;
+		return bestSavedSolution;
 	}
 
-	public void setBestSolutionSalva(Best bestSolutionSave)
+	public void setBestSavedSolution(Best bestSavedSolution)
 	{
-		this.bestSolutionSave = bestSolutionSave;
+		this.bestSavedSolution = bestSavedSolution;
 	}
 
 }

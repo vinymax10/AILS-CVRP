@@ -1,7 +1,7 @@
 package Solution;
 
 import Data.Instance;
-import Data.Ponto;
+import Data.Point;
 
 public class Node implements Cloneable
 {
@@ -17,7 +17,7 @@ public class Node implements Cloneable
 	public boolean jaInserido;
 	public boolean fixoRota;
 	public boolean fixoPos;
-	Ponto ponto;
+	Point ponto;
 	Instance instancia;
 	public boolean alterado;
 	
@@ -26,12 +26,12 @@ public class Node implements Cloneable
 	public int priority;
 	public Rota rotaDestino;
 	
-	public Node(Ponto ponto, Instance instancia) 
+	public Node(Point ponto, Instance instancia) 
 	{
 		this.ponto=ponto;
 		this.instancia=instancia;
-		this.name = ponto.nome;
-		this.demanda = ponto.demanda;
+		this.name = ponto.name;
+		this.demanda = ponto.demand;
 
 		this.next=null;
 		this.prev=null;

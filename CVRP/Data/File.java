@@ -22,7 +22,7 @@ public class File
 		outputStream.println(text);
 	}
 	
-	public void finish()
+	public void close()
 	{
 		if (outputStream != null) 
 			outputStream.close();

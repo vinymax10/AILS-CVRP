@@ -11,37 +11,37 @@ import SearchMethod.InputParameters;
 public class Instance 
 {
 	private int size;
-	private double mediaPorRota;
+	private double averagePerRoute;
 	private int knn[][];
 	private float dist[][];
-	private NoKnn[]VizKnn;
-	private int capacidade;
-	private int deposito;
-	private int numRotasMin;
-	private int numRotasMax;
-	private Ponto pontos[];
+	private NodeKnn[]neighKnn;
+	private int capacity;
+	private int depot;
+	private int minNumberRoutes;
+	private int maxNumberRoutes;
+	private Point points[];
 	double coord[][];
-	private String nome;
-	private double maiorDist=0;
-	private double menorDist=Integer.MAX_VALUE;
-	TipoEdgeType tipoEdgeType;
-	double distancia;
+	private String name;
+	private double largestDist=0;
+	private double minDist=Integer.MAX_VALUE;
+	EdgeType edgeType;
+	double distance;
 	boolean rounded;
-	double somaDemanda;
+	double sumDemand;
 	String str[];
 	Config config;
 	boolean print = false;
 	
 	public Instance(InputParameters leitor) 
 	{
-		this.nome=leitor.getFile();
+		this.name=leitor.getFile();
 		this.config=leitor.getConfig();
 		this.rounded=leitor.isRounded();
 		
 		BufferedReader in;
 		try 
 		{
-			in = new BufferedReader(new FileReader(nome));
+			in = new BufferedReader(new FileReader(name));
 			
 			str=in.readLine().split(":");
 			while(!str[0].trim().equals("EOF"))
@@ -50,26 +50,26 @@ public class Instance
 				{
 					case "DIMENSION": size=Integer.valueOf(str[1].trim());break;
 					case "EDGE_WEIGHT_TYPE":
-					case "EDGE_WEIGHT_FORMAT": setTipoCoord(str[1].trim());break;
-					case "CAPACITY": capacidade=Integer.valueOf(str[1].trim());break;
-					case "NODE_COORD_SECTION": leituraCoord(in);break;
-					case "EDGE_WEIGHT_SECTION": leituraMatrizDist(in);break;
-					case "DEMAND_SECTION": leituraDemanda(in);break;
-					case "DEPOT_SECTION": leituraDeposito(in);break;
+					case "EDGE_WEIGHT_FORMAT": setCoordType(str[1].trim());break;
+					case "CAPACITY": capacity=Integer.valueOf(str[1].trim());break;
+					case "NODE_COORD_SECTION": readCoord(in);break;
+					case "EDGE_WEIGHT_SECTION": readDistMatrix(in);break;
+					case "DEMAND_SECTION": readDemand(in);break;
+					case "DEPOT_SECTION": readDepot(in);break;
 				}
 				str=in.readLine().split(":");
 			}
 				
-			numRotasMin=(int) Math.ceil(somaDemanda/capacidade);
-			mediaPorRota=(double)size/numRotasMin;
-			double porcent=numRotasMin*((double)1/mediaPorRota);
-			numRotasMax=numRotasMin+(3+(int)Math.ceil(porcent));
+			minNumberRoutes=(int) Math.ceil(sumDemand/capacity);
+			averagePerRoute=(double)size/minNumberRoutes;
+			double porcent=minNumberRoutes*((double)1/averagePerRoute);
+			maxNumberRoutes=minNumberRoutes+(3+(int)Math.ceil(porcent));
 			
 		} 
 		catch (IOException e) {
-	    	System.out.println("Erro ao Ler Arquivo");
+	    	System.out.println("File reading error");
 	    }
-		VizKnn=null;
+		neighKnn=null;
 	}
 
 	public double dist(int i,int j)
@@ -81,12 +81,12 @@ public class Instance
 	{
 		if(i!=j)
 		{
-			if(tipoEdgeType==TipoEdgeType.EUC_2D)
+			if(edgeType==EdgeType.EUC_2D)
 			{
 				if(rounded)
-					return distanciaRounded(pontos[i].x,pontos[i].y,pontos[j].x,pontos[j].y);
+					return roundedDistance(points[i].x,points[i].y,points[j].x,points[j].y);
 				else
-					return distancia(pontos[i].x,pontos[i].y,pontos[j].x,pontos[j].y);
+					return distance(points[i].x,points[i].y,points[j].x,points[j].y);
 			}
 			else
 				return distanciaGeo(coord[i][0],coord[i][1],coord[j][0],coord[j][1]);
@@ -95,55 +95,55 @@ public class Instance
 			return 0;
 	}
 	
-	private double distancia(double x1,double y1,double x2,double y2)
+	private double distance(double x1,double y1,double x2,double y2)
 	{
 		return Math.sqrt(((x1-x2)*(x1-x2))+((y1-y2)*(y1-y2)));
 	}
 	
-	private int distanciaRounded(double x1,double y1,double x2,double y2)
+	private int roundedDistance(double x1,double y1,double x2,double y2)
 	{
 		return (short) Math.round(Math.sqrt(((x1-x2)*(x1-x2))+((y1-y2)*(y1-y2))));
 	}
 	
-	private void setTipoCoord(String str)
+	private void setCoordType(String str)
 	{
 		if(str.equals("EUC_2D"))
-			tipoEdgeType=TipoEdgeType.EUC_2D;
+			edgeType=EdgeType.EUC_2D;
 		else if(str.equals("EXPLICIT"))
-			tipoEdgeType=TipoEdgeType.EXPLICIT;
+			edgeType=EdgeType.EXPLICIT;
 		else
 		{
-			tipoEdgeType=TipoEdgeType.Coord;
+			edgeType=EdgeType.Coord;
 			coord=new double[size][2];
 		}
 	}
 	
-	private void leituraCoord(BufferedReader in)
+	private void readCoord(BufferedReader in)
 	{
 		if(print)
-			System.out.println("leituraCoord");
+			System.out.println("readCoord");
 		
-		pontos=new Ponto [size];
-		for (int i = 0; i < pontos.length; i++) 
-			pontos[i]=new Ponto(i);
+		points=new Point [size];
+		for (int i = 0; i < points.length; i++) 
+			points[i]=new Point(i);
 		
 		try 
 		{
 			for (int i = 0; i < size; i++) 
 			{
-				if(tipoEdgeType==TipoEdgeType.EUC_2D)
+				if(edgeType==EdgeType.EUC_2D)
 				{
 					str=in.readLine().trim().replaceAll("\\s+"," ").split("[' '|'\t']");
-					pontos[i].x=Double.valueOf(str[1].trim());
-					pontos[i].y=Double.valueOf(str[2].trim());
+					points[i].x=Double.valueOf(str[1].trim());
+					points[i].y=Double.valueOf(str[2].trim());
 				}
 				else
 				{
 					str=in.readLine().split("[' '|'\t']");
 					coord[i][0]=Double.valueOf(str[1].trim());
 					coord[i][1]=Double.valueOf(str[2].trim());
-					pontos[i].x=Double.valueOf((int) (coord[i][0]*10000));
-					pontos[i].y=Double.valueOf((int) (coord[i][1]*10000));
+					points[i].x=Double.valueOf((int) (coord[i][0]*10000));
+					points[i].y=Double.valueOf((int) (coord[i][1]*10000));
 				}
 			}
 			
@@ -151,62 +151,62 @@ public class Instance
 			e.printStackTrace();
 		}
 		
-		if(tipoEdgeType==TipoEdgeType.EUC_2D)
+		if(edgeType==EdgeType.EUC_2D)
 		{
 			//calculando Distancias
-			int limiteKnn=Math.min(config.getLimiteKnn(), size-1);
-			knn=new int[size][limiteKnn];
-			VizKnn=new NoKnn[size-1];
+			int knnLimit=Math.min(config.getKnnLimit(), size-1);
+			knn=new int[size][knnLimit];
+			neighKnn=new NodeKnn[size-1];
 			
-			for (int i = 0; i < VizKnn.length; i++) 
-				VizKnn[i]=new NoKnn();
+			for (int i = 0; i < neighKnn.length; i++) 
+				neighKnn[i]=new NodeKnn();
 			
 			dist=new float[size][size];
 			
-			int cont=0;
+			int counter=0;
 			for (int i = 0; i < size; i++) 
 			{
-				cont=0;
+				counter=0;
 				for (int j = 0; j < size; j++) 
 				{
-					distancia=distCalc(i,j);
+					distance=distCalc(i,j);
 					
-					dist[i][j]=(float)distancia;
+					dist[i][j]=(float)distance;
 					
 					if(i<j)
 					{
-						if(maiorDist<distancia)
-							maiorDist=distancia;
+						if(largestDist<distance)
+							largestDist=distance;
 						
-						if(menorDist>distancia)
-							menorDist=distancia;
+						if(minDist>distance)
+							minDist=distance;
 					}
 					
 					if(i!=j)
 					{
-						VizKnn[cont].dist=distancia;
-						VizKnn[cont].nome=j;
-						cont++;
+						neighKnn[counter].dist=distance;
+						neighKnn[counter].name=j;
+						counter++;
 					}
 				}
 				
-				Arrays.sort(VizKnn);
+				Arrays.sort(neighKnn);
 				
-				for (int j = 0; j < limiteKnn; j++) 
-					knn[i][j]=VizKnn[j].nome;
+				for (int j = 0; j < knnLimit; j++) 
+					knn[i][j]=neighKnn[j].name;
 			}
 		}
 	}
 	
-	private void leituraMatrizDist(BufferedReader in)
+	private void readDistMatrix(BufferedReader in)
 	{
 		//calculando Distancias
-		int limiteKnn=Math.min(config.getLimiteKnn(), size-1);
+		int limiteKnn=Math.min(config.getKnnLimit(), size-1);
 		knn=new int[size][limiteKnn];
-		VizKnn=new NoKnn[size-1];
+		neighKnn=new NodeKnn[size-1];
 		
-		for (int i = 0; i < VizKnn.length; i++) 
-			VizKnn[i]=new NoKnn();
+		for (int i = 0; i < neighKnn.length; i++) 
+			neighKnn[i]=new NodeKnn();
 		
 		dist=new float[size][size];
 				
@@ -217,9 +217,9 @@ public class Instance
 				str=in.readLine().trim().replaceAll("\\s+"," ").split("[' '|'\t']");
 				for (int j = 0; j < str.length; j++) 
 				{
-					distancia=Double.valueOf(str[j].trim());
+					distance=Double.valueOf(str[j].trim());
 //					System.out.print(distancia+" ");
-					dist[i][j]=(short) distancia;
+					dist[i][j]=(short) distance;
 					dist[j][i]=dist[i][j];
 				}
 //				System.out.println();
@@ -235,55 +235,55 @@ public class Instance
 			cont=0;
 			for (int j = 0; j < size; j++) 
 			{
-				distancia=dist[i][j];
+				distance=dist[i][j];
 				
 				if(i<j)
 				{
-					if(maiorDist<distancia)
-						maiorDist=distancia;
+					if(largestDist<distance)
+						largestDist=distance;
 					
-					if(menorDist>distancia)
-						menorDist=distancia;
+					if(minDist>distance)
+						minDist=distance;
 				}
 				
 				if(i!=j)
 				{
-					VizKnn[cont].dist=distancia;
-					VizKnn[cont].nome=j;
+					neighKnn[cont].dist=distance;
+					neighKnn[cont].name=j;
 					cont++;
 				}
 			}
 			
-			Arrays.sort(VizKnn);
+			Arrays.sort(neighKnn);
 			
 			for (int j = 0; j < limiteKnn; j++) 
-				knn[i][j]=VizKnn[j].nome;
+				knn[i][j]=neighKnn[j].name;
 			
 		}
 	}
 	
-	private void leituraDemanda(BufferedReader in)
+	private void readDemand(BufferedReader in)
 	{
 		if(print)
-			System.out.println("leituraDemanda");
+			System.out.println("readDemand");
 		
 		try {
-			somaDemanda=0;
+			sumDemand=0;
 			for (int i = 0; i < size; i++) 
 			{
 				str=in.readLine().trim().replaceAll("\\s+"," ").split("[' '|'\t']");
-				pontos[i].demanda=Integer.valueOf(str[1]);
-				somaDemanda+=pontos[i].demanda;
+				points[i].demand=Integer.valueOf(str[1]);
+				sumDemand+=points[i].demand;
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 	
-	private void leituraDeposito(BufferedReader in)
+	private void readDepot(BufferedReader in)
 	{
 		try {
-				deposito=Integer.valueOf(in.readLine().trim())-1;
+				depot=Integer.valueOf(in.readLine().trim())-1;
 			
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -309,25 +309,25 @@ public class Instance
 	
 	@Override
 	public String toString() {
-		return "size=" + size + "\n capacidade=" + capacidade
-				+ "\ndeposito="+ deposito +" numRotasMin: "+numRotasMin;
+		return "size=" + size + "\n capacidade=" + capacity
+				+ "\ndeposito="+ depot +" numRotasMin: "+minNumberRoutes;
 	}
 
-	public Ponto[] getPontos() {
-		return pontos;
+	public Point[] getPontos() {
+		return points;
 	}
 
 
-	public void setPontos(Ponto[] pontos) {
-		this.pontos = pontos;
+	public void setPontos(Point[] pontos) {
+		this.points = pontos;
 	}
 
 	public int getNumRotasMin() {
-		return numRotasMin;
+		return minNumberRoutes;
 	}
 
 	public int getNumRotasMax() {
-		return numRotasMax;
+		return maxNumberRoutes;
 	}
 
 	public int getSize() {
@@ -339,31 +339,31 @@ public class Instance
 	}
 
 	public int getCapacidade() {
-		return capacidade;
+		return capacity;
 	}
 
 	public void setCapacidade(int capacidade) {
-		this.capacidade = capacidade;
+		this.capacity = capacidade;
 	}
 
 	public int getDeposito() {
-		return deposito;
+		return depot;
 	}
 
 	public void setDeposito(int deposito) {
-		this.deposito = deposito;
+		this.depot = deposito;
 	}
 
 	public double getMaiorDist() {
-		return maiorDist;
+		return largestDist;
 	}
 	
 	public double getMenorDist() {
-		return menorDist;
+		return minDist;
 	}
 
 	public String getNome() {
-		return nome;
+		return name;
 	}
 
 	public int[][] getKnn() {

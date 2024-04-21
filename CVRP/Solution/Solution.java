@@ -6,13 +6,13 @@ import java.io.IOException;
 
 import Data.File;
 import Data.Instance;
-import Data.Ponto;
+import Data.Point;
 import Improvement.BuscaLocalIntra;
 import SearchMethod.Config;
 
 public class Solution 
 {
-	private Ponto pontos[];
+	private Point pontos[];
 	Instance instancia;
 	Config config;
 	protected int size;
@@ -371,7 +371,7 @@ public class Solution
 	{
 		File arq=new File(end);
 		arq.write(this.toString());
-		arq.finish();
+		arq.close();
 	}
 	
 }

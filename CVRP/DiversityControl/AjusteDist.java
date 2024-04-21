@@ -5,7 +5,6 @@ import SearchMethod.TipoCriterioParada;
 
 public class AjusteDist 
 {
-	double ebDistDPM=0.1;
 	int distMMin;
 	int distMMax;
 	int iterador;

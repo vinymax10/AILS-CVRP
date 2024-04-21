@@ -18,7 +18,7 @@ public class Config implements Cloneable
 	//--------------------PR-------------------
 	int varphi;
 	double epsilon;
-	int limiteKnn;
+	int knnLimit;
 	TipoCriterioParada tipoCriterioParada;
 	
 	public Config() 
@@ -28,7 +28,7 @@ public class Config implements Cloneable
 		this.dMin=15;
 		this.dMax=30;
 		this.gamma=30; 
-		this.limiteKnn=100;
+		this.knnLimit=100;
 		this.varphi=40;
 		
 		
@@ -69,7 +69,7 @@ public class Config implements Cloneable
 		+"\nepsilon: " + deci.format(epsilon)
 		+"\nperturbacao: "+Arrays.toString(perturbacao)
 		+"\nheuristicasAdicao: "+Arrays.toString(heuristicasAdicao)
-		+"\nlimiteKnn: "+limiteKnn
+		+"\nlimiteKnn: "+knnLimit
 		;  
 	}
 
@@ -143,8 +143,8 @@ public class Config implements Cloneable
 
 	public void setVarphi(int varphi)
 	{
-		if(limiteKnn<varphi)
-			limiteKnn=varphi;
+		if(knnLimit<varphi)
+			knnLimit=varphi;
 		
 		this.varphi = varphi;
 	}
@@ -157,12 +157,12 @@ public class Config implements Cloneable
 		this.epsilon = epsilon;
 	}
 
-	public int getLimiteKnn() {
-		return limiteKnn;
+	public int getKnnLimit() {
+		return knnLimit;
 	}
 
-	public void setLimiteKnn(int limiteKnn) {
-		this.limiteKnn = limiteKnn;
+	public void setKnnLimit(int knnLimit) {
+		this.knnLimit = knnLimit;
 	}
 
 	public TipoCriterioParada getTipoCriterioParada() {

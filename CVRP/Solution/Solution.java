@@ -7,7 +7,7 @@ import java.io.IOException;
 import Data.File;
 import Data.Instance;
 import Data.Point;
-import Improvement.BuscaLocalIntra;
+import Improvement.IntraLocalSearch;
 import SearchMethod.Config;
 
 public class Solution
@@ -18,7 +18,7 @@ public class Solution
 	protected int size;
 	Node solution[];
 
-	protected int inicio;
+	protected int first;
 	protected Node deposito;
 	int capacidade;
 	public Route routes[];
@@ -30,7 +30,7 @@ public class Solution
 	double epsilon;
 //	-----------Comparadores-----------
 
-	BuscaLocalIntra buscaLocalIntra;
+	IntraLocalSearch intraLocalSearch;
 
 	public Solution(Instance instance, Config config)
 	{
@@ -79,21 +79,21 @@ public class Solution
 			routes[i].demandaTotal = referencia.routes[i].demandaTotal;
 			routes[i].fRoute = referencia.routes[i].fRoute;
 			routes[i].numElements = referencia.routes[i].numElements;
-			routes[i].alterada = referencia.routes[i].alterada;
+			routes[i].modified = referencia.routes[i].modified;
 
-			if(referencia.routes[i].inicio.prev == null)
-				routes[i].inicio.prev = null;
-			else if(referencia.routes[i].inicio.prev.name == 0)
-				routes[i].inicio.prev = routes[i].inicio;
+			if(referencia.routes[i].first.prev == null)
+				routes[i].first.prev = null;
+			else if(referencia.routes[i].first.prev.name == 0)
+				routes[i].first.prev = routes[i].first;
 			else
-				routes[i].inicio.prev = solution[referencia.routes[i].inicio.prev.name - 1];
+				routes[i].first.prev = solution[referencia.routes[i].first.prev.name - 1];
 
-			if(referencia.routes[i].inicio.next == null)
-				routes[i].inicio.next = null;
-			else if(referencia.routes[i].inicio.next.name == 0)
-				routes[i].inicio.next = routes[i].inicio;
+			if(referencia.routes[i].first.next == null)
+				routes[i].first.next = null;
+			else if(referencia.routes[i].first.next.name == 0)
+				routes[i].first.next = routes[i].first;
 			else
-				routes[i].inicio.next = solution[referencia.routes[i].inicio.next.name - 1];
+				routes[i].first.next = solution[referencia.routes[i].first.next.name - 1];
 		}
 
 		for(int i = 0; i < solution.length; i++)
@@ -102,12 +102,12 @@ public class Solution
 			solution[i].jaInserido = referencia.solution[i].jaInserido;
 
 			if(referencia.solution[i].prev.name == 0)
-				solution[i].prev = routes[referencia.solution[i].prev.route.nomeRoute].inicio;
+				solution[i].prev = routes[referencia.solution[i].prev.route.nomeRoute].first;
 			else
 				solution[i].prev = solution[referencia.solution[i].prev.name - 1];
 
 			if(referencia.solution[i].next.name == 0)
-				solution[i].next = routes[referencia.solution[i].next.route.nomeRoute].inicio;
+				solution[i].next = routes[referencia.solution[i].next.route.nomeRoute].first;
 			else
 				solution[i].next = solution[referencia.solution[i].next.name - 1];
 		}
@@ -176,19 +176,19 @@ public class Solution
 				erro = true;
 			}
 
-			if(routeVazia && routes[i].inicio == routes[i].inicio.next)
+			if(routeVazia && routes[i].first == routes[i].first.next)
 			{
 				System.out.println("-------------------" + local + " ERRO-------------------" + "Route vazia: " + routes[i].toString());
 				erro = true;
 			}
 
-			if(routes[i].inicio.name != 0)
+			if(routes[i].first.name != 0)
 			{
 				System.out.println("-------------------" + local + " ERRO-------------------" + "Route iniciando sem deposito: " + routes[i].toString());
 				erro = true;
 			}
 
-			if(factibildiade && !routes[i].isFactivel())
+			if(factibildiade && !routes[i].isFeasible())
 			{
 				System.out.println("-------------------" + local + " ERRO-------------------" + "Route infactivel: " + routes[i].toString());
 				erro = true;
@@ -214,7 +214,7 @@ public class Solution
 		return erro;
 	}
 
-	public boolean factivel()
+	public boolean feasible()
 	{
 		for(int i = 0; i < numRoutes; i++)
 		{
@@ -224,11 +224,11 @@ public class Solution
 		return true;
 	}
 
-	public void removeRoutesVazias()
+	public void removeEmptyRoutes()
 	{
 		for(int i = 0; i < numRoutes; i++)
 		{
-			if(routes[i].inicio == routes[i].inicio.next)
+			if(routes[i].first == routes[i].first.next)
 			{
 				removeRoute(i);
 				i--;
@@ -262,7 +262,6 @@ public class Solution
 			linha = in.readLine();
 			str = linha.split(" ");
 
-//			int custo=Integer.valueOf(str[0]);
 			for(int i = 0; i < 3; i++)
 				in.readLine();
 
@@ -292,7 +291,6 @@ public class Solution
 			}
 			while(linha != null);
 
-//			System.out.println("f: "+f+" esperado: "+custo);
 		}
 		catch(IOException e)
 		{

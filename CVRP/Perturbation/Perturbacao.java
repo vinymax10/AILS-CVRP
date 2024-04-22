@@ -5,7 +5,7 @@ import java.util.Random;
 
 import Data.Instance;
 import DiversityControl.OmegaAdjustment;
-import Improvement.BuscaLocalIntra;
+import Improvement.IntraLocalSearch;
 import SearchMethod.Config;
 import Solution.Node;
 import Solution.Route;
@@ -37,17 +37,17 @@ public abstract class Perturbacao
 	int numIterUpdate;
 	int posHeuEscolhida;
 	
-	double custo,dist;
-	double custoPrev;
+	double cost,dist;
+	double costPrev;
 	int indexA,indexB;
 	Node bestNo,bestNoDist,aux;
 	Instance instance;
-	int limiteAdj;
+	int limitAdj;
 	
-	BuscaLocalIntra buscaLocalIntra;
+	IntraLocalSearch intraLocalSearch;
 	
 	public Perturbacao(Instance instance,Config config,
-	HashMap<String, OmegaAdjustment> configuradoresOmega, BuscaLocalIntra buscaLocalIntra) 
+	HashMap<String, OmegaAdjustment> configuradoresOmega, IntraLocalSearch intraLocalSearch) 
 	{
 		this.config=config;
 		this.instance=instance;
@@ -56,8 +56,8 @@ public abstract class Perturbacao
 		this.candidatos=new Node[size];
 		this.configuradoresOmega=configuradoresOmega;
 		this.numIterUpdate=config.getGamma();
-		this.limiteAdj=config.getVarphi();
-		this.buscaLocalIntra=buscaLocalIntra;
+		this.limitAdj=config.getVarphi();
+		this.intraLocalSearch=intraLocalSearch;
 	}
 	
 	public void estabelecerOrdem()
@@ -84,8 +84,8 @@ public abstract class Perturbacao
 		this.f=s.f;
 		for (int i = 0; i < numRoutes; i++) 
 		{
-			routes[i].alterada=false;
-			routes[i].inicio.alterado=false;
+			routes[i].modified=false;
+			routes[i].first.alterado=false;
 		}
 		
 		for (int i = 0; i < size; i++) 
@@ -112,7 +112,7 @@ public abstract class Perturbacao
 		switch(heuristicaAdicaoEscolhida)
 		{
 			case Distance: return getBestKNNNo2(no,1);
-			case Cost: return getBestKNNNo2(no,limiteAdj);
+			case Cost: return getBestKNNNo2(no,limitAdj);
 		}
 		return null;
 	}
@@ -131,12 +131,12 @@ public abstract class Perturbacao
 			{
 				for (int j = 0; j < numRoutes; j++) 
 				{
-					aux=routes[j].inicio;
+					aux=routes[j].first;
 					entrou=true;
-					custo=instance.dist(aux.name,no.name)+instance.dist(no.name,aux.next.name)-instance.dist(aux.name,aux.next.name);
-					if(custo<bestCusto)
+					cost=instance.dist(aux.name,no.name)+instance.dist(no.name,aux.next.name)-instance.dist(aux.name,aux.next.name);
+					if(cost<bestCusto)
 					{
-						bestCusto=custo;
+						bestCusto=cost;
 						bestNo=aux;
 					}
 				}
@@ -149,10 +149,10 @@ public abstract class Perturbacao
 				if(aux.jaInserido)
 				{
 					cont++;
-					custo=instance.dist(aux.name,no.name)+instance.dist(no.name,aux.next.name)-instance.dist(aux.name,aux.next.name);
-					if(custo<bestCusto)
+					cost=instance.dist(aux.name,no.name)+instance.dist(no.name,aux.next.name)-instance.dist(aux.name,aux.next.name);
+					if(cost<bestCusto)
 					{
-						bestCusto=custo;
+						bestCusto=cost;
 						bestNo=aux;
 					}
 				}
@@ -166,10 +166,10 @@ public abstract class Perturbacao
 				aux=solution[i];
 				if(aux.jaInserido)
 				{
-					custo=instance.dist(aux.name,no.name)+instance.dist(no.name,aux.next.name)-instance.dist(aux.name,aux.next.name);
-					if(custo<bestCusto)
+					cost=instance.dist(aux.name,no.name)+instance.dist(no.name,aux.next.name)-instance.dist(aux.name,aux.next.name);
+					if(cost<bestCusto)
 					{
-						bestCusto=custo;
+						bestCusto=cost;
 						bestNo=aux;
 					}
 				}
@@ -183,19 +183,19 @@ public abstract class Perturbacao
 				aux=solution[i];
 				if(aux.jaInserido)
 				{
-					custo=instance.dist(aux.name,no.name)+instance.dist(no.name,aux.next.name)-instance.dist(aux.name,aux.next.name);
-					if(custo<bestCusto)
+					cost=instance.dist(aux.name,no.name)+instance.dist(no.name,aux.next.name)-instance.dist(aux.name,aux.next.name);
+					if(cost<bestCusto)
 					{
-						bestCusto=custo;
+						bestCusto=cost;
 						bestNo=aux;
 					}
 				}
 			}
 		}
 		
-		custo=instance.dist(bestNo.name,no.name)+instance.dist(no.name,bestNo.next.name)-instance.dist(bestNo.name,bestNo.next.name);
-		custoPrev=instance.dist(bestNo.prev.name,no.name)+instance.dist(no.name,bestNo.name)-instance.dist(bestNo.prev.name,bestNo.name);
-		if(custo<custoPrev)
+		cost=instance.dist(bestNo.name,no.name)+instance.dist(no.name,bestNo.next.name)-instance.dist(bestNo.name,bestNo.next.name);
+		costPrev=instance.dist(bestNo.prev.name,no.name)+instance.dist(no.name,bestNo.name)-instance.dist(bestNo.prev.name,bestNo.name);
+		if(cost<costPrev)
 		{
 			return bestNo;
 		}

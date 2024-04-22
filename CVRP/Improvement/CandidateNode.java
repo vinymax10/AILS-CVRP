@@ -1,135 +1,135 @@
 package Improvement;
 
 import Evaluators.CostEvaluation;
-import Evaluators.TipoMovimento;
+import Evaluators.MovementType;
 import Solution.Node;
 import Solution.Route;
 
 public class CandidateNode implements Comparable<CandidateNode>
 {
-	public boolean ativo;
-	public double custo;
-	public double custoAvaliacao;
-	public TipoMovimento tipoMov;
+	public boolean active;
+	public double cost;
+	public double evaluationCost;
+	public MovementType moveType;
 	public Node a,b,prevA,prevB;
 	public int indexARoute, indexBRoute;
 	public Route routeA,routeB;
 	public boolean intra;
 	public int gain;
-	CostEvaluation avaliadorCusto;
+	CostEvaluation evaluateCost;
 	
-	public CandidateNode(CostEvaluation avaliadorCusto)
+	public CandidateNode(CostEvaluation evaluateCost)
 	{
-		this.avaliadorCusto=avaliadorCusto;
-		limpar();
+		this.evaluateCost=evaluateCost;
+		clean();
 	}
 	
-	public void setNoMelhora(double custo, TipoMovimento tipoMov, Node a, Node b,int indexARoute,int indexBRoute,double custoAvaliacao) 
+	public void setImprovedNode(double cost, MovementType moveType, Node a, Node b,int indexARoute,int indexBRoute,double evaluationCost) 
 	{
-		this.ativo = true;
-		this.custo = custo;
-		this.tipoMov = tipoMov;
+		this.active = true;
+		this.cost = cost;
+		this.moveType = moveType;
 		this.a = a;
 		this.b = b;
 		this.indexARoute=indexARoute;
 		this.indexBRoute=indexBRoute;
-		this.custoAvaliacao=custoAvaliacao;
+		this.evaluationCost=evaluationCost;
 	}
 	
-	public void setNoMelhora(double custo, TipoMovimento tipoMov, Node a, Node b,double custoAvaliacao) 
+	public void setImprovedNode(double cost, MovementType moveType, Node a, Node b,double evaluationCost) 
 	{
-		this.ativo = true;
-		this.custo = custo;
-		this.tipoMov = tipoMov;
+		this.active = true;
+		this.cost = cost;
+		this.moveType = moveType;
 		this.a = a;
 		this.b = b;
 		this.routeA=a.route;
 		this.routeB=b.route;
-		this.custoAvaliacao=custoAvaliacao;
+		this.evaluationCost=evaluationCost;
 	}
 	
-	public void setNoMelhora(double custo, TipoMovimento tipoMov, Node a, Node b, Node prevA, Node prevB, double custoAvaliacao) 
+	public void setImprovedNode(double cost, MovementType moveType, Node a, Node b, Node prevA, Node prevB, double evaluationCost) 
 	{
-		this.ativo = true;
-		this.custo = custo;
-		this.tipoMov = tipoMov;
-		this.a = a;
-		this.b = b;
-		this.prevA = prevA;
-		this.prevB = prevB;
-		this.routeA=a.route;
-		this.routeB=b.route;
-		this.custoAvaliacao=custoAvaliacao;
-	}
-	
-	public void setNoMelhora(double custo, TipoMovimento tipoMov, Node a, Node b, Node prevA, Node prevB, double custoAvaliacao,int gain) 
-	{
-		this.ativo = true;
-		this.custo = custo;
-		this.tipoMov = tipoMov;
+		this.active = true;
+		this.cost = cost;
+		this.moveType = moveType;
 		this.a = a;
 		this.b = b;
 		this.prevA = prevA;
 		this.prevB = prevB;
 		this.routeA=a.route;
 		this.routeB=b.route;
-		this.custoAvaliacao=custoAvaliacao;
+		this.evaluationCost=evaluationCost;
+	}
+	
+	public void setImprovedNode(double cost, MovementType moveType, Node a, Node b, Node prevA, Node prevB, double evaluationCost,int gain) 
+	{
+		this.active = true;
+		this.cost = cost;
+		this.moveType = moveType;
+		this.a = a;
+		this.b = b;
+		this.prevA = prevA;
+		this.prevB = prevB;
+		this.routeA=a.route;
+		this.routeB=b.route;
+		this.evaluationCost=evaluationCost;
 		this.gain=gain;
 	}
 	
-	public void setNoMelhora(double custo, TipoMovimento tipoMov, Node a, Node b,double custoAvaliacao,int gain) 
+	public void setImprovedNode(double cost, MovementType moveType, Node a, Node b,double evaluationCost,int gain) 
 	{
-		this.ativo = true;
-		this.custo = custo;
-		this.tipoMov = tipoMov;
+		this.active = true;
+		this.cost = cost;
+		this.moveType = moveType;
 		this.a = a;
 		this.b = b;
 		this.routeA=a.route;
 		this.routeB=b.route;
-		this.custoAvaliacao=custoAvaliacao;
+		this.evaluationCost=evaluationCost;
 		this.gain=gain;
 	}
 	
 	public void clone(CandidateNode x) 
 	{
-		this.ativo = x.ativo;
-		this.custo = x.custo;
-		this.tipoMov = x.tipoMov;
+		this.active = x.active;
+		this.cost = x.cost;
+		this.moveType = x.moveType;
 		this.a = x.a;
 		this.b = x.b;
 		this.routeA=a.route;
 		this.routeB=b.route;
 		this.indexARoute=x.indexARoute;
 		this.indexBRoute=x.indexBRoute;
-		this.custoAvaliacao=x.custoAvaliacao;
+		this.evaluationCost=x.evaluationCost;
 	}
 	
-	public void limpar()
+	public void clean()
 	{
-		this.custoAvaliacao=Integer.MAX_VALUE;
-		this.custo=Integer.MAX_VALUE;
-		this.ativo=false;
+		this.evaluationCost=Integer.MAX_VALUE;
+		this.cost=Integer.MAX_VALUE;
+		this.active=false;
 	}
 
 	@Override
 	public String toString() 
 	{
-		if(ativo)
-			return "CandidateNode [ativo=" + ativo + ", custo=" + custo + ", custoAvaliacao=" + custoAvaliacao + ", tipoMov="
-				+ tipoMov + ", a=" + a + ", b=" + b + ", nomeRouteA=" + a.route.nomeRoute + ", nomeRouteB=" + b.route.nomeRoute
+		if(active)
+			return "CandidateNode [active=" + active + ", custo=" + cost + ", evaluationCost=" + evaluationCost + ", moveType="
+				+ moveType + ", a=" + a + ", b=" + b + ", nomeRouteA=" + a.route.nomeRoute + ", nomeRouteB=" + b.route.nomeRoute
 				+ ", intra=" + intra + ", gain=" + gain + "]";
 		else
-			return "CandidateNode [ativo=" + ativo + ", custo=" + custo + ", custoAvaliacao=" + custoAvaliacao;
+			return "CandidateNode [active=" + active + ", custo=" + cost + ", evaluationCost=" + evaluationCost;
 	}
 
 	public int compareTo(CandidateNode x) 
 	{
-		if(this.custoAvaliacao!=x.custoAvaliacao)
+		if(this.evaluationCost!=x.evaluationCost)
 		{
-			if( this.custoAvaliacao>x.custoAvaliacao)
+			if( this.evaluationCost>x.evaluationCost)
 				return 1;
 			
-			if( this.custoAvaliacao<x.custoAvaliacao)
+			if( this.evaluationCost<x.evaluationCost)
 				return -1;
 		}
 		else

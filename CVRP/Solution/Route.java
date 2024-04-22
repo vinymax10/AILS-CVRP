@@ -8,9 +8,9 @@ public class Route implements Comparable<Route>
 	public int  capacidade;
 	public int deposito;
 
-	public Node inicio;
+	public Node first;
 	public boolean podeMelhorar;
-	public boolean alterada;
+	public boolean modified;
 	public int demandaTotal=0;
 	public double fRoute=0,prevF;
 	double acrescimoF;
@@ -20,18 +20,18 @@ public class Route implements Comparable<Route>
 	int contCaminho;
 	
 	//busca local best
-	public double menorCusto=0;
+	public double lowestCost=0;
 	Node aux;
 	
 	//------------------------------------------------
-	public double custo,custoRemocao;
+	public double cost,custoRemocao;
 	public Node bestCusto;
 	public double distancia,menorDist;
 	//------------------------------------------------
 	public boolean update;
 	
     Instance instance;
-    int limiteAdj;
+    int limitAdj;
     
 	public Route(Instance instance, Config config, Node deposito,int nomeRoute) 
 	{
@@ -39,77 +39,77 @@ public class Route implements Comparable<Route>
 		this.capacidade = instance.getCapacity();
 		this.deposito=deposito.name;
 		this.nomeRoute=nomeRoute;
-		this.inicio=null;
-		this.limiteAdj=config.getVarphi();
+		this.first=null;
+		this.limitAdj=config.getVarphi();
 		addNoFinal(deposito.clone());
 	}
 	
     public Node findBestPosition(Node no)
 	{
-		bestCusto=inicio;
-		aux=inicio.next;
-		menorCusto=instance.dist(inicio.name,no.name)+instance.dist(no.name,inicio.next.name)-instance.dist(inicio.name,inicio.next.name);
+		bestCusto=first;
+		aux=first.next;
+		lowestCost=instance.dist(first.name,no.name)+instance.dist(no.name,first.next.name)-instance.dist(first.name,first.next.name);
 		do
 		{
-			custo=instance.dist(aux.name,no.name)+instance.dist(no.name,aux.next.name)-instance.dist(aux.name,aux.next.name);
-			if(custo<menorCusto)
+			cost=instance.dist(aux.name,no.name)+instance.dist(no.name,aux.next.name)-instance.dist(aux.name,aux.next.name);
+			if(cost<lowestCost)
 			{
-				menorCusto=custo;
+				lowestCost=cost;
 				bestCusto=aux;
 			}
 			aux=aux.next;
 		}
-		while(aux!=inicio);
+		while(aux!=first);
 		return bestCusto;
 	}
     
     public Node findBestPositionExceto(Node no,Node excecao)
   	{
-  		bestCusto=inicio;
-  		aux=inicio.next;
+  		bestCusto=first;
+  		aux=first.next;
   		
-  		menorCusto=instance.dist(inicio.name,no.name)+instance.dist(no.name,inicio.next.name)-instance.dist(inicio.name,inicio.next.name);
+  		lowestCost=instance.dist(first.name,no.name)+instance.dist(no.name,first.next.name)-instance.dist(first.name,first.next.name);
   		do
   		{
-  			custo=instance.dist(aux.name,no.name)+instance.dist(no.name,aux.next.name)-instance.dist(aux.name,aux.next.name);
-  			if(custo<menorCusto&&aux.name!=excecao.name)
+  			cost=instance.dist(aux.name,no.name)+instance.dist(no.name,aux.next.name)-instance.dist(aux.name,aux.next.name);
+  			if(cost<lowestCost&&aux.name!=excecao.name)
   			{
-  				menorCusto=custo;
+  				lowestCost=cost;
   				bestCusto=aux;
   			}
   			aux=aux.next;
   		}
-  		while(aux!=inicio);
+  		while(aux!=first);
   		return bestCusto;
   	}
     
     public Node findBestPositionExcetoKNN(Node no,Node excecao, Node solution[])
    	{
-    	menorCusto=Double.MAX_VALUE;
+    	lowestCost=Double.MAX_VALUE;
     	
-   		bestCusto=inicio;
+   		bestCusto=first;
    		
-   		if(numElements>limiteAdj)
+   		if(numElements>limitAdj)
    		{
-   			for (int j = 0; j < limiteAdj; j++) 
+   			for (int j = 0; j < limitAdj; j++) 
    			{
    	   			if(no.getKnn()[j]==0)
    	   			{
-   	   				aux=inicio;
-   	   				custo=instance.dist(aux.name,no.name)+instance.dist(no.name,aux.next.name)-instance.dist(aux.name,aux.next.name);
-   	   				if(custo<menorCusto)
+   	   				aux=first;
+   	   				cost=instance.dist(aux.name,no.name)+instance.dist(no.name,aux.next.name)-instance.dist(aux.name,aux.next.name);
+   	   				if(cost<lowestCost)
    	   				{
-   	   					menorCusto=custo;
+   	   					lowestCost=cost;
    	   					bestCusto=aux;
    	   				}   				
    	   			}
    	   			else if(no.getKnn()[j]!=excecao.name&&solution[no.getKnn()[j]-1].route==this)
    	   			{
    	   				aux=solution[no.getKnn()[j]-1];
-   	   				custo=instance.dist(aux.name,no.name)+instance.dist(no.name,aux.next.name)-instance.dist(aux.name,aux.next.name);
-   	   				if(custo<menorCusto)
+   	   				cost=instance.dist(aux.name,no.name)+instance.dist(no.name,aux.next.name)-instance.dist(aux.name,aux.next.name);
+   	   				if(cost<lowestCost)
    	   				{
-   	   					menorCusto=custo;
+   	   					lowestCost=cost;
    	   					bestCusto=aux;
    	   				}
    	   			}
@@ -124,35 +124,35 @@ public class Route implements Comparable<Route>
    		return bestCusto;
    	}
     
-	public void limpar()
+	public void clean()
 	{
-		inicio.prev=inicio;
-		inicio.next=inicio;
+		first.prev=first;
+		first.next=first;
 		
 		demandaTotal=0;
 		fRoute=0;
 		numElements=1;
-		alterada=true;
+		modified=true;
 	}
 	
 	
 	public void setDemandaAcumulada()
 	{
-		inicio.demandaAcumulada=0;
-		aux=inicio.next;
+		first.demandaAcumulada=0;
+		aux=first.next;
 		do
 		{
 			aux.demandaAcumulada=aux.prev.demandaAcumulada+aux.demanda;
 			aux=aux.next;
 		}
-		while(aux!=inicio);
+		while(aux!=first);
 	}
 	
 	public void inverterRoute()
 	{
-		aux=inicio;
-		Node prev=inicio.prev;
-		Node next=inicio.next;
+		aux=first;
+		Node prev=first.prev;
+		Node next=first.next;
 		do
 		{
 			aux.prev=next;
@@ -161,13 +161,13 @@ public class Route implements Comparable<Route>
 			prev=aux.prev;
 			next=aux.next;
 		}
-		while(aux!=inicio);
+		while(aux!=first);
 	}
 	
 	public double F()
 	{
 		double f=0;
-		Node no=inicio;
+		Node no=first;
 		Node next=no.next;
 		do
 		{
@@ -175,7 +175,7 @@ public class Route implements Comparable<Route>
 			no=next;
 			next=no.next;
 		}
-		while(next!=inicio);
+		while(next!=first);
 		
 		f+=instance.dist(no.name,next.name);
 		return f;
@@ -184,7 +184,7 @@ public class Route implements Comparable<Route>
 	public void findErro()
 	{
 		int cont=0;
-		Node aux=inicio;
+		Node aux=first;
 		
 		do
 		{
@@ -199,7 +199,7 @@ public class Route implements Comparable<Route>
 			cont++;
 			aux=aux.next;
 		}
-		while(aux!=inicio);
+		while(aux!=first);
 		if(cont!=numElements)
 			System.out.println("Erro no numElements \n"+this.toString());
 
@@ -216,16 +216,16 @@ public class Route implements Comparable<Route>
 		str+=" f: "+fRoute;
 		str+=" espaco: "+availableCapacity();
 		str+=" size: "+numElements+" = ";
-		str+=" alterada: "+alterada+" = ";
+		str+=" modified: "+modified+" = ";
 
-		Node aux=inicio;
+		Node aux=first;
 		do
 		{
 			str+=aux+"->";
 //			System.out.println(str);
 			aux=aux.next;
 		}
-		while(aux!=inicio);
+		while(aux!=first);
 		
 		return str;
 	}
@@ -233,18 +233,18 @@ public class Route implements Comparable<Route>
 	public String toString2() 
 	{
 		String str="Route #"+(nomeRoute+1)+": ";
-		Node aux=inicio.next;
+		Node aux=first.next;
 		do
 		{
 			str+=aux.name+" ";
 			aux=aux.next;
 		}
-		while(aux!=inicio);
+		while(aux!=first);
 		
 		return str;
 	}
 	
-	public boolean isFactivel()
+	public boolean isFeasible()
 	{
 		if((capacidade-demandaTotal)>=0)
 			return true;
@@ -276,19 +276,19 @@ public class Route implements Comparable<Route>
 
 	public double remove(Node no) 
 	{
-		double custo=no.custoRemocao();
+		double cost=no.custoRemocao();
 		
-		if(no==inicio)
-			inicio=no.prev;
+		if(no==first)
+			first=no.prev;
 		
-		alterada=true;
+		modified=true;
 		no.alterado=true;
 		no.next.alterado=true;
 		no.prev.alterado=true;
 		
 		no.jaInserido=false;
 		
-		fRoute+=custo;
+		fRoute+=cost;
 		numElements--;
 		
 		prev=no.prev;
@@ -305,7 +305,7 @@ public class Route implements Comparable<Route>
 		
 //		setDemandaAcumulada();
 		
-		return custo;
+		return cost;
 	}
 
 	//------------------------Add No-------------------------
@@ -313,11 +313,11 @@ public class Route implements Comparable<Route>
 	public double addNoFinal(Node no)
 	{
 		no.route=this;
-		if(inicio==null)
+		if(first==null)
 		{
-			inicio=no;
-			inicio.prev=no;
-			inicio.next=no;
+			first=no;
+			first.prev=no;
+			first.next=no;
 			numElements++;
 			demandaTotal=0;
 			fRoute=0;
@@ -325,13 +325,13 @@ public class Route implements Comparable<Route>
 		}
 		else if(no.name==0)
 		{
-			aux=inicio.prev;
-			inicio=no;
+			aux=first.prev;
+			first=no;
 			return addDepois(no, aux); 
 		}
 		else 
 		{
-			aux=inicio.prev;
+			aux=first.prev;
 			return addDepois(no, aux); 
 		}
 	}
@@ -339,7 +339,7 @@ public class Route implements Comparable<Route>
 	public double addDepois(Node no1, Node no2) 
 	{
 		acrescimoF=no1.custoInserirApos(no2);
-		alterada=true;
+		modified=true;
 		no1.jaInserido=true;
 		no1.alterado=true;
 		no2.next.alterado=true;
@@ -360,7 +360,7 @@ public class Route implements Comparable<Route>
 		no1.next=next;
 		
 		if(no1.name==0)
-			inicio=no1;
+			first=no1;
 		
 //		setDemandaAcumulada();
 		

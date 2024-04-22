@@ -56,9 +56,9 @@ public class ExecuteMovement
 		bRoute.addDepois(a, b);
 	}
 
-	public void executa2Opt(Node a, Node b)
+	public void execute2Opt(Node a, Node b)
 	{
-		double custo = custo2Opt(a, b);
+		double cost = cost2Opt(a, b);
 
 		aNext = a.next;
 		bNext = b.next;
@@ -82,12 +82,12 @@ public class ExecuteMovement
 		aux = aux.next;
 		aux.prev = prev;
 
-		a.route.fRoute += custo;
+		a.route.fRoute += cost;
 		a.route.setDemandaAcumulada();
-		a.route.alterada = true;
+		a.route.modified = true;
 	}
 
-	public double custo2Opt(Node a, Node b)
+	public double cost2Opt(Node a, Node b)
 	{
 		return -(instance.dist(a.name, a.next.name) + instance.dist(b.name, b.next.name))
 		+ (instance.dist(a.name, b.name) + instance.dist(a.next.name, b.next.name));
@@ -101,7 +101,7 @@ public class ExecuteMovement
 		Node aux = a.next;
 		Node prev = b;
 
-		while(aux != aRoute.inicio)
+		while(aux != aRoute.first)
 		{
 			aRoute.remove(aux);
 			bRoute.addDepois(aux, prev);
@@ -112,7 +112,7 @@ public class ExecuteMovement
 		Node ultimo = prev;
 		aux = ultimo.next;
 		prev = a;
-		while(aux != bRoute.inicio)
+		while(aux != bRoute.first)
 		{
 			bRoute.remove(aux);
 			aRoute.addDepois(aux, prev);
@@ -129,7 +129,7 @@ public class ExecuteMovement
 
 	public double aplicar(CandidateNode no)
 	{
-		switch(no.tipoMov) {
+		switch(no.moveType) {
 		case SWAP:
 			SWAP(no.a, no.b);
 			break;
@@ -137,7 +137,7 @@ public class ExecuteMovement
 			SHIFT(no.a, no.b);
 			break;
 		case TwoOpt:
-			executa2Opt(no.a, no.b);
+			execute2Opt(no.a, no.b);
 			break;
 		case Cross:
 			Cross(no.a, no.b);
@@ -151,6 +151,6 @@ public class ExecuteMovement
 			break;
 
 		}
-		return no.custo;
+		return no.cost;
 	}
 }

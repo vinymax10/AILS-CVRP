@@ -37,7 +37,7 @@ public class ConstrutorSolucao
 			this.routes[i]=solution.routes[i];
 	}
 
-	private void passaResultado(Solution solution) 
+	private void assignResult(Solution solution) 
 	{
 		solution.numRoutes=this.numRoutes;
 		solution.f=this.f;
@@ -50,7 +50,7 @@ public class ConstrutorSolucao
 		setSolution(s);
 		
 		for (int i = 0; i < routes.length; i++)
-			routes[i].limpar();
+			routes[i].clean();
 		
 		int index;
 		Node no,bestNo;
@@ -79,32 +79,32 @@ public class ConstrutorSolucao
 			naoInseridos[--contNaoInseridos]=no;
 		}
 		
-		passaResultado(s);
-		s.removeRoutesVazias();
+		assignResult(s);
+		s.removeEmptyRoutes();
 	}
 	
 	protected Node getBestKNNNo(Node no)
 	{
 		double bestCusto=Double.MAX_VALUE;
 		Node aux,bestNo=null;
-		double custo,custoPrev;
+		double cost,costPrev;
 		
 		for (int i = 0; i < solution.length; i++) 
 		{
 			aux=solution[i];
 			if(aux.jaInserido)
 			{
-				custo=instance.dist(aux.name,no.name)+instance.dist(no.name,aux.next.name)-instance.dist(aux.name,aux.next.name);
-				if(custo<bestCusto)
+				cost=instance.dist(aux.name,no.name)+instance.dist(no.name,aux.next.name)-instance.dist(aux.name,aux.next.name);
+				if(cost<bestCusto)
 				{
-					bestCusto=custo;
+					bestCusto=cost;
 					bestNo=aux;
 				}
 			}
 		}
-		custo=instance.dist(bestNo.name,no.name)+instance.dist(no.name,bestNo.next.name)-instance.dist(bestNo.name,bestNo.next.name);
-		custoPrev=instance.dist(bestNo.prev.name,no.name)+instance.dist(no.name,bestNo.name)-instance.dist(bestNo.prev.name,bestNo.name);
-		if(custo<custoPrev)
+		cost=instance.dist(bestNo.name,no.name)+instance.dist(no.name,bestNo.next.name)-instance.dist(bestNo.name,bestNo.next.name);
+		costPrev=instance.dist(bestNo.prev.name,no.name)+instance.dist(no.name,bestNo.name)-instance.dist(bestNo.prev.name,bestNo.name);
+		if(cost<costPrev)
 			return bestNo;
 		
 		return bestNo.prev;
@@ -118,9 +118,9 @@ public class ConstrutorSolucao
 		for (int i = 0; i < numRoutes; i++) 
 		{
 			aux=routes[i].findBestPosition(no);
-			if(routes[i].menorCusto<bestCusto)
+			if(routes[i].lowestCost<bestCusto)
 			{
-				bestCusto=routes[i].menorCusto;
+				bestCusto=routes[i].lowestCost;
 				bestNo=aux;
 			}
 		}

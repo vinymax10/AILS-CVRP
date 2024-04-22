@@ -44,7 +44,7 @@ public class Node implements Cloneable
 		return instance.dist(x.name,this.name);
 	}
 	
-	public void limpar()
+	public void clean()
 	{
 		this.jaInserido=false;
 		this.route=null;

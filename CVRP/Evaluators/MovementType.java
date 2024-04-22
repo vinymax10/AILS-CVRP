@@ -1,6 +1,6 @@
 package Evaluators;
 
-public enum TipoMovimento
+public enum MovementType
 {
 	SWAP(0),
 	SHIFT(1),
@@ -11,7 +11,7 @@ public enum TipoMovimento
 	
 	final int tipo;
 	
-	TipoMovimento(int tipo)
+	MovementType(int tipo)
 	{
 		this.tipo=tipo;
 	}

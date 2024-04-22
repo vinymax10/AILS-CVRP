@@ -11,9 +11,9 @@ import DiversityControl.DistAdjustment;
 import DiversityControl.OmegaAdjustment;
 import DiversityControl.AcceptanceCriterion;
 import DiversityControl.IdealDist;
-import Improvement.BuscaLocal;
-import Improvement.BuscaLocalIntra;
-import Improvement.Factibilizador;
+import Improvement.LocalSearch;
+import Improvement.IntraLocalSearch;
+import Improvement.FeasibilityPhase;
 import Perturbation.HeuristicaAdicao;
 import Perturbation.Perturbacao;
 import Solution.Solution;
@@ -34,7 +34,7 @@ public class AILSII
 
 	//----------Metricas------------
 	int iterator,iteratorMF;
-	long inicio,ini;
+	long first,ini;
 	double tempoMF,tempoTotal,tempo;
 	
 	Random rand=new Random();
@@ -46,13 +46,13 @@ public class AILSII
 	Perturbacao[] perturbadores;
 	Perturbacao perturbacaoEscolhida;
 	
-	Factibilizador factibilizador;
+	FeasibilityPhase factibilizador;
 	ConstrutorSolucao construtorSolucao;
 	
-	BuscaLocal buscaLocal;
+	LocalSearch localSearch;
 
 	HeuristicaAdicao heuristicaAdicao;
-	BuscaLocalIntra buscaLocalIntra;
+	IntraLocalSearch intraLocalSearch;
 	AcceptanceCriterion acceptanceCriterion;
 //	----------Mare------------
 	DistAdjustment distAdjustment;
@@ -85,11 +85,11 @@ public class AILSII
 		
 		this.distAdjustment=new DistAdjustment( idealDist, config, executionMaximumLimit);
 		
-		this.buscaLocalIntra=new BuscaLocalIntra(instance,config);
+		this.intraLocalSearch=new IntraLocalSearch(instance,config);
 		
-		this.buscaLocal=new BuscaLocal(instance,config,buscaLocalIntra);
+		this.localSearch=new LocalSearch(instance,config,intraLocalSearch);
 		
-		this.factibilizador=new Factibilizador(instance,config,buscaLocalIntra);
+		this.factibilizador=new FeasibilityPhase(instance,config,intraLocalSearch);
 		
 		this.construtorSolucao=new ConstrutorSolucao(instance,config);
 		
@@ -107,8 +107,8 @@ public class AILSII
 			for (int i = 0; i < perturbadores.length; i++) 
 			{
 				this.perturbadores[i]=(Perturbacao) Class.forName("Perturbation."+config.getPerturbacao()[i]).
-				getConstructor(Instance.class,Config.class,HashMap.class,BuscaLocalIntra.class).
-				newInstance(instance,config,configuradoresOmega,buscaLocalIntra);
+				getConstructor(Instance.class,Config.class,HashMap.class,IntraLocalSearch.class).
+				newInstance(instance,config,configuradoresOmega,intraLocalSearch);
 			}
 			
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
@@ -122,12 +122,12 @@ public class AILSII
 	public void search()
 	{
 		iterator=0;
-		inicio=System.currentTimeMillis();
+		first=System.currentTimeMillis();
 		solucaoReferencia.numRoutes=instance.getMinNumberRoutes();
 		construtorSolucao.construir(solucaoReferencia);
 
-		factibilizador.factibilizar(solucaoReferencia);
-		buscaLocal.buscaLocal(solucaoReferencia,true);
+		factibilizador.makeFeasible(solucaoReferencia);
+		localSearch.localSearch(solucaoReferencia,true);
 		melhorSolucao.clone(solucaoReferencia);
 		while(!criterioParada())
 		{
@@ -137,8 +137,8 @@ public class AILSII
 			
 			perturbacaoEscolhida=perturbadores[rand.nextInt(perturbadores.length)];
 			perturbacaoEscolhida.perturbar(solution);
-			factibilizador.factibilizar(solution);
-			buscaLocal.buscaLocal(solution,true);
+			factibilizador.makeFeasible(solution);
+			localSearch.localSearch(solution,true);
 			distanciaBL=distEntreSolucoes.pairwiseSolutionDistance(solution,solucaoReferencia);
 			
 			analisaSolucao();
@@ -150,7 +150,7 @@ public class AILSII
 				solucaoReferencia.clone(solution);
 		}
 		
-		tempoTotal=(double)(System.currentTimeMillis()-inicio)/1000;
+		tempoTotal=(double)(System.currentTimeMillis()-first)/1000;
 	}
 	
 	public void analisaSolucao()
@@ -161,7 +161,7 @@ public class AILSII
 			
 			melhorSolucao.clone(solution);
 			iteratorMF=iterator;
-			tempoMF=(double)(System.currentTimeMillis()-inicio)/1000;
+			tempoMF=(double)(System.currentTimeMillis()-first)/1000;
 				
 			if(print)
 			{
@@ -185,7 +185,7 @@ public class AILSII
 									return true;
 								break;
 							
-			case Time: 	if(melhorF<=otimo||executionMaximumLimit<(System.currentTimeMillis()-inicio)/1000)
+			case Time: 	if(melhorF<=otimo||executionMaximumLimit<(System.currentTimeMillis()-first)/1000)
 							return true;
 						break;
 		}

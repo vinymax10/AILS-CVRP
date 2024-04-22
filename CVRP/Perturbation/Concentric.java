@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 import Data.Instance;
 import DiversityControl.OmegaAdjustment;
-import Improvement.BuscaLocalIntra;
+import Improvement.IntraLocalSearch;
 import SearchMethod.Config;
 import Solution.Node;
 import Solution.Solution;
@@ -14,9 +14,9 @@ import Solution.Solution;
 public class Concentric extends Perturbacao
 {
 	public Concentric(Instance instance, Config config,
-	HashMap<String, OmegaAdjustment> configuradoresOmega, BuscaLocalIntra buscaLocalIntra)
+	HashMap<String, OmegaAdjustment> configuradoresOmega, IntraLocalSearch intraLocalSearch)
 	{
-		super(instance, config, configuradoresOmega,buscaLocalIntra);
+		super(instance, config, configuradoresOmega,intraLocalSearch);
 		this.perturbationType=PerturbationType.Concentric;
 	}
 

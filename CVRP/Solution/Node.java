@@ -5,26 +5,26 @@ import Data.Point;
 
 public class Node implements Cloneable
 {
-	public Node prev,antOld;
-	public Node next,proxOld;
+	public Node prev,prevOld;
+	public Node next,nextOld;
 	
-	public Rota rota;
+	public Route route;
 	public int name;
 	public int demanda;
 
 	public int knn[];
 	public int demandaAcumulada=0;
 	public boolean jaInserido;
-	public boolean fixoRota;
+	public boolean fixoRoute;
 	public boolean fixoPos;
 	Point ponto;
 	Instance instance;
 	public boolean alterado;
 	
-	public int nomeRotaDestino;
-	public int nomeRotaOrigem;
+	public int nomeRouteDestino;
+	public int nomeRouteOrigem;
 	public int priority;
-	public Rota rotaDestino;
+	public Route routeDestino;
 	
 	public Node(Point ponto, Instance instance) 
 	{
@@ -35,7 +35,7 @@ public class Node implements Cloneable
 
 		this.next=null;
 		this.prev=null;
-		this.rota=null;
+		this.route=null;
 		this.knn=instance.getKnn()[name];
 	}
 	
@@ -47,7 +47,7 @@ public class Node implements Cloneable
 	public void limpar()
 	{
 		this.jaInserido=false;
-		this.rota=null;
+		this.route=null;
 	}
 	
 	 public Node clone() 
@@ -55,7 +55,7 @@ public class Node implements Cloneable
 		 Node clone = new Node(ponto, instance);
 		 clone.prev=prev;
 		 clone.next=next;
-		 clone.rota=rota;
+		 clone.route=route;
 		 return clone; 
 	 }
 	

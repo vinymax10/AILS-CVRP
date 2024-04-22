@@ -3,34 +3,35 @@ package Improvement;
 import java.util.Arrays;
 
 import Data.Instance;
-import Evaluators.AvaliadorCusto;
-import Evaluators.AvaliadorFac;
-import Evaluators.ExecutaMovimento;
+import Evaluators.CostEvaluation;
+import Evaluators.FeasibilityEvaluation;
+import Evaluators.ExecuteMovement;
+import Evaluators.TipoMovimento;
 import SearchMethod.Config;
 import Solution.Node;
-import Solution.Rota;
+import Solution.Route;
 import Solution.Solution;
 
 
 public class BuscaLocal 
 {
-	private Rota rotas[];
-	private  NoPosMel melhoras[];
-	private  NoPosMel matrixMelhoras[][];
-	private NoPosMel noMelhora;
+	private Route routes[];
+	private  CandidateNode melhoras[];
+	private  CandidateNode matrixMelhoras[][];
+	private CandidateNode noMelhora;
 	private int topMelhores=0;
-	private int NumRotas;
+	private int numRoutes;
 	
-	Node bestAntNoRotaI,bestAntNoRotaJ;
+	Node bestPrevNoRouteI,bestPrevNoRouteJ;
 
 	double f=0;
 	
 	double custo;
-	Node auxRotaI,auxRotaJ;
-	Rota rotaA,rotaB;
-	AvaliadorCusto avaliadorCusto;
-	AvaliadorFac avaliadorFac;
-	ExecutaMovimento executaMovimento;
+	Node auxRouteI,auxRouteJ;
+	Route routeA,routeB;
+	CostEvaluation avaliadorCusto;
+	FeasibilityEvaluation feasibilityEvaluation;
+	ExecuteMovement executaMovimento;
 	Node solution[];
 	int limiteAdj;
 	BuscaLocalIntra buscaLocalIntra;
@@ -39,17 +40,17 @@ public class BuscaLocal
 	
 	public BuscaLocal(Instance instance,Config config, BuscaLocalIntra buscaLocalIntra)
 	{
-		this.avaliadorCusto=new AvaliadorCusto(instance);
-		this.avaliadorFac=new AvaliadorFac();
-		this.executaMovimento=new ExecutaMovimento(instance);
-		this.melhoras=new NoPosMel[instance.getMaxNumberRoutes()*(instance.getMaxNumberRoutes()-1)/2];
-		this.matrixMelhoras=new NoPosMel[instance.getMaxNumberRoutes()][instance.getMaxNumberRoutes()];
+		this.avaliadorCusto=new CostEvaluation(instance);
+		this.feasibilityEvaluation=new FeasibilityEvaluation();
+		this.executaMovimento=new ExecuteMovement(instance);
+		this.melhoras=new CandidateNode[instance.getMaxNumberRoutes()*(instance.getMaxNumberRoutes()-1)/2];
+		this.matrixMelhoras=new CandidateNode[instance.getMaxNumberRoutes()][instance.getMaxNumberRoutes()];
 		
 		for (int i = 0; i < matrixMelhoras.length; i++)
 		{
 			for (int j = i+1; j < matrixMelhoras.length; j++) 
 			{
-				matrixMelhoras[i][j]=new NoPosMel(avaliadorCusto);
+				matrixMelhoras[i][j]=new CandidateNode(avaliadorCusto);
 				matrixMelhoras[j][i]=matrixMelhoras[i][j];
 			}
 		}
@@ -61,38 +62,38 @@ public class BuscaLocal
 	
 	private void setSolution(Solution solution) 
 	{
-		this.NumRotas=solution.NumRotas;
+		this.numRoutes=solution.numRoutes;
 		this.solution=solution.getSolution();
 		this.f=solution.f;
-		this.rotas=solution.rotas;
+		this.routes=solution.routes;
 	}
 
 	private void passaResultado(Solution solution) 
 	{
-		solution.NumRotas=this.NumRotas;
+		solution.numRoutes=this.numRoutes;
 		solution.f=this.f;
 	}
 
-	public void buscaLocal(Solution solution,boolean removerRotasVazias)
+	public void buscaLocal(Solution solution,boolean removerRoutesVazias)
 	{
 		setSolution(solution);
 		topMelhores=0;
 			
-		for (int i = 0; i < NumRotas; i++) 
-			rotas[i].setDemandaAcumulada();
+		for (int i = 0; i < numRoutes; i++) 
+			routes[i].setDemandaAcumulada();
 		
-		for (int i = 0; i < NumRotas; i++) 
+		for (int i = 0; i < numRoutes; i++) 
 		{
-			if(rotas[i].numElements>1&&rotas[i].alterada)
-				varrerRotas(rotas[i]);
+			if(routes[i].numElements>1&&routes[i].alterada)
+				varrerRoutes(routes[i]);
 		}
 		
 		if(topMelhores>0)
 			executa();
 		
 		passaResultado(solution);
-		if(removerRotasVazias)
-			solution.removeRotasVazias();
+		if(removerRoutesVazias)
+			solution.removeRoutesVazias();
 	}
 	
 	//-----------------------------------Factibilizando com o Best Improviment-------------------------------------------
@@ -102,21 +103,21 @@ public class BuscaLocal
 		while(topMelhores>0)
 		{
 			Arrays.sort(melhoras,0,topMelhores);
-			rotaA=melhoras[0].rotaA;
-			rotaB=melhoras[0].rotaB;
+			routeA=melhoras[0].routeA;
+			routeB=melhoras[0].routeB;
 			
 			f+=executaMovimento.aplicar(melhoras[0]);
 
-			BuscaLocalIntra(rotaA);
-			BuscaLocalIntra(rotaB);
+			BuscaLocalIntra(routeA);
+			BuscaLocalIntra(routeB);
 			
-			rotaA.setDemandaAcumulada();
-			rotaB.setDemandaAcumulada();
+			routeA.setDemandaAcumulada();
+			routeB.setDemandaAcumulada();
 			
 			contAtivos=0;
 			for (int k = 0; k < topMelhores; k++) 
 			{
-				if(melhoras[k].rotaA==rotaA||melhoras[k].rotaB==rotaA||melhoras[k].rotaA==rotaB||melhoras[k].rotaB==rotaB)
+				if(melhoras[k].routeA==routeA||melhoras[k].routeB==routeA||melhoras[k].routeA==routeB||melhoras[k].routeB==routeB)
 				{
 					melhoras[k].limpar();
 					contAtivos++;
@@ -126,216 +127,216 @@ public class BuscaLocal
 			Arrays.sort(melhoras,0,topMelhores);
 			topMelhores-=contAtivos;
 			
-			varrerRotas(rotaA);
-			varrerRotas(rotaB);
+			varrerRoutes(routeA);
+			varrerRoutes(routeB);
 		}
 	}
 	
-	public void varrerRotas(Rota rota)
+	public void varrerRoutes(Route route)
 	{
-		if(rota.numElements>1)
+		if(route.numElements>1)
 		{
-			procuraBestSHIFT(rota);
-			procuraBestSWAPEstrelaKNN(rota);
-			procuraBestCross(rota);
+			procuraBestSHIFT(route);
+			procuraBestSWAPEstrelaKNN(route);
+			procuraBestCross(route);
 		}
 	}
 	
-	private void procuraBestSWAPEstrelaKNN(Rota rota)
+	private void procuraBestSWAPEstrelaKNN(Route route)
 	{
-		auxRotaI=rota.inicio.next;
+		auxRouteI=route.inicio.next;
 		do
 		{
-			if(auxRotaI.alterado)
+			if(auxRouteI.alterado)
 			{
 				for (int j = 0; j < limiteAdj; j++) 
 				{
-					if(auxRotaI.getKnn()[j]!=0&&solution[auxRotaI.getKnn()[j]-1].rota!=rota)
+					if(auxRouteI.getKnn()[j]!=0&&solution[auxRouteI.getKnn()[j]-1].route!=route)
 					{
-						auxRotaJ=solution[auxRotaI.getKnn()[j]-1];
-						if(avaliadorFac.ganhoSWAP(auxRotaI, auxRotaJ)>=0)
+						auxRouteJ=solution[auxRouteI.getKnn()[j]-1];
+						if(feasibilityEvaluation.gainSWAP(auxRouteI, auxRouteJ)>=0)
 						{
-							bestAntNoRotaI=auxRotaJ.rota.findBestPositionExcetoKNN(auxRotaI,auxRotaJ,solution);
-							bestAntNoRotaJ=auxRotaI.rota.findBestPositionExcetoKNN(auxRotaJ,auxRotaI,solution);
+							bestPrevNoRouteI=auxRouteJ.route.findBestPositionExcetoKNN(auxRouteI,auxRouteJ,solution);
+							bestPrevNoRouteJ=auxRouteI.route.findBestPositionExcetoKNN(auxRouteJ,auxRouteI,solution);
 							
-							custo=avaliadorCusto.custoSwapEstrela(auxRotaI,auxRotaJ,bestAntNoRotaI,bestAntNoRotaJ);
-							noMelhora=matrixMelhoras[auxRotaI.rota.nomeRota][auxRotaJ.rota.nomeRota];
+							custo=avaliadorCusto.costSwapStar(auxRouteI,auxRouteJ,bestPrevNoRouteI,bestPrevNoRouteJ);
+							noMelhora=matrixMelhoras[auxRouteI.route.nomeRoute][auxRouteJ.route.nomeRoute];
 							
 							if(((custo-noMelhora.custo)<-epsilon)&&((custo-0)<-epsilon))
 							{
 								if(!noMelhora.ativo)
 									melhoras[topMelhores++]=noMelhora;
 								
-								noMelhora.setNoMelhora(custo, 25, auxRotaI, auxRotaJ,bestAntNoRotaI, bestAntNoRotaJ, custo);
+								noMelhora.setNoMelhora(custo, TipoMovimento.SWAPEstrela, auxRouteI, auxRouteJ,bestPrevNoRouteI, bestPrevNoRouteJ, custo);
 							}
 						}
 					}
 				}
 			}
 			
-			auxRotaI=auxRotaI.next;
+			auxRouteI=auxRouteI.next;
 		}
-		while(auxRotaI!=rota.inicio);
+		while(auxRouteI!=route.inicio);
 	}
 	
-	private void procuraBestSHIFT(Rota rota)
+	private void procuraBestSHIFT(Route route)
 	{
-		auxRotaI=rota.inicio.next;
+		auxRouteI=route.inicio.next;
 		do
 		{
-			if(auxRotaI.alterado)
+			if(auxRouteI.alterado)
 			{
 				for (int j = 0; j < limiteAdj; j++) 
 				{
-					if(auxRotaI.getKnn()[j]==0)
+					if(auxRouteI.getKnn()[j]==0)
 					{
-						for (int i = 0; i < NumRotas; i++) 
+						for (int i = 0; i < numRoutes; i++) 
 						{
-							if(rotas[i]!=rota)
+							if(routes[i]!=route)
 							{
-								auxRotaJ=rotas[i].inicio;
-								if(avaliadorFac.ganhoSHIFT(auxRotaI, auxRotaJ)>=0)
+								auxRouteJ=routes[i].inicio;
+								if(feasibilityEvaluation.gainSHIFT(auxRouteI, auxRouteJ)>=0)
 								{
-									custo=avaliadorCusto.custoSHIFT(auxRotaI,auxRotaJ);
-									noMelhora=matrixMelhoras[auxRotaI.rota.nomeRota][auxRotaJ.rota.nomeRota];
+									custo=avaliadorCusto.costSHIFT(auxRouteI,auxRouteJ);
+									noMelhora=matrixMelhoras[auxRouteI.route.nomeRoute][auxRouteJ.route.nomeRoute];
 									
 									if(((custo-noMelhora.custo)<-epsilon)&&((custo-0)<-epsilon))
 									{
 										if(!noMelhora.ativo)
 											melhoras[topMelhores++]=noMelhora;
 										
-										noMelhora.setNoMelhora(custo, 7, auxRotaI, auxRotaJ,custo);
+										noMelhora.setNoMelhora(custo, TipoMovimento.SHIFT, auxRouteI, auxRouteJ,custo);
 									}
 								}
 							}
 						}
 					}
-					else if(solution[auxRotaI.getKnn()[j]-1].rota!=rota)
+					else if(solution[auxRouteI.getKnn()[j]-1].route!=route)
 					{
-						auxRotaJ=solution[auxRotaI.getKnn()[j]-1];
-						if(avaliadorFac.ganhoSHIFT(auxRotaI, auxRotaJ)>=0)
+						auxRouteJ=solution[auxRouteI.getKnn()[j]-1];
+						if(feasibilityEvaluation.gainSHIFT(auxRouteI, auxRouteJ)>=0)
 						{
-							custo=avaliadorCusto.custoSHIFT(auxRotaI,auxRotaJ);
-							noMelhora=matrixMelhoras[auxRotaI.rota.nomeRota][auxRotaJ.rota.nomeRota];
+							custo=avaliadorCusto.costSHIFT(auxRouteI,auxRouteJ);
+							noMelhora=matrixMelhoras[auxRouteI.route.nomeRoute][auxRouteJ.route.nomeRoute];
 							
 							if(((custo-noMelhora.custo)<-epsilon)&&((custo-0)<-epsilon))
 							{
 								if(!noMelhora.ativo)
 									melhoras[topMelhores++]=noMelhora;
 								
-								noMelhora.setNoMelhora(custo, 7, auxRotaI, auxRotaJ,custo);
+								noMelhora.setNoMelhora(custo, TipoMovimento.SHIFT, auxRouteI, auxRouteJ,custo);
 							}
 						}
 						
-						if(avaliadorFac.ganhoSHIFT(auxRotaJ, auxRotaI)>=0)
+						if(feasibilityEvaluation.gainSHIFT(auxRouteJ, auxRouteI)>=0)
 						{
-							custo=avaliadorCusto.custoSHIFT(auxRotaJ, auxRotaI);
-							noMelhora=matrixMelhoras[auxRotaI.rota.nomeRota][auxRotaJ.rota.nomeRota];
+							custo=avaliadorCusto.costSHIFT(auxRouteJ, auxRouteI);
+							noMelhora=matrixMelhoras[auxRouteI.route.nomeRoute][auxRouteJ.route.nomeRoute];
 							
 							if(((custo-noMelhora.custo)<-epsilon)&&((custo-0)<-epsilon))
 							{
 								if(!noMelhora.ativo)
 									melhoras[topMelhores++]=noMelhora;
 								
-								noMelhora.setNoMelhora(custo, 7, auxRotaJ,auxRotaI, custo);
+								noMelhora.setNoMelhora(custo, TipoMovimento.SHIFT, auxRouteJ,auxRouteI, custo);
 							}
 						}
 					}
 				}
 			}
 			
-			auxRotaI=auxRotaI.next;
+			auxRouteI=auxRouteI.next;
 		}
-		while(auxRotaI!=rota.inicio);
+		while(auxRouteI!=route.inicio);
 	}
 	
-	private void procuraBestCross(Rota rota)
+	private void procuraBestCross(Route route)
 	{
-		auxRotaI=rota.inicio;
+		auxRouteI=route.inicio;
 		do
 		{
-			if(auxRotaI.alterado)
+			if(auxRouteI.alterado)
 			{
 				for (int j = 0; j < limiteAdj; j++) 
 				{
-					if(auxRotaI.getKnn()[j]==0)
+					if(auxRouteI.getKnn()[j]==0)
 					{
-						for (int i = 0; i < NumRotas; i++) 
+						for (int i = 0; i < numRoutes; i++) 
 						{
-							if(rotas[i]!=rota)
+							if(routes[i]!=route)
 							{
-								auxRotaJ=rotas[i].inicio;
-								if(avaliadorFac.ganhoCross(auxRotaI, auxRotaJ)>=0)
+								auxRouteJ=routes[i].inicio;
+								if(feasibilityEvaluation.gainCross(auxRouteI, auxRouteJ)>=0)
 								{
-									custo=avaliadorCusto.custoCross(auxRotaI,auxRotaJ);
-									noMelhora=matrixMelhoras[auxRotaI.rota.nomeRota][auxRotaJ.rota.nomeRota];
+									custo=avaliadorCusto.costCross(auxRouteI,auxRouteJ);
+									noMelhora=matrixMelhoras[auxRouteI.route.nomeRoute][auxRouteJ.route.nomeRoute];
 									
 									if(((custo-noMelhora.custo)<-epsilon)&&((custo-0)<-epsilon))
 									{
 										if(!noMelhora.ativo)
 											melhoras[topMelhores++]=noMelhora;
 										
-										noMelhora.setNoMelhora(custo, 11, auxRotaI, auxRotaJ,custo);
+										noMelhora.setNoMelhora(custo, TipoMovimento.Cross, auxRouteI, auxRouteJ,custo);
 									}
 								}
 								
-								if(avaliadorFac.ganhoCrossInvertido(auxRotaI, auxRotaJ)>=0)
+								if(feasibilityEvaluation.gainCrossInverted(auxRouteI, auxRouteJ)>=0)
 								{
-									custo=avaliadorCusto.custoCrossInvertido(auxRotaI,auxRotaJ);
-									noMelhora=matrixMelhoras[auxRotaI.rota.nomeRota][auxRotaJ.rota.nomeRota];
+									custo=avaliadorCusto.inversedCostCross(auxRouteI,auxRouteJ);
+									noMelhora=matrixMelhoras[auxRouteI.route.nomeRoute][auxRouteJ.route.nomeRoute];
 									
 									if(((custo-noMelhora.custo)<-epsilon)&&((custo-0)<-epsilon))
 									{
 										if(!noMelhora.ativo)
 											melhoras[topMelhores++]=noMelhora;
 										
-										noMelhora.setNoMelhora(custo, 12, auxRotaI, auxRotaJ,custo);
+										noMelhora.setNoMelhora(custo, TipoMovimento.CrossInverted, auxRouteI, auxRouteJ,custo);
 									}
 								}
 							}
 						}
 					}
-					else if(solution[auxRotaI.getKnn()[j]-1].rota!=rota)
+					else if(solution[auxRouteI.getKnn()[j]-1].route!=route)
 					{
-						auxRotaJ=solution[auxRotaI.getKnn()[j]-1];
-						if(avaliadorFac.ganhoCross(auxRotaI, auxRotaJ)>=0)
+						auxRouteJ=solution[auxRouteI.getKnn()[j]-1];
+						if(feasibilityEvaluation.gainCross(auxRouteI, auxRouteJ)>=0)
 						{
-							custo=avaliadorCusto.custoCross(auxRotaI,auxRotaJ);
-							noMelhora=matrixMelhoras[auxRotaI.rota.nomeRota][auxRotaJ.rota.nomeRota];
+							custo=avaliadorCusto.costCross(auxRouteI,auxRouteJ);
+							noMelhora=matrixMelhoras[auxRouteI.route.nomeRoute][auxRouteJ.route.nomeRoute];
 							
 							if(((custo-noMelhora.custo)<-epsilon)&&((custo-0)<-epsilon))
 							{
 								if(!noMelhora.ativo)
 									melhoras[topMelhores++]=noMelhora;
 								
-								noMelhora.setNoMelhora(custo, 11, auxRotaI, auxRotaJ,custo);
+								noMelhora.setNoMelhora(custo, TipoMovimento.Cross, auxRouteI, auxRouteJ,custo);
 							}
 						}
-						if(avaliadorFac.ganhoCrossInvertido(auxRotaI, auxRotaJ)>=0)
+						if(feasibilityEvaluation.gainCrossInverted(auxRouteI, auxRouteJ)>=0)
 						{
-							custo=avaliadorCusto.custoCrossInvertido(auxRotaI,auxRotaJ);
-							noMelhora=matrixMelhoras[auxRotaI.rota.nomeRota][auxRotaJ.rota.nomeRota];
+							custo=avaliadorCusto.inversedCostCross(auxRouteI,auxRouteJ);
+							noMelhora=matrixMelhoras[auxRouteI.route.nomeRoute][auxRouteJ.route.nomeRoute];
 							
 							if(((custo-noMelhora.custo)<-epsilon)&&((custo-0)<-epsilon))
 							{
 								if(!noMelhora.ativo)
 									melhoras[topMelhores++]=noMelhora;
 								
-								noMelhora.setNoMelhora(custo, 12, auxRotaI, auxRotaJ,custo);
+								noMelhora.setNoMelhora(custo, TipoMovimento.CrossInverted, auxRouteI, auxRouteJ,custo);
 							}
 						}
 					}
 				}
 			}
 			
-			auxRotaI=auxRotaI.next;
+			auxRouteI=auxRouteI.next;
 		}
-		while(auxRotaI!=rota.inicio);
+		while(auxRouteI!=route.inicio);
 	}
 	
-	private void BuscaLocalIntra(Rota rota)
+	private void BuscaLocalIntra(Route route)
 	{
-		f+=buscaLocalIntra.buscaLocalIntra(rota, solution);
+		f+=buscaLocalIntra.buscaLocalIntra(route, solution);
 	}
 	
 }

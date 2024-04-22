@@ -123,7 +123,7 @@ public class AILSII
 	{
 		iterator=0;
 		inicio=System.currentTimeMillis();
-		solucaoReferencia.NumRotas=instance.getMinNumberRoutes();
+		solucaoReferencia.numRoutes=instance.getMinNumberRoutes();
 		construtorSolucao.construir(solucaoReferencia);
 
 		factibilizador.factibilizar(solucaoReferencia);
@@ -167,7 +167,7 @@ public class AILSII
 			{
 				System.out.println("solution quality: "+melhorF
 				+" gap: "+deci.format(getGap())+"%"
-				+" K: "+solution.NumRotas
+				+" K: "+solution.numRoutes
 				+" iteration: "+iterator
 				+" eta: "+deci.format(acceptanceCriterion.getEta())
 				+" omega: "+deci.format(perturbacaoEscolhida.omega)
@@ -238,7 +238,7 @@ public class AILSII
 		String str="";
 		for (int i = 0; i < perturbadores.length; i++) 
 		{
-			str+="\n"+configuradoresOmega.get(this.perturbadores[i].perturbationType+""+solucaoReferencia.NumRotas);
+			str+="\n"+configuradoresOmega.get(this.perturbadores[i].perturbationType+""+solucaoReferencia.numRoutes);
 		}
 		return str;
 	}

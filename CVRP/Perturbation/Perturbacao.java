@@ -8,13 +8,13 @@ import DiversityControl.OmegaAdjustment;
 import Improvement.BuscaLocalIntra;
 import SearchMethod.Config;
 import Solution.Node;
-import Solution.Rota;
+import Solution.Route;
 import Solution.Solution;
 
 public abstract class Perturbacao 
 {
-	protected Rota rotas[];
-	protected int NumRotas;
+	protected Route routes[];
+	protected int numRoutes;
 	protected Node solution[];
 	protected double f=0;
 	protected Random rand=new Random();
@@ -38,7 +38,7 @@ public abstract class Perturbacao
 	int posHeuEscolhida;
 	
 	double custo,dist;
-	double custoAnt;
+	double custoPrev;
 	int indexA,indexB;
 	Node bestNo,bestNoDist,aux;
 	Instance instance;
@@ -78,14 +78,14 @@ public abstract class Perturbacao
 	
 	protected void setSolution(Solution s)
 	{
-		this.NumRotas=s.getNumRotas();
-		this.rotas=s.rotas;
+		this.numRoutes=s.getNumRoutes();
+		this.routes=s.routes;
 		this.solution=s.getSolution();
 		this.f=s.f;
-		for (int i = 0; i < NumRotas; i++) 
+		for (int i = 0; i < numRoutes; i++) 
 		{
-			rotas[i].alterada=false;
-			rotas[i].inicio.alterado=false;
+			routes[i].alterada=false;
+			routes[i].inicio.alterado=false;
 		}
 		
 		for (int i = 0; i < size; i++) 
@@ -104,7 +104,7 @@ public abstract class Perturbacao
 	protected void passaSolucao(Solution s)
 	{
 		s.f=f;
-		s.NumRotas=this.NumRotas;
+		s.numRoutes=this.numRoutes;
 	}
 	
 	protected Node getNo(Node no)
@@ -129,9 +129,9 @@ public abstract class Perturbacao
 		{
 			if(no.knn[i]==0)
 			{
-				for (int j = 0; j < NumRotas; j++) 
+				for (int j = 0; j < numRoutes; j++) 
 				{
-					aux=rotas[j].inicio;
+					aux=routes[j].inicio;
 					entrou=true;
 					custo=instance.dist(aux.name,no.name)+instance.dist(no.name,aux.next.name)-instance.dist(aux.name,aux.next.name);
 					if(custo<bestCusto)
@@ -194,8 +194,8 @@ public abstract class Perturbacao
 		}
 		
 		custo=instance.dist(bestNo.name,no.name)+instance.dist(no.name,bestNo.next.name)-instance.dist(bestNo.name,bestNo.next.name);
-		custoAnt=instance.dist(bestNo.prev.name,no.name)+instance.dist(no.name,bestNo.name)-instance.dist(bestNo.prev.name,bestNo.name);
-		if(custo<custoAnt)
+		custoPrev=instance.dist(bestNo.prev.name,no.name)+instance.dist(no.name,bestNo.name)-instance.dist(bestNo.prev.name,bestNo.name);
+		if(custo<custoPrev)
 		{
 			return bestNo;
 		}
@@ -212,7 +212,7 @@ public abstract class Perturbacao
 			no=candidatos[i];
 			bestNo=getNo(no);
 			
-			f+=bestNo.rota.addDepois(no, bestNo);
+			f+=bestNo.route.addDepois(no, bestNo);
 		}
 	}
 	

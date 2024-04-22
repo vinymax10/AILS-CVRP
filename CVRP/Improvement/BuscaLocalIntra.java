@@ -1,46 +1,47 @@
 package Improvement;
 
 import Data.Instance;
-import Evaluators.AvaliadorCusto;
-import Evaluators.ExecutaMovimento;
+import Evaluators.CostEvaluation;
+import Evaluators.ExecuteMovement;
+import Evaluators.TipoMovimento;
 import SearchMethod.Config;
 import Solution.Node;
-import Solution.Rota;
+import Solution.Route;
 
 public class BuscaLocalIntra 
 {
-	private  NoPosMel melhora;
+	private  CandidateNode melhora;
 	Node inicio;
 	int numElements=0;
-	int tipoMov;
+	TipoMovimento tipoMov;
 	int iterator;
 	double menorCusto;
-	double antF;
+	double prevF;
 	Node auxSai,auxEntra;
 	double custo;
 	boolean trocou=false;
-	AvaliadorCusto avaliadorCusto;
-	ExecutaMovimento executaMovimento;
+	CostEvaluation avaliadorCusto;
+	ExecuteMovement executaMovimento;
 	int limiteAdj;
 	
 	public BuscaLocalIntra(Instance instance,Config config)
 	{
-		this.avaliadorCusto=new AvaliadorCusto(instance);
-		this.executaMovimento=new ExecutaMovimento(instance);
-		this.melhora=new NoPosMel(avaliadorCusto);
+		this.avaliadorCusto=new CostEvaluation(instance);
+		this.executaMovimento=new ExecuteMovement(instance);
+		this.melhora=new CandidateNode(avaliadorCusto);
 		this.limiteAdj=config.getVarphi();
 	}
 	
-	private void setRota(Rota rota,Node solution[]) 
+	private void setRoute(Route route,Node solution[]) 
 	{
-		this.antF=rota.fRota;
-		this.inicio=rota.inicio;
-		this.numElements=rota.numElements;
+		this.prevF=route.fRoute;
+		this.inicio=route.inicio;
+		this.numElements=route.numElements;
 	}
 
-	public double buscaLocalIntra(Rota rota,Node solution[])
+	public double buscaLocalIntra(Route route,Node solution[])
 	{
-		setRota(rota,solution);
+		setRoute(route,solution);
 		
 		iterator=0;
 		trocou=true;
@@ -61,16 +62,16 @@ public class BuscaLocalIntra
 						else
 							auxEntra=solution[auxSai.getKnn()[j]-1];
 						
-						if(auxSai.rota.nomeRota==auxEntra.rota.nomeRota)
+						if(auxSai.route.nomeRoute==auxEntra.route.nomeRoute)
 						{
 							//2Opt
 							if(auxSai!=auxEntra&&auxEntra!=auxSai.next)
 							{
-								custo=avaliadorCusto.custo2Opt(auxSai,auxEntra);
+								custo=avaliadorCusto.cost2Opt(auxSai,auxEntra);
 								if(menorCusto>custo)
 								{
 									menorCusto=custo;
-									tipoMov=10;
+									tipoMov=TipoMovimento.TwoOpt;
 									melhora.setNoMelhora(menorCusto, tipoMov, auxSai, auxEntra,0,0,menorCusto);
 									trocou=true;
 								}
@@ -79,22 +80,22 @@ public class BuscaLocalIntra
 							//SHIFT
 							if(numElements>2&&auxSai!=auxEntra&&auxSai!=auxEntra.next)
 							{
-								custo=avaliadorCusto.custoSHIFT(auxSai,auxEntra);
+								custo=avaliadorCusto.costSHIFT(auxSai,auxEntra);
 								if(menorCusto>custo)
 								{
 									menorCusto=custo;
-									tipoMov=7;
+									tipoMov=TipoMovimento.SHIFT;
 									melhora.setNoMelhora(menorCusto, tipoMov, auxSai, auxEntra,0,0,menorCusto);
 									trocou=true;
 								}
 								
 								if(auxEntra!=auxSai.next)
 								{
-									custo=avaliadorCusto.custoSHIFT(auxEntra,auxSai);
+									custo=avaliadorCusto.costSHIFT(auxEntra,auxSai);
 									if(menorCusto>custo)
 									{
 										menorCusto=custo;
-										tipoMov=7;
+										tipoMov=TipoMovimento.SHIFT;
 										melhora.setNoMelhora(menorCusto, tipoMov, auxEntra, auxSai,0,0,menorCusto);
 										trocou=true;
 									}
@@ -104,11 +105,11 @@ public class BuscaLocalIntra
 							//SWAP
 							if(numElements>2&&auxEntra!=auxSai&&auxEntra.next!=auxSai)
 							{
-								custo=avaliadorCusto.custoSWAP(auxSai,auxEntra);
+								custo=avaliadorCusto.costSWAP(auxSai,auxEntra);
 								if(menorCusto>custo)
 								{
 									menorCusto=custo;
-									tipoMov=4;
+									tipoMov=TipoMovimento.SWAP;
 									melhora.setNoMelhora(menorCusto, tipoMov, auxSai, auxEntra,0,0,menorCusto);
 									trocou=true;
 								}
@@ -125,7 +126,7 @@ public class BuscaLocalIntra
 				executaMovimento.aplicar(melhora);
 		}
 		
-		return rota.fRota-antF;
+		return route.fRoute-prevF;
 	}
 	
 }

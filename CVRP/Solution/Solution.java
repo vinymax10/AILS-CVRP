@@ -10,7 +10,7 @@ import Data.Point;
 import Improvement.BuscaLocalIntra;
 import SearchMethod.Config;
 
-public class Solution 
+public class Solution
 {
 	private Point pontos[];
 	Instance instance;
@@ -21,353 +21,356 @@ public class Solution
 	protected int inicio;
 	protected Node deposito;
 	int capacidade;
-	public Rota rotas[];
-	public int NumRotas;
-	protected int NumRotasMin;
-	protected int NumRotasMax;
-	public double f=0;
+	public Route routes[];
+	public int numRoutes;
+	protected int numRoutesMin;
+	protected int numRoutesMax;
+	public double f = 0;
 	public int distancia;
 	double epsilon;
 //	-----------Comparadores-----------
-	
-	BuscaLocalIntra buscaLocalIntra;
-	
-	public Solution(Instance instance,Config config) 
-	{
-		this.instance=instance;
-		this.config=config;
-		this.pontos=instance.getPoints();
-		int deposito=instance.getDepot();
-		this.capacidade=instance.getCapacity();
-		this.size=instance.getSize()-1;
-		this.solution=new Node[size];
-		this.NumRotasMin=instance.getMinNumberRoutes();
-		this.NumRotas=NumRotasMin;
-		this.NumRotasMax=instance.getMaxNumberRoutes();
-		this.deposito=new Node(pontos[deposito],instance);
-		this.epsilon=config.getEpsilon();
 
-		this.rotas=new Rota[NumRotasMax];
-		
-		for (int i = 0; i < rotas.length; i++) 
-			rotas[i]=new Rota(instance,config, this.deposito,i);
-		
-		int cont=0;
-		for (int i = 0; i < (solution.length+1); i++)
+	BuscaLocalIntra buscaLocalIntra;
+
+	public Solution(Instance instance, Config config)
+	{
+		this.instance = instance;
+		this.config = config;
+		this.pontos = instance.getPoints();
+		int deposito = instance.getDepot();
+		this.capacidade = instance.getCapacity();
+		this.size = instance.getSize() - 1;
+		this.solution = new Node[size];
+		this.numRoutesMin = instance.getMinNumberRoutes();
+		this.numRoutes = numRoutesMin;
+		this.numRoutesMax = instance.getMaxNumberRoutes();
+		this.deposito = new Node(pontos[deposito], instance);
+		this.epsilon = config.getEpsilon();
+
+		this.routes = new Route[numRoutesMax];
+
+		for(int i = 0; i < routes.length; i++)
+			routes[i] = new Route(instance, config, this.deposito, i);
+
+		int cont = 0;
+		for(int i = 0; i < (solution.length + 1); i++)
 		{
-			if(i!=deposito)
+			if(i != deposito)
 			{
-				solution[cont]=new Node(pontos[i],instance);
+				solution[cont] = new Node(pontos[i], instance);
 				cont++;
 			}
 		}
 	}
 
-
 	public void clone(Solution referencia)
 	{
-		this.NumRotas=referencia.NumRotas;
-		this.f=referencia.f;
-		
-		for (int i = 0; i < rotas.length; i++)
-		{
-			rotas[i].nomeRota=i;
-			referencia.rotas[i].nomeRota=i;
-		}
-		
-		for (int i = 0; i < rotas.length; i++)
-		{
-			rotas[i].demandaTotal=referencia.rotas[i].demandaTotal;
-			rotas[i].fRota=referencia.rotas[i].fRota;
-			rotas[i].numElements=referencia.rotas[i].numElements;
-			rotas[i].alterada=referencia.rotas[i].alterada;
+		this.numRoutes = referencia.numRoutes;
+		this.f = referencia.f;
 
-			if(referencia.rotas[i].inicio.prev==null)
-				rotas[i].inicio.prev=null;
-			else if(referencia.rotas[i].inicio.prev.name==0)
-				rotas[i].inicio.prev=rotas[i].inicio;
-			else
-				rotas[i].inicio.prev=solution[referencia.rotas[i].inicio.prev.name-1];
-			
-			if(referencia.rotas[i].inicio.next==null)
-				rotas[i].inicio.next=null;
-			else if(referencia.rotas[i].inicio.next.name==0)
-				rotas[i].inicio.next=rotas[i].inicio;
-			else
-				rotas[i].inicio.next=solution[referencia.rotas[i].inicio.next.name-1];
-		}
-		
-		for (int i = 0; i < solution.length; i++)
+		for(int i = 0; i < routes.length; i++)
 		{
-			solution[i].rota=rotas[referencia.solution[i].rota.nomeRota];
-			solution[i].jaInserido=referencia.solution[i].jaInserido;
-			
-			if(referencia.solution[i].prev.name==0)
-				solution[i].prev=rotas[referencia.solution[i].prev.rota.nomeRota].inicio;
+			routes[i].nomeRoute = i;
+			referencia.routes[i].nomeRoute = i;
+		}
+
+		for(int i = 0; i < routes.length; i++)
+		{
+			routes[i].demandaTotal = referencia.routes[i].demandaTotal;
+			routes[i].fRoute = referencia.routes[i].fRoute;
+			routes[i].numElements = referencia.routes[i].numElements;
+			routes[i].alterada = referencia.routes[i].alterada;
+
+			if(referencia.routes[i].inicio.prev == null)
+				routes[i].inicio.prev = null;
+			else if(referencia.routes[i].inicio.prev.name == 0)
+				routes[i].inicio.prev = routes[i].inicio;
 			else
-				solution[i].prev=solution[referencia.solution[i].prev.name-1];
-				
-			if(referencia.solution[i].next.name==0)
-				solution[i].next=rotas[referencia.solution[i].next.rota.nomeRota].inicio;
+				routes[i].inicio.prev = solution[referencia.routes[i].inicio.prev.name - 1];
+
+			if(referencia.routes[i].inicio.next == null)
+				routes[i].inicio.next = null;
+			else if(referencia.routes[i].inicio.next.name == 0)
+				routes[i].inicio.next = routes[i].inicio;
 			else
-				solution[i].next=solution[referencia.solution[i].next.name-1];
+				routes[i].inicio.next = solution[referencia.routes[i].inicio.next.name - 1];
+		}
+
+		for(int i = 0; i < solution.length; i++)
+		{
+			solution[i].route = routes[referencia.solution[i].route.nomeRoute];
+			solution[i].jaInserido = referencia.solution[i].jaInserido;
+
+			if(referencia.solution[i].prev.name == 0)
+				solution[i].prev = routes[referencia.solution[i].prev.route.nomeRoute].inicio;
+			else
+				solution[i].prev = solution[referencia.solution[i].prev.name - 1];
+
+			if(referencia.solution[i].next.name == 0)
+				solution[i].next = routes[referencia.solution[i].next.route.nomeRoute].inicio;
+			else
+				solution[i].next = solution[referencia.solution[i].next.name - 1];
 		}
 	}
-	
-	//------------------------Visualizacao-------------------------
-	
-	public String toStringMeu() 
-	{
-		String str="size: " + size;
-		str+="\n"+"deposito: " + deposito;
-		str+="\nNumRotas: "+NumRotas;
-		str+="\nCapacidade: "+capacidade;
 
-		str+="\nf: "+f;
+	// ------------------------Visualizacao-------------------------
+
+	public String toStringMeu()
+	{
+		String str = "size: " + size;
+		str += "\n" + "deposito: " + deposito;
+		str += "\nNumRoutes: " + numRoutes;
+		str += "\nCapacidade: " + capacidade;
+
+		str += "\nf: " + f;
 //		System.out.println(str);
-		for (int i = 0; i < NumRotas; i++) 
+		for(int i = 0; i < numRoutes; i++)
 		{
 //			System.out.println(str);
-			str+="\n"+rotas[i];
+			str += "\n" + routes[i];
 		}
-		
+
 		return str;
 	}
-	
-	
+
 	@Override
-	public String toString() 
+	public String toString()
 	{
-		String str="";
-		for (int i = 0; i < NumRotas; i++) 
+		String str = "";
+		for(int i = 0; i < numRoutes; i++)
 		{
-			str+=rotas[i].toString2()+"\n";
+			str += routes[i].toString2() + "\n";
 		}
-		str+="Cost "+f+"\n";
+		str += "Cost " + f + "\n";
 		return str;
 	}
-	
+
 	public int infactibilidade()
 	{
-		int infac=0;
-		for (int i = 0; i < NumRotas; i++)
+		int infac = 0;
+		for(int i = 0; i < numRoutes; i++)
 		{
-			if(rotas[i].espacoLivre()<0)
-				infac+=rotas[i].espacoLivre();
+			if(routes[i].availableCapacity() < 0)
+				infac += routes[i].availableCapacity();
 		}
 		return infac;
 	}
-	
-	public boolean auditoria(String local, boolean factibildiade, boolean rotaVazia)
+
+	public boolean auditoria(String local, boolean factibildiade, boolean routeVazia)
 	{
 		double f;
-		double somaF=0;
-		int somaNumElements=0;
-		boolean erro=false;
-		
-		for (int i = 0; i < NumRotas; i++)
+		double somaF = 0;
+		int somaNumElements = 0;
+		boolean erro = false;
+
+		for(int i = 0; i < numRoutes; i++)
 		{
-			rotas[i].findErro();
-			f=rotas[i].F();
-			somaF+=f;
-			somaNumElements+=rotas[i].numElements;
-			
-			if(Math.abs(f-rotas[i].fRota)>epsilon)
+			routes[i].findErro();
+			f = routes[i].F();
+			somaF += f;
+			somaNumElements += routes[i].numElements;
+
+			if(Math.abs(f - routes[i].fRoute) > epsilon)
 			{
-				System.out.println("-------------------"+local+" ERRO-------------------"
-				+ "\n"+rotas[i].toString()+"\nf esperado: "+f);
-				erro=true;
+				System.out.println("-------------------" + local + " ERRO-------------------" + "\n" + routes[i].toString() + "\nf esperado: " + f);
+				erro = true;
 			}
-			
-			if(rotaVazia&&rotas[i].inicio==rotas[i].inicio.next)
+
+			if(routeVazia && routes[i].inicio == routes[i].inicio.next)
 			{
-				System.out.println("-------------------"+local+" ERRO-------------------"
-				+"Rota vazia: "+rotas[i].toString());
-				erro=true;
+				System.out.println("-------------------" + local + " ERRO-------------------" + "Route vazia: " + routes[i].toString());
+				erro = true;
 			}
-			
-			if(rotas[i].inicio.name!=0)
+
+			if(routes[i].inicio.name != 0)
 			{
-				System.out.println("-------------------"+local+" ERRO-------------------"
-				+"Rota iniciando sem deposito: "+rotas[i].toString());
-				erro=true;
+				System.out.println("-------------------" + local + " ERRO-------------------" + "Route iniciando sem deposito: " + routes[i].toString());
+				erro = true;
 			}
-			
-			if(factibildiade&&!rotas[i].isFactivel())
+
+			if(factibildiade && !routes[i].isFactivel())
 			{
-				System.out.println("-------------------"+local+" ERRO-------------------"
-				+"Rota infactivel: "+rotas[i].toString());
-				erro=true;
+				System.out.println("-------------------" + local + " ERRO-------------------" + "Route infactivel: " + routes[i].toString());
+				erro = true;
 			}
 
 		}
-		if(Math.abs(somaF-this.f)>epsilon)
+		if(Math.abs(somaF - this.f) > epsilon)
 		{
-			erro=true;
-			System.out.println("-------------------"+local+" ERRO somatorio Total-------------------");
-			System.out.println("Espedado: "+somaF+" obtido: "+this.f);
+			erro = true;
+			System.out.println("-------------------" + local + " ERRO somatorio Total-------------------");
+			System.out.println("Espedado: " + somaF + " obtido: " + this.f);
 			System.out.println(this.toStringMeu());
 		}
-		
-		if((somaNumElements-NumRotas)!=size)
+
+		if((somaNumElements - numRoutes) != size)
 		{
-			erro=true;
-			System.out.println("-------------------"+local+" ERRO quantidade Elementos-------------------");
-			System.out.println("Espedado: "+size+" obtido: "+(somaNumElements-NumRotas));
+			erro = true;
+			System.out.println("-------------------" + local + " ERRO quantidade Elementos-------------------");
+			System.out.println("Espedado: " + size + " obtido: " + (somaNumElements - numRoutes));
 
 			System.out.println(this);
 		}
 		return erro;
 	}
-	
-	public boolean factivel() 
+
+	public boolean factivel()
 	{
-		for (int i = 0; i < NumRotas; i++)
+		for(int i = 0; i < numRoutes; i++)
 		{
-			if(rotas[i].espacoLivre()<0)
+			if(routes[i].availableCapacity() < 0)
 				return false;
 		}
 		return true;
 	}
-	
-	public void removeRotasVazias()
+
+	public void removeRoutesVazias()
 	{
-		for (int i = 0; i < NumRotas; i++) 
+		for(int i = 0; i < numRoutes; i++)
 		{
-			if(rotas[i].inicio==rotas[i].inicio.next)
+			if(routes[i].inicio == routes[i].inicio.next)
 			{
-				removeRota(i);
+				removeRoute(i);
 				i--;
 			}
 		}
 	}
-	
-	private void removeRota(int index)
+
+	private void removeRoute(int index)
 	{
-		Rota aux=rotas[index];
-		if(index!=NumRotas-1)
+		Route aux = routes[index];
+		if(index != numRoutes - 1)
 		{
-			rotas[index]=rotas[NumRotas-1];
-			
-			rotas[NumRotas-1]=aux;
+			routes[index] = routes[numRoutes - 1];
+
+			routes[numRoutes - 1] = aux;
 		}
-		NumRotas--;
+		numRoutes--;
 	}
-	
-	//------------------------carregaSolution-------------------------
+
+	// ------------------------carregaSolution-------------------------
 
 	public void carregaSolution(String nome)
 	{
 		BufferedReader in;
-		try 
+		try
 		{
 			in = new BufferedReader(new FileReader(nome));
-			String str []= null;
+			String str[] = null;
 			String linha;
-			
-			linha=in.readLine();
-			str=linha.split(" ");
-			
+
+			linha = in.readLine();
+			str = linha.split(" ");
+
 //			int custo=Integer.valueOf(str[0]);
-			for (int i = 0; i < 3; i++) 
+			for(int i = 0; i < 3; i++)
 				in.readLine();
 
-			int indexRota=0;
-			linha=in.readLine();
-			str=linha.split(" ");
-			
-			System.out.println("-------------- str.length: "+str.length);
-			for (int i = 0; i < str.length; i++) 
+			int indexRoute = 0;
+			linha = in.readLine();
+			str = linha.split(" ");
+
+			System.out.println("-------------- str.length: " + str.length);
+			for(int i = 0; i < str.length; i++)
 			{
-				System.out.print(str[i]+"-");
+				System.out.print(str[i] + "-");
 			}
 			System.out.println();
-			
+
 			do
 			{
-				rotas[indexRota].addNoFinal(deposito.clone());
-				for (int i = 9; i < str.length-1; i++)
+				routes[indexRoute].addNoFinal(deposito.clone());
+				for(int i = 9; i < str.length - 1; i++)
 				{
-					System.out.println("add: "+solution[Integer.valueOf(str[i].trim())-1]+" na rota: "+rotas[indexRota].nomeRota);
-					f+=rotas[indexRota].addNoFinal(solution[Integer.valueOf(str[i])-1]);
+					System.out.println("add: " + solution[Integer.valueOf(str[i].trim()) - 1] + " na route: " + routes[indexRoute].nomeRoute);
+					f += routes[indexRoute].addNoFinal(solution[Integer.valueOf(str[i]) - 1]);
 				}
-				indexRota++;
-				linha=in.readLine();
-				if(linha!=null)
-					str=linha.split(" ");
+				indexRoute++;
+				linha = in.readLine();
+				if(linha != null)
+					str = linha.split(" ");
 			}
-			while(linha!=null);
-			
+			while(linha != null);
+
 //			System.out.println("f: "+f+" esperado: "+custo);
-		} 
-		catch (IOException e) {
-	    	System.out.println("Erro ao Ler Arquivo");
-	    }
+		}
+		catch(IOException e)
+		{
+			System.out.println("Erro ao Ler Arquivo");
+		}
 	}
-	
+
 	public void carregaSolution1(String nome)
 	{
 		BufferedReader in;
-		try 
+		try
 		{
 			in = new BufferedReader(new FileReader(nome));
-			String str []= null;
-			
-			str=in.readLine().split(" ");
-			int indexRota=0;
+			String str[] = null;
+
+			str = in.readLine().split(" ");
+			int indexRoute = 0;
 			while(!str[0].equals("Cost"))
 			{
-				for (int i = 2; i < str.length; i++)
+				for(int i = 2; i < str.length; i++)
 				{
-					f+=rotas[indexRota].addNoFinal(solution[Integer.valueOf(str[i])-1]);
+					f += routes[indexRoute].addNoFinal(solution[Integer.valueOf(str[i]) - 1]);
 				}
-				indexRota++;
-				str=in.readLine().split(" ");
+				indexRoute++;
+				str = in.readLine().split(" ");
 			}
-		} 
-		catch (IOException e) {
-	    	System.out.println("Erro ao Ler Arquivo");
-	    }
-	}
-	
-	public Rota[] getRotas() {
-		return rotas;
+		}
+		catch(IOException e)
+		{
+			System.out.println("Erro ao Ler Arquivo");
+		}
 	}
 
-	public int getNumRotas() {
-		return NumRotas;
+	public Route[] getRoutes()
+	{
+		return routes;
 	}
 
-	public Node getDeposito() {
+	public int getNumRoutes()
+	{
+		return numRoutes;
+	}
+
+	public Node getDeposito()
+	{
 		return deposito;
 	}
 
-
-	public Node[] getSolution() {
+	public Node[] getSolution()
+	{
 		return solution;
 	}
 
-	public int getNumRotasMax() {
-		return NumRotasMax;
+	public int getNumRoutesMax()
+	{
+		return numRoutesMax;
 	}
 
-	public void setNumRotasMax(int numRotasMax) {
-		NumRotasMax = numRotasMax;
+	public void setNumRoutesMax(int numRoutesMax)
+	{
+		this.numRoutesMax = numRoutesMax;
 	}
 
-	public int getNumRotasMin() {
-		return NumRotasMin;
+	public int getNumRoutesMin()
+	{
+		return numRoutesMin;
 	}
 
-	public void setNumRotasMin(int numRotasMin) {
-		NumRotasMin = numRotasMin;
+	public void setNumRoutesMin(int numRoutesMin)
+	{
+		this.numRoutesMin = numRoutesMin;
 	}
 
 	public void escrecerSolucao(String end)
 	{
-		File arq=new File(end);
+		File arq = new File(end);
 		arq.write(this.toString());
 		arq.close();
 	}
-	
+
 }

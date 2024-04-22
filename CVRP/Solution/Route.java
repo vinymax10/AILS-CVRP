@@ -3,7 +3,7 @@ package Solution;
 import Data.Instance;
 import SearchMethod.Config;
 
-public class Rota implements Comparable<Rota>
+public class Route implements Comparable<Route>
 {
 	public int  capacidade;
 	public int deposito;
@@ -12,11 +12,11 @@ public class Rota implements Comparable<Rota>
 	public boolean podeMelhorar;
 	public boolean alterada;
 	public int demandaTotal=0;
-	public double fRota=0,antF;
+	public double fRoute=0,prevF;
 	double acrescimoF;
 	public int numElements=0;
-	public int nomeRota;
-	Node ant,prox;
+	public int nomeRoute;
+	Node prev,next;
 	int contCaminho;
 	
 	//busca local best
@@ -33,12 +33,12 @@ public class Rota implements Comparable<Rota>
     Instance instance;
     int limiteAdj;
     
-	public Rota(Instance instance, Config config, Node deposito,int nomeRota) 
+	public Route(Instance instance, Config config, Node deposito,int nomeRoute) 
 	{
 		this.instance=instance;
 		this.capacidade = instance.getCapacity();
 		this.deposito=deposito.name;
-		this.nomeRota=nomeRota;
+		this.nomeRoute=nomeRoute;
 		this.inicio=null;
 		this.limiteAdj=config.getVarphi();
 		addNoFinal(deposito.clone());
@@ -103,7 +103,7 @@ public class Rota implements Comparable<Rota>
    	   					bestCusto=aux;
    	   				}   				
    	   			}
-   	   			else if(no.getKnn()[j]!=excecao.name&&solution[no.getKnn()[j]-1].rota==this)
+   	   			else if(no.getKnn()[j]!=excecao.name&&solution[no.getKnn()[j]-1].route==this)
    	   			{
    	   				aux=solution[no.getKnn()[j]-1];
    	   				custo=instance.dist(aux.name,no.name)+instance.dist(no.name,aux.next.name)-instance.dist(aux.name,aux.next.name);
@@ -130,7 +130,7 @@ public class Rota implements Comparable<Rota>
 		inicio.next=inicio;
 		
 		demandaTotal=0;
-		fRota=0;
+		fRoute=0;
 		numElements=1;
 		alterada=true;
 	}
@@ -148,18 +148,18 @@ public class Rota implements Comparable<Rota>
 		while(aux!=inicio);
 	}
 	
-	public void inverterRota()
+	public void inverterRoute()
 	{
 		aux=inicio;
-		Node ant=inicio.prev;
-		Node prox=inicio.next;
+		Node prev=inicio.prev;
+		Node next=inicio.next;
 		do
 		{
-			aux.prev=prox;
-			aux.next=ant;
-			aux=prox;
-			ant=aux.prev;
-			prox=aux.next;
+			aux.prev=next;
+			aux.next=prev;
+			aux=next;
+			prev=aux.prev;
+			next=aux.next;
 		}
 		while(aux!=inicio);
 	}
@@ -168,16 +168,16 @@ public class Rota implements Comparable<Rota>
 	{
 		double f=0;
 		Node no=inicio;
-		Node prox=no.next;
+		Node next=no.next;
 		do
 		{
-			f+=instance.dist(no.name,prox.name);
-			no=prox;
-			prox=no.next;
+			f+=instance.dist(no.name,next.name);
+			no=next;
+			next=no.next;
 		}
-		while(prox!=inicio);
+		while(next!=inicio);
 		
-		f+=instance.dist(no.name,prox.name);
+		f+=instance.dist(no.name,next.name);
 		return f;
 	}
 	
@@ -193,8 +193,8 @@ public class Rota implements Comparable<Rota>
 				System.out.println("Erro no null No: "+aux+" em:\n"+this.toString());
 				System.out.println(this);
 			}
-			if(aux.rota!=this)
-				System.out.println("Erro no : "+aux+" com rota Errada:\n"+this.toString());
+			if(aux.route!=this)
+				System.out.println("Erro no : "+aux+" com route Errada:\n"+this.toString());
 
 			cont++;
 			aux=aux.next;
@@ -212,9 +212,9 @@ public class Rota implements Comparable<Rota>
 	@Override
 	public String toString() 
 	{
-		String str="Rota: "+nomeRota;
-		str+=" f: "+fRota;
-		str+=" espaco: "+espacoLivre();
+		String str="Route: "+nomeRoute;
+		str+=" f: "+fRoute;
+		str+=" espaco: "+availableCapacity();
 		str+=" size: "+numElements+" = ";
 		str+=" alterada: "+alterada+" = ";
 
@@ -232,7 +232,7 @@ public class Rota implements Comparable<Rota>
 	
 	public String toString2() 
 	{
-		String str="Route #"+(nomeRota+1)+": ";
+		String str="Route #"+(nomeRoute+1)+": ";
 		Node aux=inicio.next;
 		do
 		{
@@ -251,7 +251,7 @@ public class Rota implements Comparable<Rota>
 		return false;
 	}
 	
-	public int espacoLivre()
+	public int availableCapacity()
 	{
 		return capacidade-demandaTotal;
 	}
@@ -269,15 +269,14 @@ public class Rota implements Comparable<Rota>
 	}
 	
 	@Override
-	public int compareTo(Rota x) 
+	public int compareTo(Route x) 
 	{
-		return nomeRota-x.nomeRota;
+		return nomeRoute-x.nomeRoute;
 	}
 
 	public double remove(Node no) 
 	{
 		double custo=no.custoRemocao();
-//		System.out.println("custo: "+custo+" fRota: "+fRota);
 		
 		if(no==inicio)
 			inicio=no.prev;
@@ -289,18 +288,18 @@ public class Rota implements Comparable<Rota>
 		
 		no.jaInserido=false;
 		
-		fRota+=custo;
+		fRoute+=custo;
 		numElements--;
 		
-		ant=no.prev;
-		prox=no.next;
+		prev=no.prev;
+		next=no.next;
 		
-		ant.next=prox;
-		prox.prev=ant;
+		prev.next=next;
+		next.prev=prev;
 		
 		demandaTotal-=no.demanda;
 		
-		no.rota=null;
+		no.route=null;
 		no.prev=null;
 		no.next=null;
 		
@@ -313,7 +312,7 @@ public class Rota implements Comparable<Rota>
 	
 	public double addNoFinal(Node no)
 	{
-		no.rota=this;
+		no.route=this;
 		if(inicio==null)
 		{
 			inicio=no;
@@ -321,7 +320,7 @@ public class Rota implements Comparable<Rota>
 			inicio.next=no;
 			numElements++;
 			demandaTotal=0;
-			fRota=0;
+			fRoute=0;
 			return 0;
 		}
 		else if(no.name==0)
@@ -347,18 +346,18 @@ public class Rota implements Comparable<Rota>
 		no2.prev.alterado=true;
 		
 		numElements++;
-		fRota+=acrescimoF;
+		fRoute+=acrescimoF;
 		
 		demandaTotal+=no1.demanda;
 
-		no1.rota=this;
+		no1.route=this;
 		
-		prox=no2.next;
+		next=no2.next;
 		no2.next=no1;
 		no1.prev=no2;
 		
-		prox.prev=no1;
-		no1.next=prox;
+		next.prev=no1;
+		no1.next=next;
 		
 		if(no1.name==0)
 			inicio=no1;

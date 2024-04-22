@@ -33,9 +33,9 @@ public class Concentric extends Perturbacao
 				no=solution[referencia.knn[i]-1];
 				candidatos[contCandidatos]=no;
 				contCandidatos++;
-				no.antOld=no.prev;
-				no.proxOld=no.next;
-				f+=no.rota.remove(no);
+				no.prevOld=no.prev;
+				no.nextOld=no.next;
+				f+=no.route.remove(no);
 			}
 		}
 		

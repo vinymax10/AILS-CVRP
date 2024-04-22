@@ -50,10 +50,10 @@ public class Sequential extends Perturbacao
 				
 				candidatos[contCandidatos++]=no;
 				
-				no.antOld=no.prev;
-				no.proxOld=no.next;
+				no.prevOld=no.prev;
+				no.nextOld=no.next;
 				
-				f+=no.rota.remove(no);
+				f+=no.route.remove(no);
 			}
 			while(noInicial.name!=no.name&&contSizeString<sizeString);
 		}

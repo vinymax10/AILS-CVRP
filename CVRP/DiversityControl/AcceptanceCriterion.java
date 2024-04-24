@@ -35,7 +35,7 @@ public class AcceptanceCriterion
 		if(globalIterator==0)
 			ini=System.currentTimeMillis();
 		
-		averageLSfunction.setValor(solution.f);
+		averageLSfunction.setValue(solution.f);
 		
 		globalIterator++;
 		

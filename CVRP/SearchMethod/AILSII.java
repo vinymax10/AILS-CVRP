@@ -144,7 +144,7 @@ public class AILSII
 			analisaSolucao();
 			distAdjustment.distAdjustment();
 			
-			perturbacaoEscolhida.getChosenOmega().setDistancia(distanciaBL);//update
+			perturbacaoEscolhida.getChosenOmega().setDistance(distanciaBL);//update
 			
 			if(acceptanceCriterion.aceitaSolucao(solution))
 				referenceSolution.clone(solution);

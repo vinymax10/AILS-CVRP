@@ -14,7 +14,7 @@ public class Mean
 		this.numIterUpdate=numIterUpdate;
 	}
 	
-	public void setValor(double value)
+	public void setValue(double value)
 	{
 		iterations++;
 		if(iterations<numIterUpdate)

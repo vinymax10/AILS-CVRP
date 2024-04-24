@@ -36,7 +36,7 @@ public class OmegaAdjustment
 		this.idealDist=idealDist;
 	}
 	
-	public void ajusteOmega()
+	public void setupOmega()
 	{
 		obtainedDist=meanLSDist.getMediaDinam();
 
@@ -44,19 +44,19 @@ public class OmegaAdjustment
 
 		omega=Math.min(omegaMax, Math.max(omega, omegaMin));
 		
-		averageOmega.setValor(omega);
+		averageOmega.setValue(omega);
 		
 		iterator=0;
 	}
 	
-	public void setDistancia(double distBL)
+	public void setDistance(double distLS)
 	{
 		iterator++;
 		
-		meanLSDist.setValor(distBL);
+		meanLSDist.setValue(distLS);
 
 		if(iterator%numIterUpdate==0)
-			ajusteOmega();
+			setupOmega();
 	}
 	
 	public double getActualOmega() 

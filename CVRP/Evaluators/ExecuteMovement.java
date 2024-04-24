@@ -26,12 +26,12 @@ public class ExecuteMovement
 			if(a.next == b)
 			{
 				aRoute.remove(a);
-				aRoute.addDepois(a, b);
+				aRoute.addAfter(a, b);
 			}
 			else
 			{
 				aRoute.remove(b);
-				aRoute.addDepois(b, a);
+				aRoute.addAfter(b, a);
 			}
 		}
 		else
@@ -42,8 +42,8 @@ public class ExecuteMovement
 			aRoute.remove(a);
 			bRoute.remove(b);
 
-			bRoute.addDepois(a, nodePrev);
-			aRoute.addDepois(b, myPrev);
+			bRoute.addAfter(a, nodePrev);
+			aRoute.addAfter(b, myPrev);
 		}
 	}
 
@@ -53,7 +53,7 @@ public class ExecuteMovement
 		bRoute = b.route;
 
 		aRoute.remove(a);
-		bRoute.addDepois(a, b);
+		bRoute.addAfter(a, b);
 	}
 
 	public void execute2Opt(Node a, Node b)
@@ -104,7 +104,7 @@ public class ExecuteMovement
 		while(aux != aRoute.first)
 		{
 			aRoute.remove(aux);
-			bRoute.addDepois(aux, prev);
+			bRoute.addAfter(aux, prev);
 			prev = aux;
 			aux = a.next;
 		}
@@ -115,7 +115,7 @@ public class ExecuteMovement
 		while(aux != bRoute.first)
 		{
 			bRoute.remove(aux);
-			aRoute.addDepois(aux, prev);
+			aRoute.addAfter(aux, prev);
 			prev = aux;
 			aux = ultimo.next;
 		}

@@ -9,8 +9,7 @@ import SearchMethod.Config;
 import Solution.Node;
 import Solution.Solution;
 
-//Remocao sequencial todos de uma vez depois adiciona o restante
-
+//Sequential removal of all at once to add the nodes
 public class Sequential extends Perturbation
 {
 	
@@ -28,7 +27,7 @@ public class Sequential extends Perturbation
 //		---------------------------------------------------------------------
 		int contSizeString;
 		double sizeString;
-		Node noInicial;
+		Node initialNode;
 		
 		while(countCandidates<(int)omega)
 		{
@@ -38,13 +37,13 @@ public class Sequential extends Perturbation
 			while(!node.nodeBelong)
 				node=solution[rand.nextInt(size)];
 			
-			noInicial=node;
+			initialNode=node;
 			
 			contSizeString=0;
 			do
 			{
 				contSizeString++;
-				node=noInicial.next;
+				node=initialNode.next;
 				if(node.name==0)
 					node=node.next;
 				
@@ -55,7 +54,7 @@ public class Sequential extends Perturbation
 				
 				f+=node.route.remove(node);
 			}
-			while(noInicial.name!=node.name&&contSizeString<sizeString);
+			while(initialNode.name!=node.name&&contSizeString<sizeString);
 		}
 		
 		setOrder();

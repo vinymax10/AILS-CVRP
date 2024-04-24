@@ -74,7 +74,7 @@ public class ConstrutorSolucao
 			index=rand.nextInt(contNaoInseridos);
 			node=naoInseridos[index];
 			bestNode=getBestNoRoutes(node);
-			f+=bestNode.route.addDepois(node, bestNode);
+			f+=bestNode.route.addAfter(node, bestNode);
 			naoInseridos[index]=naoInseridos[contNaoInseridos-1];
 			naoInseridos[--contNaoInseridos]=node;
 		}

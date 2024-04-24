@@ -212,7 +212,7 @@ public abstract class Perturbation
 			node=candidates[i];
 			bestNode=getNode(node);
 			
-			f+=bestNode.route.addDepois(node, bestNode);
+			f+=bestNode.route.addAfter(node, bestNode);
 		}
 	}
 	

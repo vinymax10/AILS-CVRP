@@ -323,16 +323,16 @@ public class Route implements Comparable<Route>
 		{
 			aux=first.prev;
 			first=node;
-			return addDepois(node, aux); 
+			return addAfter(node, aux); 
 		}
 		else 
 		{
 			aux=first.prev;
-			return addDepois(node, aux); 
+			return addAfter(node, aux); 
 		}
 	}
 	
-	public double addDepois(Node node1, Node node2) 
+	public double addAfter(Node node1, Node node2) 
 	{
 		acrescimoF=node1.costInserirApos(node2);
 		modified=true;

@@ -362,6 +362,11 @@ public class Solution
 		this.numRoutesMin = numRoutesMin;
 	}
 
+	public int getSize()
+	{
+		return size;
+	}
+
 	public void printSolution(String end)
 	{
 		File arq = new File(end);

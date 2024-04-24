@@ -62,7 +62,7 @@ public class IntraLocalSearch
 						else
 							auxEntra=solution[auxSai.getKnn()[j]-1];
 						
-						if(auxSai.route.nomeRoute==auxEntra.route.nomeRoute)
+						if(auxSai.route.nameRoute==auxEntra.route.nameRoute)
 						{
 							//2Opt
 							if(auxSai!=auxEntra&&auxEntra!=auxSai.next)

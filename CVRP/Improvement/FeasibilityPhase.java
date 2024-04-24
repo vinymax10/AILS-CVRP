@@ -197,13 +197,13 @@ public class FeasibilityPhase
 						if(gain>0)
 						{
 							
-							bestPrevNoRouteI=auxEntra.route.findBestPositionExcetoKNN(auxSai,auxEntra,solution);
-							bestPrevNoRouteJ=auxSai.route.findBestPositionExcetoKNN(auxEntra,auxSai,solution);
+							bestPrevNoRouteI=auxEntra.route.findBestPositionExceptAfterNodeKNN(auxSai,auxEntra,solution);
+							bestPrevNoRouteJ=auxSai.route.findBestPositionExceptAfterNodeKNN(auxEntra,auxSai,solution);
 							
 							cost=evaluateCost.costSwapStar(auxSai,auxEntra,bestPrevNoRouteI,bestPrevNoRouteJ);
 							calculateCost();
 							
-							improvedNode=improvedMatrix[auxSai.route.nomeRoute][auxEntra.route.nomeRoute];
+							improvedNode=improvedMatrix[auxSai.route.nameRoute][auxEntra.route.nameRoute];
 							
 							if(evaluationCost<improvedNode.evaluationCost)
 							{
@@ -238,7 +238,7 @@ public class FeasibilityPhase
 						{
 							cost=evaluateCost.costSHIFT(auxSai, auxEntra);
 							calculateCost();
-							improvedNode=improvedMatrix[auxSai.route.nomeRoute][auxEntra.route.nomeRoute];
+							improvedNode=improvedMatrix[auxSai.route.nameRoute][auxEntra.route.nameRoute];
 							
 							if(evaluationCost<improvedNode.evaluationCost)
 							{
@@ -261,7 +261,7 @@ public class FeasibilityPhase
 						{
 							cost=evaluateCost.costSHIFT(auxSai, auxEntra);
 							calculateCost();
-							improvedNode=improvedMatrix[auxSai.route.nomeRoute][auxEntra.route.nomeRoute];
+							improvedNode=improvedMatrix[auxSai.route.nameRoute][auxEntra.route.nameRoute];
 							
 							if(evaluationCost<improvedNode.evaluationCost)
 							{
@@ -282,7 +282,7 @@ public class FeasibilityPhase
 							cost=evaluateCost.costSHIFT(auxEntra, auxSai);
 							calculateCost();
 							
-							improvedNode=improvedMatrix[auxSai.route.nomeRoute][auxEntra.route.nomeRoute];
+							improvedNode=improvedMatrix[auxSai.route.nameRoute][auxEntra.route.nameRoute];
 							
 							if(evaluationCost<improvedNode.evaluationCost)
 							{
@@ -319,7 +319,7 @@ public class FeasibilityPhase
 							cost=evaluateCost.costCross(auxSai, auxEntra);
 							calculateCost();
 							
-							improvedNode=improvedMatrix[auxSai.route.nomeRoute][auxEntra.route.nomeRoute];
+							improvedNode=improvedMatrix[auxSai.route.nameRoute][auxEntra.route.nameRoute];
 							
 							if(evaluationCost<improvedNode.evaluationCost)
 							{
@@ -336,7 +336,7 @@ public class FeasibilityPhase
 							cost=evaluateCost.inversedCostCross(auxSai, auxEntra);
 							calculateCost();
 							
-							improvedNode=improvedMatrix[auxSai.route.nomeRoute][auxEntra.route.nomeRoute];
+							improvedNode=improvedMatrix[auxSai.route.nameRoute][auxEntra.route.nameRoute];
 							
 							if(evaluationCost<improvedNode.evaluationCost)
 							{
@@ -359,7 +359,7 @@ public class FeasibilityPhase
 						{
 							cost=evaluateCost.costCross(auxSai, auxEntra);
 							calculateCost();
-							improvedNode=improvedMatrix[auxSai.route.nomeRoute][auxEntra.route.nomeRoute];
+							improvedNode=improvedMatrix[auxSai.route.nameRoute][auxEntra.route.nameRoute];
 							
 							if(evaluationCost<improvedNode.evaluationCost)
 							{
@@ -374,7 +374,7 @@ public class FeasibilityPhase
 						{
 							cost=evaluateCost.inversedCostCross(auxSai, auxEntra);
 							calculateCost();
-							improvedNode=improvedMatrix[auxSai.route.nomeRoute][auxEntra.route.nomeRoute];
+							improvedNode=improvedMatrix[auxSai.route.nameRoute][auxEntra.route.nameRoute];
 							
 							if(evaluationCost<improvedNode.evaluationCost)
 							{

@@ -21,13 +21,13 @@ import Solution.Solution;
 public class AILSII 
 {
 	//----------Problema------------
-	Solution solution,referenceSolution,melhorSolucao;
+	Solution solution,referenceSolution,bestSolution;
 	
 	Instance instance;
-	Distance distEntreSolucoes;
-	double melhorF=Double.MAX_VALUE;
+	Distance pairwiseDistance;
+	double bestF=Double.MAX_VALUE;
 	double executionMaximumLimit;
-	double otimo;
+	double optimal;
 	
 	//----------caculoLimiar------------
 	int numIterUpdate;
@@ -35,19 +35,19 @@ public class AILSII
 	//----------Metricas------------
 	int iterator,iteratorMF;
 	long first,ini;
-	double tempoMF,tempoTotal,tempo;
+	double timeAF,totalTime,time;
 	
 	Random rand=new Random();
 	
 	HashMap<String,OmegaAdjustment>omegaSetup=new HashMap<String,OmegaAdjustment>();
 
-	double distanciaBL;
+	double distanceLS;
 	
-	Perturbation[] perturbadores;
-	Perturbation perturbacaoEscolhida;
+	Perturbation[] pertubOperators;
+	Perturbation selectedPerturbation;
 	
-	FeasibilityPhase factibilizador;
-	ConstrutorSolucao construtorSolucao;
+	FeasibilityPhase feasibilityOperator;
+	ConstructSolution constructSolution;
 	
 	LocalSearch localSearch;
 
@@ -64,24 +64,24 @@ public class AILSII
 	DecimalFormat deci=new DecimalFormat("0.0000");
 	StoppingCriterionType stoppingCriterionType;
 	
-	public AILSII(Instance instance,InputParameters leitor)
+	public AILSII(Instance instance,InputParameters reader)
 	{ 
 		this.instance=instance;
-		Config config=leitor.getConfig();
-		this.otimo=leitor.getBest();
-		this.executionMaximumLimit=leitor.getTimeLimit();
+		Config config=reader.getConfig();
+		this.optimal=reader.getBest();
+		this.executionMaximumLimit=reader.getTimeLimit();
 		
 		this.epsilon=config.getEpsilon();
 		this.stoppingCriterionType=config.getStoppingCriterionType();
 		this.idealDist=new IdealDist();
 		this.solution =new Solution(instance,config);
 		this.referenceSolution =new Solution(instance,config);
-		this.melhorSolucao =new Solution(instance,config);
+		this.bestSolution =new Solution(instance,config);
 		this.numIterUpdate=config.getGamma();
 		
-		this.distEntreSolucoes=new Distance();
+		this.pairwiseDistance=new Distance();
 		
-		this.perturbadores=new Perturbation[config.getPerturbacao().length];
+		this.pertubOperators=new Perturbation[config.getPerturbation().length];
 		
 		this.distAdjustment=new DistAdjustment( idealDist, config, executionMaximumLimit);
 		
@@ -89,24 +89,24 @@ public class AILSII
 		
 		this.localSearch=new LocalSearch(instance,config,intraLocalSearch);
 		
-		this.factibilizador=new FeasibilityPhase(instance,config,intraLocalSearch);
+		this.feasibilityOperator=new FeasibilityPhase(instance,config,intraLocalSearch);
 		
-		this.construtorSolucao=new ConstrutorSolucao(instance,config);
+		this.constructSolution=new ConstructSolution(instance,config);
 		
-		OmegaAdjustment novo;
-		for (int i = 0; i < config.getPerturbacao().length; i++) 
+		OmegaAdjustment newOmegaAdjustment;
+		for (int i = 0; i < config.getPerturbation().length; i++) 
 		{
-			novo=new OmegaAdjustment(config.getPerturbacao()[i], config,instance.getSize(),idealDist);
-			omegaSetup.put(config.getPerturbacao()[i]+"", novo);
+			newOmegaAdjustment=new OmegaAdjustment(config.getPerturbation()[i], config,instance.getSize(),idealDist);
+			omegaSetup.put(config.getPerturbation()[i]+"", newOmegaAdjustment);
 		}
 		
 		this.acceptanceCriterion=new AcceptanceCriterion(instance,config,executionMaximumLimit);
 
 		try 
 		{
-			for (int i = 0; i < perturbadores.length; i++) 
+			for (int i = 0; i < pertubOperators.length; i++) 
 			{
-				this.perturbadores[i]=(Perturbation) Class.forName("Perturbation."+config.getPerturbacao()[i]).
+				this.pertubOperators[i]=(Perturbation) Class.forName("Perturbation."+config.getPerturbation()[i]).
 				getConstructor(Instance.class,Config.class,HashMap.class,IntraLocalSearch.class).
 				newInstance(instance,config,omegaSetup,intraLocalSearch);
 			}
@@ -124,68 +124,68 @@ public class AILSII
 		iterator=0;
 		first=System.currentTimeMillis();
 		referenceSolution.numRoutes=instance.getMinNumberRoutes();
-		construtorSolucao.construir(referenceSolution);
+		constructSolution.construct(referenceSolution);
 
-		factibilizador.makeFeasible(referenceSolution);
+		feasibilityOperator.makeFeasible(referenceSolution);
 		localSearch.localSearch(referenceSolution,true);
-		melhorSolucao.clone(referenceSolution);
-		while(!criterioParada())
+		bestSolution.clone(referenceSolution);
+		while(!stoppingCriterion())
 		{
 			iterator++;
 
 			solution.clone(referenceSolution);
 			
-			perturbacaoEscolhida=perturbadores[rand.nextInt(perturbadores.length)];
-			perturbacaoEscolhida.applyPerturbation(solution);
-			factibilizador.makeFeasible(solution);
+			selectedPerturbation=pertubOperators[rand.nextInt(pertubOperators.length)];
+			selectedPerturbation.applyPerturbation(solution);
+			feasibilityOperator.makeFeasible(solution);
 			localSearch.localSearch(solution,true);
-			distanciaBL=distEntreSolucoes.pairwiseSolutionDistance(solution,referenceSolution);
+			distanceLS=pairwiseDistance.pairwiseSolutionDistance(solution,referenceSolution);
 			
-			analisaSolucao();
+			evaluateSolution();
 			distAdjustment.distAdjustment();
 			
-			perturbacaoEscolhida.getChosenOmega().setDistance(distanciaBL);//update
+			selectedPerturbation.getChosenOmega().setDistance(distanceLS);//update
 			
-			if(acceptanceCriterion.aceitaSolucao(solution))
+			if(acceptanceCriterion.acceptSolution(solution))
 				referenceSolution.clone(solution);
 		}
 		
-		tempoTotal=(double)(System.currentTimeMillis()-first)/1000;
+		totalTime=(double)(System.currentTimeMillis()-first)/1000;
 	}
 	
-	public void analisaSolucao()
+	public void evaluateSolution()
 	{
-		if((solution.f-melhorF)<-epsilon)
+		if((solution.f-bestF)<-epsilon)
 		{		
-			melhorF=solution.f;
+			bestF=solution.f;
 			
-			melhorSolucao.clone(solution);
+			bestSolution.clone(solution);
 			iteratorMF=iterator;
-			tempoMF=(double)(System.currentTimeMillis()-first)/1000;
+			timeAF=(double)(System.currentTimeMillis()-first)/1000;
 				
 			if(print)
 			{
-				System.out.println("solution quality: "+melhorF
+				System.out.println("solution quality: "+bestF
 				+" gap: "+deci.format(getGap())+"%"
 				+" K: "+solution.numRoutes
 				+" iteration: "+iterator
 				+" eta: "+deci.format(acceptanceCriterion.getEta())
-				+" omega: "+deci.format(perturbacaoEscolhida.omega)
-				+" time: "+tempoMF
+				+" omega: "+deci.format(selectedPerturbation.omega)
+				+" time: "+timeAF
 				);
 			}
 		}
 	}
 	
-	private boolean criterioParada()
+	private boolean stoppingCriterion()
 	{
 		switch(stoppingCriterionType)
 		{
-			case Iteration: 	if(melhorF<=otimo||executionMaximumLimit<=iterator)
+			case Iteration: 	if(bestF<=optimal||executionMaximumLimit<=iterator)
 									return true;
 								break;
 							
-			case Time: 	if(melhorF<=otimo||executionMaximumLimit<(System.currentTimeMillis()-first)/1000)
+			case Time: 	if(bestF<=optimal||executionMaximumLimit<(System.currentTimeMillis()-first)/1000)
 							return true;
 						break;
 		}
@@ -204,17 +204,17 @@ public class AILSII
 		ailsII.search();
 	}
 	
-	public Solution getMelhorSolucao() {
-		return melhorSolucao;
+	public Solution getBestSolution() {
+		return bestSolution;
 	}
 
-	public double getMelhorF() {
-		return melhorF;
+	public double getBestF() {
+		return bestF;
 	}
 
 	public double getGap()
 	{
-		return 100*((melhorF-otimo)/otimo);
+		return 100*((bestF-optimal)/optimal);
 	}
 	
 	public boolean isPrint() {
@@ -236,42 +236,42 @@ public class AILSII
 	public String printOmegas()
 	{
 		String str="";
-		for (int i = 0; i < perturbadores.length; i++) 
+		for (int i = 0; i < pertubOperators.length; i++) 
 		{
-			str+="\n"+omegaSetup.get(this.perturbadores[i].perturbationType+""+referenceSolution.numRoutes);
+			str+="\n"+omegaSetup.get(this.pertubOperators[i].perturbationType+""+referenceSolution.numRoutes);
 		}
 		return str;
 	}
 	
-	public Perturbation[] getPerturbadores() {
-		return perturbadores;
+	public Perturbation[] getPertubOperators() {
+		return pertubOperators;
 	}
 	
-	public double getTempoTotal() {
-		return tempoTotal;
+	public double getTotalTime() {
+		return totalTime;
 	}
 	
-	public double getTemoPorIteracao() 
+	public double getTimePerIteration() 
 	{
-		return tempoTotal/iterator;
+		return totalTime/iterator;
 	}
 
-	public double getTempoMF() {
-		return tempoMF;
+	public double getTimeAF() {
+		return timeAF;
 	}
 
 	public int getIteratorMF() {
 		return iteratorMF;
 	}
 	
-	public double getConvergenciaIteracao()
+	public double getConvergenceIteration()
 	{
 		return (double)iteratorMF/iterator;
 	}
 	
-	public double convergenciaTempo()
+	public double convergenceTime()
 	{
-		return (double)tempoMF/tempoTotal;
+		return (double)timeAF/totalTime;
 	}
 	
 }

@@ -123,7 +123,7 @@ public class ExecuteMovement
 
 	public void CrossInverted(Node a, Node b)
 	{
-		b.route.inverterRoute();
+		b.route.invertRoute();
 		Cross(a, b.prev);
 	}
 

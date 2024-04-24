@@ -5,43 +5,41 @@ import SearchMethod.Config;
 
 public class Route implements Comparable<Route>
 {
-	public int  capacidade;
-	public int deposito;
+	public int  capacity;
+	public int depot;
 
 	public Node first;
-	public boolean podeMelhorar;
 	public boolean modified;
 	public int totalDemand=0;
 	public double fRoute=0,prevF;
-	double acrescimoF;
+	double increaseObjFunction;
 	public int numElements=0;
-	public int nomeRoute;
+	public int nameRoute;
 	Node prev,next;
-	int contCaminho;
 	
 	//busca local best
 	public double lowestCost=0;
 	Node aux;
 	
 	//------------------------------------------------
-	public double cost,costRemocao;
+	public double cost,costRemoval;
 	public Node bestCost;
-	public double distancia,menorDist;
+	public double distance,lowestDist;
 	//------------------------------------------------
 	public boolean update;
 	
     Instance instance;
     int limitAdj;
     
-	public Route(Instance instance, Config config, Node deposito,int nomeRoute) 
+	public Route(Instance instance, Config config, Node depot,int nameRoute) 
 	{
 		this.instance=instance;
-		this.capacidade = instance.getCapacity();
-		this.deposito=deposito.name;
-		this.nomeRoute=nomeRoute;
+		this.capacity = instance.getCapacity();
+		this.depot=depot.name;
+		this.nameRoute=nameRoute;
 		this.first=null;
 		this.limitAdj=config.getVarphi();
-		addNoFinal(deposito.clone());
+		addNodeEndRoute(depot.clone());
 	}
 	
     public Node findBestPosition(Node no)
@@ -63,7 +61,7 @@ public class Route implements Comparable<Route>
 		return bestCost;
 	}
     
-    public Node findBestPositionExceto(Node no,Node excecao)
+    public Node findBestPositionExceptAfterNode(Node no,Node exception)
   	{
   		bestCost=first;
   		aux=first.next;
@@ -72,7 +70,7 @@ public class Route implements Comparable<Route>
   		do
   		{
   			cost=instance.dist(aux.name,no.name)+instance.dist(no.name,aux.next.name)-instance.dist(aux.name,aux.next.name);
-  			if(cost<lowestCost&&aux.name!=excecao.name)
+  			if(cost<lowestCost&&aux.name!=exception.name)
   			{
   				lowestCost=cost;
   				bestCost=aux;
@@ -83,7 +81,7 @@ public class Route implements Comparable<Route>
   		return bestCost;
   	}
     
-    public Node findBestPositionExcetoKNN(Node node,Node excecao, Node solution[])
+    public Node findBestPositionExceptAfterNodeKNN(Node node,Node exception, Node solution[])
    	{
     	lowestCost=Double.MAX_VALUE;
     	
@@ -103,7 +101,7 @@ public class Route implements Comparable<Route>
    	   					bestCost=aux;
    	   				}   				
    	   			}
-   	   			else if(node.getKnn()[j]!=excecao.name&&solution[node.getKnn()[j]-1].route==this)
+   	   			else if(node.getKnn()[j]!=exception.name&&solution[node.getKnn()[j]-1].route==this)
    	   			{
    	   				aux=solution[node.getKnn()[j]-1];
    	   				cost=instance.dist(aux.name,node.name)+instance.dist(node.name,aux.next.name)-instance.dist(aux.name,aux.next.name);
@@ -118,7 +116,7 @@ public class Route implements Comparable<Route>
    		}
    		else
    		{
-   			findBestPositionExceto(node,excecao);
+   			findBestPositionExceptAfterNode(node,exception);
    		}
    		
    		return bestCost;
@@ -148,7 +146,7 @@ public class Route implements Comparable<Route>
 		while(aux!=first);
 	}
 	
-	public void inverterRoute()
+	public void invertRoute()
 	{
 		aux=first;
 		Node prev=first.prev;
@@ -181,7 +179,7 @@ public class Route implements Comparable<Route>
 		return f;
 	}
 	
-	public void findErro()
+	public void findError()
 	{
 		int count=0;
 		Node aux=first;
@@ -201,7 +199,7 @@ public class Route implements Comparable<Route>
 		}
 		while(aux!=first);
 		if(count!=numElements)
-			System.out.println("Erro no numElements \n"+this.toString());
+			System.out.println("Error in numElements \n"+this.toString());
 
 	}
 	
@@ -210,9 +208,9 @@ public class Route implements Comparable<Route>
 	@Override
 	public String toString() 
 	{
-		String str="Route: "+nomeRoute;
+		String str="Route: "+nameRoute;
 		str+=" f: "+fRoute;
-		str+=" espaco: "+availableCapacity();
+		str+=" space: "+availableCapacity();
 		str+=" size: "+numElements+" = ";
 		str+=" modified: "+modified+" = ";
 
@@ -230,7 +228,7 @@ public class Route implements Comparable<Route>
 	
 	public String toString2() 
 	{
-		String str="Route #"+(nomeRoute+1)+": ";
+		String str="Route #"+(nameRoute+1)+": ";
 		Node aux=first.next;
 		do
 		{
@@ -244,18 +242,18 @@ public class Route implements Comparable<Route>
 	
 	public boolean isFeasible()
 	{
-		if((capacidade-totalDemand)>=0)
+		if((capacity-totalDemand)>=0)
 			return true;
 		return false;
 	}
 	
 	public int availableCapacity()
 	{
-		return capacidade-totalDemand;
+		return capacity-totalDemand;
 	}
 	
-	public void setAcrescimoF(int acrescimoF) {
-		this.acrescimoF = acrescimoF;
+	public void setIncreaseObjFunction(int increaseObjFunction) {
+		this.increaseObjFunction = increaseObjFunction;
 	}
 
 	public int getNumElements() {
@@ -269,12 +267,12 @@ public class Route implements Comparable<Route>
 	@Override
 	public int compareTo(Route x) 
 	{
-		return nomeRoute-x.nomeRoute;
+		return nameRoute-x.nameRoute;
 	}
 
 	public double remove(Node node) 
 	{
-		double cost=node.costRemocao();
+		double cost=node.costRemoval();
 		
 		if(node==first)
 			first=node.prev;
@@ -306,7 +304,7 @@ public class Route implements Comparable<Route>
 
 	//------------------------Add No-------------------------
 	
-	public double addNoFinal(Node node)
+	public double addNodeEndRoute(Node node)
 	{
 		node.route=this;
 		if(first==null)
@@ -334,7 +332,7 @@ public class Route implements Comparable<Route>
 	
 	public double addAfter(Node node1, Node node2) 
 	{
-		acrescimoF=node1.costInserirApos(node2);
+		increaseObjFunction=node1.costInsertAfter(node2);
 		modified=true;
 		node1.nodeBelong=true;
 		node1.modified=true;
@@ -342,7 +340,7 @@ public class Route implements Comparable<Route>
 		node2.prev.modified=true;
 		
 		numElements++;
-		fRoute+=acrescimoF;
+		fRoute+=increaseObjFunction;
 		
 		totalDemand+=node1.demand;
 
@@ -358,7 +356,7 @@ public class Route implements Comparable<Route>
 		if(node1.name==0)
 			first=node1;
 		
-		return acrescimoF;
+		return increaseObjFunction;
 	}
 }
 

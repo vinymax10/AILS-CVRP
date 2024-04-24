@@ -12,21 +12,21 @@ import SearchMethod.Config;
 
 public class Solution
 {
-	private Point pontos[];
+	private Point points[];
 	Instance instance;
 	Config config;
 	protected int size;
 	Node solution[];
 
 	protected int first;
-	protected Node deposito;
-	int capacidade;
+	protected Node depot;
+	int capacity;
 	public Route routes[];
 	public int numRoutes;
 	protected int numRoutesMin;
 	protected int numRoutesMax;
 	public double f = 0;
-	public int distancia;
+	public int distance;
 	double epsilon;
 //	-----------Comparadores-----------
 
@@ -36,28 +36,28 @@ public class Solution
 	{
 		this.instance = instance;
 		this.config = config;
-		this.pontos = instance.getPoints();
-		int deposito = instance.getDepot();
-		this.capacidade = instance.getCapacity();
+		this.points = instance.getPoints();
+		int depot = instance.getDepot();
+		this.capacity = instance.getCapacity();
 		this.size = instance.getSize() - 1;
 		this.solution = new Node[size];
 		this.numRoutesMin = instance.getMinNumberRoutes();
 		this.numRoutes = numRoutesMin;
 		this.numRoutesMax = instance.getMaxNumberRoutes();
-		this.deposito = new Node(pontos[deposito], instance);
+		this.depot = new Node(points[depot], instance);
 		this.epsilon = config.getEpsilon();
 
 		this.routes = new Route[numRoutesMax];
 
 		for(int i = 0; i < routes.length; i++)
-			routes[i] = new Route(instance, config, this.deposito, i);
+			routes[i] = new Route(instance, config, this.depot, i);
 
 		int count = 0;
 		for(int i = 0; i < (solution.length + 1); i++)
 		{
-			if(i != deposito)
+			if(i != depot)
 			{
-				solution[count] = new Node(pontos[i], instance);
+				solution[count] = new Node(points[i], instance);
 				count++;
 			}
 		}
@@ -70,8 +70,8 @@ public class Solution
 
 		for(int i = 0; i < routes.length; i++)
 		{
-			routes[i].nomeRoute = i;
-			reference.routes[i].nomeRoute = i;
+			routes[i].nameRoute = i;
+			reference.routes[i].nameRoute = i;
 		}
 
 		for(int i = 0; i < routes.length; i++)
@@ -98,16 +98,16 @@ public class Solution
 
 		for(int i = 0; i < solution.length; i++)
 		{
-			solution[i].route = routes[reference.solution[i].route.nomeRoute];
+			solution[i].route = routes[reference.solution[i].route.nameRoute];
 			solution[i].nodeBelong = reference.solution[i].nodeBelong;
 
 			if(reference.solution[i].prev.name == 0)
-				solution[i].prev = routes[reference.solution[i].prev.route.nomeRoute].first;
+				solution[i].prev = routes[reference.solution[i].prev.route.nameRoute].first;
 			else
 				solution[i].prev = solution[reference.solution[i].prev.name - 1];
 
 			if(reference.solution[i].next.name == 0)
-				solution[i].next = routes[reference.solution[i].next.route.nomeRoute].first;
+				solution[i].next = routes[reference.solution[i].next.route.nameRoute].first;
 			else
 				solution[i].next = solution[reference.solution[i].next.name - 1];
 		}
@@ -118,9 +118,9 @@ public class Solution
 	public String toStringMeu()
 	{
 		String str = "size: " + size;
-		str += "\n" + "deposito: " + deposito;
-		str += "\nNumRoutes: " + numRoutes;
-		str += "\nCapacidade: " + capacidade;
+		str += "\n" + "depot: " + depot;
+		str += "\nnumRoutes: " + numRoutes;
+		str += "\ncapacity: " + capacity;
 
 		str += "\nf: " + f;
 //		System.out.println(str);
@@ -145,7 +145,7 @@ public class Solution
 		return str;
 	}
 
-	public int infactibilidade()
+	public int infeasibility()
 	{
 		int capViolation = 0;
 		for(int i = 0; i < numRoutes; i++)
@@ -156,58 +156,58 @@ public class Solution
 		return capViolation;
 	}
 
-	public boolean auditoria(String local, boolean factibildiade, boolean routeVazia)
+	public boolean checking(String local, boolean feasibility, boolean emptyRoute)
 	{
 		double f;
-		double somaF = 0;
-		int somaNumElements = 0;
+		double sumF = 0;
+		int sumNumElements = 0;
 		boolean erro = false;
 
 		for(int i = 0; i < numRoutes; i++)
 		{
-			routes[i].findErro();
+			routes[i].findError();
 			f = routes[i].F();
-			somaF += f;
-			somaNumElements += routes[i].numElements;
+			sumF += f;
+			sumNumElements += routes[i].numElements;
 
 			if(Math.abs(f - routes[i].fRoute) > epsilon)
 			{
-				System.out.println("-------------------" + local + " ERRO-------------------" + "\n" + routes[i].toString() + "\nf esperado: " + f);
+				System.out.println("-------------------" + local + " ERROR-------------------" + "\n" + routes[i].toString() + "\nf esperado: " + f);
 				erro = true;
 			}
 
-			if(routeVazia && routes[i].first == routes[i].first.next)
+			if(emptyRoute && routes[i].first == routes[i].first.next)
 			{
-				System.out.println("-------------------" + local + " ERRO-------------------" + "Route vazia: " + routes[i].toString());
+				System.out.println("-------------------" + local + " ERROR-------------------" + "Empty route: " + routes[i].toString());
 				erro = true;
 			}
 
 			if(routes[i].first.name != 0)
 			{
-				System.out.println("-------------------" + local + " ERRO-------------------" + "Route iniciando sem deposito: " + routes[i].toString());
+				System.out.println("-------------------" + local + " ERROR-------------------" + " Route initiating without depot: " + routes[i].toString());
 				erro = true;
 			}
 
-			if(factibildiade && !routes[i].isFeasible())
+			if(feasibility && !routes[i].isFeasible())
 			{
-				System.out.println("-------------------" + local + " ERRO-------------------" + "Route infactivel: " + routes[i].toString());
+				System.out.println("-------------------" + local + " ERROR-------------------" + "Infeasible route: " + routes[i].toString());
 				erro = true;
 			}
 
 		}
-		if(Math.abs(somaF - this.f) > epsilon)
+		if(Math.abs(sumF - this.f) > epsilon)
 		{
 			erro = true;
-			System.out.println("-------------------" + local + " ERRO somatorio Total-------------------");
-			System.out.println("Espedado: " + somaF + " obtido: " + this.f);
+			System.out.println("-------------------" + local + " Error total sum-------------------");
+			System.out.println("Expected: " + sumF + " obtained: " + this.f);
 			System.out.println(this.toStringMeu());
 		}
 
-		if((somaNumElements - numRoutes) != size)
+		if((sumNumElements - numRoutes) != size)
 		{
 			erro = true;
-			System.out.println("-------------------" + local + " ERRO quantidade Elementos-------------------");
-			System.out.println("Espedado: " + size + " obtido: " + (somaNumElements - numRoutes));
+			System.out.println("-------------------" + local + " ERROR quantity of Elements-------------------");
+			System.out.println("Expected: " + size + " obtained : " + (sumNumElements - numRoutes));
 
 			System.out.println(this);
 		}
@@ -248,26 +248,24 @@ public class Solution
 		numRoutes--;
 	}
 
-	// ------------------------carregaSolution-------------------------
-
-	public void carregaSolution(String nome)
+	public void uploadSolution(String name)
 	{
 		BufferedReader in;
 		try
 		{
-			in = new BufferedReader(new FileReader(nome));
+			in = new BufferedReader(new FileReader(name));
 			String str[] = null;
-			String linha;
+			String line;
 
-			linha = in.readLine();
-			str = linha.split(" ");
+			line = in.readLine();
+			str = line.split(" ");
 
 			for(int i = 0; i < 3; i++)
 				in.readLine();
 
 			int indexRoute = 0;
-			linha = in.readLine();
-			str = linha.split(" ");
+			line = in.readLine();
+			str = line.split(" ");
 
 			System.out.println("-------------- str.length: " + str.length);
 			for(int i = 0; i < str.length; i++)
@@ -278,32 +276,32 @@ public class Solution
 
 			do
 			{
-				routes[indexRoute].addNoFinal(deposito.clone());
+				routes[indexRoute].addNodeEndRoute(depot.clone());
 				for(int i = 9; i < str.length - 1; i++)
 				{
-					System.out.println("add: " + solution[Integer.valueOf(str[i].trim()) - 1] + " na route: " + routes[indexRoute].nomeRoute);
-					f += routes[indexRoute].addNoFinal(solution[Integer.valueOf(str[i]) - 1]);
+					System.out.println("add: " + solution[Integer.valueOf(str[i].trim()) - 1] + " na route: " + routes[indexRoute].nameRoute);
+					f += routes[indexRoute].addNodeEndRoute(solution[Integer.valueOf(str[i]) - 1]);
 				}
 				indexRoute++;
-				linha = in.readLine();
-				if(linha != null)
-					str = linha.split(" ");
+				line = in.readLine();
+				if(line != null)
+					str = line.split(" ");
 			}
-			while(linha != null);
+			while(line != null);
 
 		}
 		catch(IOException e)
 		{
-			System.out.println("Erro ao Ler Arquivo");
+			System.out.println("File read Error");
 		}
 	}
 
-	public void carregaSolution1(String nome)
+	public void uploadSolution1(String name)
 	{
 		BufferedReader in;
 		try
 		{
-			in = new BufferedReader(new FileReader(nome));
+			in = new BufferedReader(new FileReader(name));
 			String str[] = null;
 
 			str = in.readLine().split(" ");
@@ -312,7 +310,7 @@ public class Solution
 			{
 				for(int i = 2; i < str.length; i++)
 				{
-					f += routes[indexRoute].addNoFinal(solution[Integer.valueOf(str[i]) - 1]);
+					f += routes[indexRoute].addNodeEndRoute(solution[Integer.valueOf(str[i]) - 1]);
 				}
 				indexRoute++;
 				str = in.readLine().split(" ");
@@ -320,7 +318,7 @@ public class Solution
 		}
 		catch(IOException e)
 		{
-			System.out.println("Erro ao Ler Arquivo");
+			System.out.println("File read Error");
 		}
 	}
 
@@ -334,9 +332,9 @@ public class Solution
 		return numRoutes;
 	}
 
-	public Node getDeposito()
+	public Node getDepot()
 	{
-		return deposito;
+		return depot;
 	}
 
 	public Node[] getSolution()
@@ -364,7 +362,7 @@ public class Solution
 		this.numRoutesMin = numRoutesMin;
 	}
 
-	public void escrecerSolucao(String end)
+	public void printSolution(String end)
 	{
 		File arq = new File(end);
 		arq.write(this.toString());

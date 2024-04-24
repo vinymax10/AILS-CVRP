@@ -67,7 +67,7 @@ public class Config implements Cloneable
 		+"\ndMax: "+dMax
 		+"\nvarphi: "+varphi
 		+"\nepsilon: " + deci.format(epsilon)
-		+"\nperturbacao: "+Arrays.toString(perturbation)
+		+"\nperturbation: "+Arrays.toString(perturbation)
 		+"\ninsertionHeuristics: "+Arrays.toString(insertionHeuristics)
 		+"\nlimitKnn: "+knnLimit
 		;  
@@ -121,19 +121,19 @@ public class Config implements Cloneable
 		this.gamma = gamma;
 	}
 
-	public PerturbationType[] getPerturbacao() {
+	public PerturbationType[] getPerturbation() {
 		return perturbation;
 	}
 
-	public void setPerturbacao(PerturbationType[] perturbacao) {
-		this.perturbation = perturbacao;
+	public void setPerturbation(PerturbationType[] perturbation) {
+		this.perturbation = perturbation;
 	}
 
 	public InsertionHeuristic[] getInsertionHeuristics() {
 		return insertionHeuristics;
 	}
 
-	public void setHeuristicasAdicao(InsertionHeuristic[] insertionHeuristics) {
+	public void setInsertionHeuristics(InsertionHeuristic[] insertionHeuristics) {
 		this.insertionHeuristics = insertionHeuristics;
 	}
 

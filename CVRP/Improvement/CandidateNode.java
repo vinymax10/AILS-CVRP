@@ -116,7 +116,7 @@ public class CandidateNode implements Comparable<CandidateNode>
 	{
 		if(active)
 			return "CandidateNode [active=" + active + ", cost=" + cost + ", evaluationCost=" + evaluationCost + ", moveType="
-				+ moveType + ", a=" + a + ", b=" + b + ", nomeRouteA=" + a.route.nomeRoute + ", nomeRouteB=" + b.route.nomeRoute
+				+ moveType + ", a=" + a + ", b=" + b + ", nameRouteA=" + a.route.nameRoute + ", nameRouteB=" + b.route.nameRoute
 				+ ", intra=" + intra + ", gain=" + gain + "]";
 		else
 			return "CandidateNode [active=" + active + ", cost=" + cost + ", evaluationCost=" + evaluationCost;

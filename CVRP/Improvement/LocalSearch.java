@@ -156,11 +156,11 @@ public class LocalSearch
 						auxRouteJ=solution[auxRouteI.getKnn()[j]-1];
 						if(feasibilityEvaluation.gainSWAP(auxRouteI, auxRouteJ)>=0)
 						{
-							bestPrevNoRouteI=auxRouteJ.route.findBestPositionExcetoKNN(auxRouteI,auxRouteJ,solution);
-							bestPrevNoRouteJ=auxRouteI.route.findBestPositionExcetoKNN(auxRouteJ,auxRouteI,solution);
+							bestPrevNoRouteI=auxRouteJ.route.findBestPositionExceptAfterNodeKNN(auxRouteI,auxRouteJ,solution);
+							bestPrevNoRouteJ=auxRouteI.route.findBestPositionExceptAfterNodeKNN(auxRouteJ,auxRouteI,solution);
 							
 							cost=evaluateCost.costSwapStar(auxRouteI,auxRouteJ,bestPrevNoRouteI,bestPrevNoRouteJ);
-							improvedNode=improvedMatrix[auxRouteI.route.nomeRoute][auxRouteJ.route.nomeRoute];
+							improvedNode=improvedMatrix[auxRouteI.route.nameRoute][auxRouteJ.route.nameRoute];
 							
 							if(((cost-improvedNode.cost)<-epsilon)&&((cost-0)<-epsilon))
 							{
@@ -198,7 +198,7 @@ public class LocalSearch
 								if(feasibilityEvaluation.gainSHIFT(auxRouteI, auxRouteJ)>=0)
 								{
 									cost=evaluateCost.costSHIFT(auxRouteI,auxRouteJ);
-									improvedNode=improvedMatrix[auxRouteI.route.nomeRoute][auxRouteJ.route.nomeRoute];
+									improvedNode=improvedMatrix[auxRouteI.route.nameRoute][auxRouteJ.route.nameRoute];
 									
 									if(((cost-improvedNode.cost)<-epsilon)&&((cost-0)<-epsilon))
 									{
@@ -217,7 +217,7 @@ public class LocalSearch
 						if(feasibilityEvaluation.gainSHIFT(auxRouteI, auxRouteJ)>=0)
 						{
 							cost=evaluateCost.costSHIFT(auxRouteI,auxRouteJ);
-							improvedNode=improvedMatrix[auxRouteI.route.nomeRoute][auxRouteJ.route.nomeRoute];
+							improvedNode=improvedMatrix[auxRouteI.route.nameRoute][auxRouteJ.route.nameRoute];
 							
 							if(((cost-improvedNode.cost)<-epsilon)&&((cost-0)<-epsilon))
 							{
@@ -231,7 +231,7 @@ public class LocalSearch
 						if(feasibilityEvaluation.gainSHIFT(auxRouteJ, auxRouteI)>=0)
 						{
 							cost=evaluateCost.costSHIFT(auxRouteJ, auxRouteI);
-							improvedNode=improvedMatrix[auxRouteI.route.nomeRoute][auxRouteJ.route.nomeRoute];
+							improvedNode=improvedMatrix[auxRouteI.route.nameRoute][auxRouteJ.route.nameRoute];
 							
 							if(((cost-improvedNode.cost)<-epsilon)&&((cost-0)<-epsilon))
 							{
@@ -269,7 +269,7 @@ public class LocalSearch
 								if(feasibilityEvaluation.gainCross(auxRouteI, auxRouteJ)>=0)
 								{
 									cost=evaluateCost.costCross(auxRouteI,auxRouteJ);
-									improvedNode=improvedMatrix[auxRouteI.route.nomeRoute][auxRouteJ.route.nomeRoute];
+									improvedNode=improvedMatrix[auxRouteI.route.nameRoute][auxRouteJ.route.nameRoute];
 									
 									if(((cost-improvedNode.cost)<-epsilon)&&((cost-0)<-epsilon))
 									{
@@ -283,7 +283,7 @@ public class LocalSearch
 								if(feasibilityEvaluation.gainCrossInverted(auxRouteI, auxRouteJ)>=0)
 								{
 									cost=evaluateCost.inversedCostCross(auxRouteI,auxRouteJ);
-									improvedNode=improvedMatrix[auxRouteI.route.nomeRoute][auxRouteJ.route.nomeRoute];
+									improvedNode=improvedMatrix[auxRouteI.route.nameRoute][auxRouteJ.route.nameRoute];
 									
 									if(((cost-improvedNode.cost)<-epsilon)&&((cost-0)<-epsilon))
 									{
@@ -302,7 +302,7 @@ public class LocalSearch
 						if(feasibilityEvaluation.gainCross(auxRouteI, auxRouteJ)>=0)
 						{
 							cost=evaluateCost.costCross(auxRouteI,auxRouteJ);
-							improvedNode=improvedMatrix[auxRouteI.route.nomeRoute][auxRouteJ.route.nomeRoute];
+							improvedNode=improvedMatrix[auxRouteI.route.nameRoute][auxRouteJ.route.nameRoute];
 							
 							if(((cost-improvedNode.cost)<-epsilon)&&((cost-0)<-epsilon))
 							{
@@ -315,7 +315,7 @@ public class LocalSearch
 						if(feasibilityEvaluation.gainCrossInverted(auxRouteI, auxRouteJ)>=0)
 						{
 							cost=evaluateCost.inversedCostCross(auxRouteI,auxRouteJ);
-							improvedNode=improvedMatrix[auxRouteI.route.nomeRoute][auxRouteJ.route.nomeRoute];
+							improvedNode=improvedMatrix[auxRouteI.route.nameRoute][auxRouteJ.route.nameRoute];
 							
 							if(((cost-improvedNode.cost)<-epsilon)&&((cost-0)<-epsilon))
 							{

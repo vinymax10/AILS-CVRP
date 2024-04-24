@@ -32,11 +32,11 @@ public class Instance
 	Config config;
 	boolean print = false;
 	
-	public Instance(InputParameters leitor) 
+	public Instance(InputParameters reader) 
 	{
-		this.name=leitor.getFile();
-		this.config=leitor.getConfig();
-		this.rounded=leitor.isRounded();
+		this.name=reader.getFile();
+		this.config=reader.getConfig();
+		this.rounded=reader.isRounded();
 		
 		BufferedReader in;
 		try 
@@ -89,7 +89,7 @@ public class Instance
 					return distance(points[i].x,points[i].y,points[j].x,points[j].y);
 			}
 			else
-				return distanciaGeo(coord[i][0],coord[i][1],coord[j][0],coord[j][1]);
+				return distanceGeo(coord[i][0],coord[i][1],coord[j][0],coord[j][1]);
 		}
 		else
 			return 0;
@@ -153,7 +153,6 @@ public class Instance
 		
 		if(edgeType==EdgeType.EUC_2D)
 		{
-			//calculando Distancias
 			int knnLimit=Math.min(config.getKnnLimit(), size-1);
 			knn=new int[size][knnLimit];
 			neighKnn=new NodeKnn[size-1];
@@ -200,7 +199,6 @@ public class Instance
 	
 	private void readDistMatrix(BufferedReader in)
 	{
-		//calculando Distancias
 		int limitKnn=Math.min(config.getKnnLimit(), size-1);
 		knn=new int[size][limitKnn];
 		neighKnn=new NodeKnn[size-1];
@@ -218,11 +216,9 @@ public class Instance
 				for (int j = 0; j < str.length; j++) 
 				{
 					distance=Double.valueOf(str[j].trim());
-//					System.out.print(distancia+" ");
 					dist[i][j]=(short) distance;
 					dist[j][i]=dist[i][j];
 				}
-//				System.out.println();
 			}
 			
 		} catch (IOException e) {
@@ -290,17 +286,14 @@ public class Instance
 		}
 	}
 	
-	private int distanciaGeo(double Lat1,double Long1,double Lat2,double Long2)
+	private int distanceGeo(double Lat1,double Long1,double Lat2,double Long2)
 	{
-		// Convers�o de graus pra radianos das latitudes
 		double firstLatToRad = Math.toRadians(Lat1);
 		double secondLatToRad = Math.toRadians(Lat2);
 
-		// Diferen�a das longitudes
 		double deltaLongitudeInRad = Math.toRadians(Long2
 		- Long1);
 
-		// C�lcula da dist�ncia entre os pontos
 		return (int) Math.round(Math.acos(Math.cos(firstLatToRad) * Math.cos(secondLatToRad)
 		* Math.cos(deltaLongitudeInRad) + Math.sin(firstLatToRad)
 		* Math.sin(secondLatToRad))

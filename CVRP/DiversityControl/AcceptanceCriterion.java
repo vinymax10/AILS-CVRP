@@ -30,7 +30,7 @@ public class AcceptanceCriterion
 		this.executionMaximumLimit=executionMaximumLimit;
 	}
 	
-	public boolean aceitaSolucao(Solution solution)
+	public boolean acceptSolution(Solution solution)
 	{
 		if(globalIterator==0)
 			ini=System.currentTimeMillis();

@@ -15,23 +15,23 @@ public class Node implements Cloneable
 	public int knn[];
 	public int accumulatedDemand=0;
 	public boolean nodeBelong;
-	public boolean fixoRoute;
-	public boolean fixoPos;
-	Point ponto;
+	public boolean fixedRoute;
+	public boolean fixedPosition;
+	Point point;
 	Instance instance;
 	public boolean modified;
 	
-	public int nomeRouteDestino;
-	public int nomeRouteOrigem;
+	public int nameDestinyRoute;
+	public int nameOriginRoute;
 	public int priority;
-	public Route routeDestino;
+	public Route destinyRoute;
 	
-	public Node(Point ponto, Instance instance) 
+	public Node(Point point, Instance instance) 
 	{
-		this.ponto=ponto;
+		this.point=point;
 		this.instance=instance;
-		this.name = ponto.name;
-		this.demand = ponto.demand;
+		this.name = point.name;
+		this.demand = point.demand;
 
 		this.next=null;
 		this.prev=null;
@@ -52,19 +52,19 @@ public class Node implements Cloneable
 	
 	 public Node clone() 
 	 {
-		 Node clone = new Node(ponto, instance);
+		 Node clone = new Node(point, instance);
 		 clone.prev=prev;
 		 clone.next=next;
 		 clone.route=route;
 		 return clone; 
 	 }
 	
-	 public double costRemocao()
+	 public double costRemoval()
 	 {
 		 return instance.dist(prev.name,next.name)-instance.dist(name,prev.name)-instance.dist(name,next.name);
 	 }
 	 
-	 public double costInserirApos(Node node)
+	 public double costInsertAfter(Node node)
 	 {
 		 if(node==null)
 			 System.out.println("no null");

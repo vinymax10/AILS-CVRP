@@ -8,7 +8,7 @@ import Solution.Route;
 import Solution.Solution;
 
 
-public class ConstrutorSolucao 
+public class ConstructSolution 
 {
 	private Route routes[];
 	private double f=0;
@@ -17,15 +17,15 @@ public class ConstrutorSolucao
 	protected Random rand=new Random();
 	protected int size;
 	Instance instance;
-	Node naoInseridos[];
-	int contNaoInseridos=0;
+	Node notInserted[];
+	int countNotInserted=0;
 	
-	public ConstrutorSolucao(Instance instance,Config config)
+	public ConstructSolution(Instance instance,Config config)
 	{
 		this.instance=instance;
 		this.routes=new Route[instance.getMaxNumberRoutes()];
 		this.size=instance.getSize()-1;
-		this.naoInseridos=new Node[size];
+		this.notInserted=new Node[size];
 	}
 	
 	private void setSolution(Solution solution) 
@@ -45,7 +45,7 @@ public class ConstrutorSolucao
 			solution.routes[i]=this.routes[i];
 	}
 
-	public void construir(Solution s)
+	public void construct(Solution s)
 	{
 		setSolution(s);
 		
@@ -57,26 +57,26 @@ public class ConstrutorSolucao
 		f=0;
 		
 		for (int i = 0; i < size; i++) 
-			naoInseridos[contNaoInseridos++]=solution[i];
+			notInserted[countNotInserted++]=solution[i];
 		
 		for (int i = 0; i < numRoutes; i++)
 		{
-			index=rand.nextInt(contNaoInseridos);
-			f+=routes[i].addNoFinal(naoInseridos[index]);
+			index=rand.nextInt(countNotInserted);
+			f+=routes[i].addNodeEndRoute(notInserted[index]);
 			
-			node=naoInseridos[index];
-			naoInseridos[index]=naoInseridos[contNaoInseridos-1];
-			naoInseridos[--contNaoInseridos]=node;
+			node=notInserted[index];
+			notInserted[index]=notInserted[countNotInserted-1];
+			notInserted[--countNotInserted]=node;
 		}
 		
-		while(contNaoInseridos>0) 
+		while(countNotInserted>0) 
 		{
-			index=rand.nextInt(contNaoInseridos);
-			node=naoInseridos[index];
+			index=rand.nextInt(countNotInserted);
+			node=notInserted[index];
 			bestNode=getBestNoRoutes(node);
 			f+=bestNode.route.addAfter(node, bestNode);
-			naoInseridos[index]=naoInseridos[contNaoInseridos-1];
-			naoInseridos[--contNaoInseridos]=node;
+			notInserted[index]=notInserted[countNotInserted-1];
+			notInserted[--countNotInserted]=node;
 		}
 		
 		assignResult(s);

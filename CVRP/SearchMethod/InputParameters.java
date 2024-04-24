@@ -20,7 +20,7 @@ public class InputParameters
 			{
 				switch(args[i])
 				{
-					case "-file": file=getEndereco(args[i+1]);break;
+					case "-file": file=getAddress(args[i+1]);break;
 					case "-rounded": rounded=getRound(args[i+1]);break;
 					case "-limit": limit=getLimit(args[i+1]);break;
 					case "-best": best=getBest(args[i+1]);break;
@@ -46,13 +46,13 @@ public class InputParameters
 	}
 	
 	
-	public String getEndereco(String texto)
+	public String getAddress(String text)
 	{
 		try 
 		{
-			File file=new File(texto);
+			File file=new File(text);
 			if(file.exists()&&!file.isDirectory())
-				return texto;
+				return text;
 			else
 				System.err.println("The -file parameter must contain the address of a valid file.");
 		} 
@@ -62,13 +62,13 @@ public class InputParameters
 		return "";	
 	}
 	
-	public boolean getRound(String texto)
+	public boolean getRound(String text)
 	{
 		rounded=true;
 		try 
 		{
-			if(texto.equals("false")||texto.equals("true"))
-				rounded=Boolean.valueOf(texto);
+			if(text.equals("false")||text.equals("true"))
+				rounded=Boolean.valueOf(text);
 			else
 				System.err.println("The -rounded parameter must have the values false or true.");
 		} 
@@ -78,11 +78,11 @@ public class InputParameters
 		return rounded;
 	}
 	
-	public double getLimit(String texto)
+	public double getLimit(String text)
 	{
 		try 
 		{
-			limit=Double.valueOf(texto);
+			limit=Double.valueOf(text);
 		} 
 		catch (java.lang.NumberFormatException e) {
 			System.err.println("The -limit parameter must contain a valid real value.");
@@ -90,11 +90,11 @@ public class InputParameters
 		return limit;
 	}
 	
-	public double getBest(String texto)
+	public double getBest(String text)
 	{
 		try 
 		{
-			best=Double.valueOf(texto);
+			best=Double.valueOf(text);
 		} 
 		catch (java.lang.NumberFormatException e) {
 			System.err.println("The -best parameter must contain a valid real value.");
@@ -102,12 +102,12 @@ public class InputParameters
 		return best;
 	}
 	
-	public int getVarphi(String texto)
+	public int getVarphi(String text)
 	{
 		int varphi=40;
 		try 
 		{
-			varphi=Integer.valueOf(texto);
+			varphi=Integer.valueOf(text);
 		} 
 		catch (java.lang.NumberFormatException e) {
 			System.err.println("The -varphi parameter must contain a valid integer value.");
@@ -115,12 +115,12 @@ public class InputParameters
 		return varphi;
 	}
 	
-	public int getGamma(String texto)
+	public int getGamma(String text)
 	{
 		int gamma=30;
 		try 
 		{
-			gamma=Integer.valueOf(texto);
+			gamma=Integer.valueOf(text);
 		} 
 		catch (java.lang.NumberFormatException e) {
 			System.err.println("The -gamma parameter must contain a valid integer value.");
@@ -128,12 +128,12 @@ public class InputParameters
 		return gamma;
 	}
 	
-	public int getDMax(String texto)
+	public int getDMax(String text)
 	{
 		int dMax=30;
 		try 
 		{
-			dMax=Integer.valueOf(texto);
+			dMax=Integer.valueOf(text);
 		} 
 		catch (java.lang.NumberFormatException e) {
 			System.err.println("The -dMax parameter must contain a valid integer value.");
@@ -141,12 +141,12 @@ public class InputParameters
 		return dMax;
 	}
 	
-	public int getDMin(String texto)
+	public int getDMin(String text)
 	{
 		int dMin=15;
 		try 
 		{
-			dMin=Integer.valueOf(texto);
+			dMin=Integer.valueOf(text);
 		} 
 		catch (java.lang.NumberFormatException e) {
 			System.err.println("The -dMin parameter must contain a valid integer value.");

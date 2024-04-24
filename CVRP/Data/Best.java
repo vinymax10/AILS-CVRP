@@ -2,19 +2,19 @@ package Data;
 
 public class Best 
 {
-	private double otimo;
+	private double optimal;
 
-	public Best(double otimo)
+	public Best(double optimal)
 	{
-		this.otimo = otimo;
+		this.optimal = optimal;
 	}
 
-	public double getOtimo() {
-		return otimo;
+	public double getOptimal() {
+		return optimal;
 	}
 
-	public synchronized void setOtimo(double d) {
-		this.otimo = d;
+	public synchronized void setOptimal(double optimal) {
+		this.optimal = optimal;
 	}
 
 	

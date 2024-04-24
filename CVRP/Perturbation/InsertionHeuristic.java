@@ -5,10 +5,10 @@ public enum InsertionHeuristic
 	Distance(1),
 	Cost(2);
 	
-	final int heuristica;
+	final int heuristic;
 	
-	InsertionHeuristic(int heuristica)
+	InsertionHeuristic(int heuristic)
 	{
-		this.heuristica=heuristica;
+		this.heuristic=heuristic;
 	}
 }

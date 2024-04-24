@@ -1,13 +1,13 @@
 package Perturbation;
 
-public enum HeuristicaAdicao 
+public enum InsertionHeuristic 
 {
 	Distance(1),
 	Cost(2);
 	
 	final int heuristica;
 	
-	HeuristicaAdicao(int heuristica)
+	InsertionHeuristic(int heuristica)
 	{
 		this.heuristica=heuristica;
 	}

@@ -5,11 +5,11 @@ public enum PerturbationType
 	Sequential(0),
 	Concentric(1);
 	
-	final int tipo;
+	final int type;
 	
-	PerturbationType(int tipo)
+	PerturbationType(int type)
 	{
-		this.tipo=tipo;
+		this.type=type;
 	}
 
 }

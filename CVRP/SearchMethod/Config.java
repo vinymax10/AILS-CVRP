@@ -3,7 +3,7 @@ package SearchMethod;
 import java.text.DecimalFormat;
 import java.util.Arrays;
 
-import Perturbation.HeuristicaAdicao;
+import Perturbation.InsertionHeuristic;
 import Perturbation.PerturbationType;
 
 public class Config implements Cloneable
@@ -13,8 +13,8 @@ public class Config implements Cloneable
 	int dMin,dMax;	
 	
 	int gamma;
-	PerturbationType perturbacao[];
-	HeuristicaAdicao[]heuristicasAdicao;
+	PerturbationType perturbation[];
+	InsertionHeuristic[]insertionHeuristics;
 	//--------------------PR-------------------
 	int varphi;
 	double epsilon;
@@ -36,13 +36,13 @@ public class Config implements Cloneable
 		this.etaMin=0.01;
 		this.etaMax=1;
 		
-		this.perturbacao=new PerturbationType[2];
-		this.perturbacao[0]=PerturbationType.Sequential;
-		this.perturbacao[1]=PerturbationType.Concentric;
+		this.perturbation=new PerturbationType[2];
+		this.perturbation[0]=PerturbationType.Sequential;
+		this.perturbation[1]=PerturbationType.Concentric;
 		
-		this.heuristicasAdicao=new HeuristicaAdicao[2];
-		heuristicasAdicao[0]=HeuristicaAdicao.Distance;
-		heuristicasAdicao[1]=HeuristicaAdicao.Cost;
+		this.insertionHeuristics=new InsertionHeuristic[2];
+		insertionHeuristics[0]=InsertionHeuristic.Distance;
+		insertionHeuristics[1]=InsertionHeuristic.Cost;
 	}
 	
 	public Config clone()
@@ -67,9 +67,9 @@ public class Config implements Cloneable
 		+"\ndMax: "+dMax
 		+"\nvarphi: "+varphi
 		+"\nepsilon: " + deci.format(epsilon)
-		+"\nperturbacao: "+Arrays.toString(perturbacao)
-		+"\nheuristicasAdicao: "+Arrays.toString(heuristicasAdicao)
-		+"\nlimiteKnn: "+knnLimit
+		+"\nperturbacao: "+Arrays.toString(perturbation)
+		+"\ninsertionHeuristics: "+Arrays.toString(insertionHeuristics)
+		+"\nlimitKnn: "+knnLimit
 		;  
 	}
 
@@ -122,19 +122,19 @@ public class Config implements Cloneable
 	}
 
 	public PerturbationType[] getPerturbacao() {
-		return perturbacao;
+		return perturbation;
 	}
 
 	public void setPerturbacao(PerturbationType[] perturbacao) {
-		this.perturbacao = perturbacao;
+		this.perturbation = perturbacao;
 	}
 
-	public HeuristicaAdicao[] getHeuristicasAdicao() {
-		return heuristicasAdicao;
+	public InsertionHeuristic[] getInsertionHeuristics() {
+		return insertionHeuristics;
 	}
 
-	public void setHeuristicasAdicao(HeuristicaAdicao[] heuristicasAdicao) {
-		this.heuristicasAdicao = heuristicasAdicao;
+	public void setHeuristicasAdicao(InsertionHeuristic[] insertionHeuristics) {
+		this.insertionHeuristics = insertionHeuristics;
 	}
 
 	public int getVarphi() {

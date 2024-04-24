@@ -14,14 +14,14 @@ import DiversityControl.IdealDist;
 import Improvement.LocalSearch;
 import Improvement.IntraLocalSearch;
 import Improvement.FeasibilityPhase;
-import Perturbation.HeuristicaAdicao;
-import Perturbation.Perturbacao;
+import Perturbation.InsertionHeuristic;
+import Perturbation.Perturbation;
 import Solution.Solution;
 
 public class AILSII 
 {
 	//----------Problema------------
-	Solution solution,solucaoReferencia,melhorSolucao;
+	Solution solution,referenceSolution,melhorSolucao;
 	
 	Instance instance;
 	Distance distEntreSolucoes;
@@ -39,19 +39,19 @@ public class AILSII
 	
 	Random rand=new Random();
 	
-	HashMap<String,OmegaAdjustment>configuradoresOmega=new HashMap<String,OmegaAdjustment>();
+	HashMap<String,OmegaAdjustment>omegaSetup=new HashMap<String,OmegaAdjustment>();
 
 	double distanciaBL;
 	
-	Perturbacao[] perturbadores;
-	Perturbacao perturbacaoEscolhida;
+	Perturbation[] perturbadores;
+	Perturbation perturbacaoEscolhida;
 	
 	FeasibilityPhase factibilizador;
 	ConstrutorSolucao construtorSolucao;
 	
 	LocalSearch localSearch;
 
-	HeuristicaAdicao heuristicaAdicao;
+	InsertionHeuristic insertionHeuristic;
 	IntraLocalSearch intraLocalSearch;
 	AcceptanceCriterion acceptanceCriterion;
 //	----------Mare------------
@@ -75,13 +75,13 @@ public class AILSII
 		this.stoppingCriterionType=config.getStoppingCriterionType();
 		this.idealDist=new IdealDist();
 		this.solution =new Solution(instance,config);
-		this.solucaoReferencia =new Solution(instance,config);
+		this.referenceSolution =new Solution(instance,config);
 		this.melhorSolucao =new Solution(instance,config);
 		this.numIterUpdate=config.getGamma();
 		
 		this.distEntreSolucoes=new Distance();
 		
-		this.perturbadores=new Perturbacao[config.getPerturbacao().length];
+		this.perturbadores=new Perturbation[config.getPerturbacao().length];
 		
 		this.distAdjustment=new DistAdjustment( idealDist, config, executionMaximumLimit);
 		
@@ -97,7 +97,7 @@ public class AILSII
 		for (int i = 0; i < config.getPerturbacao().length; i++) 
 		{
 			novo=new OmegaAdjustment(config.getPerturbacao()[i], config,instance.getSize(),idealDist);
-			configuradoresOmega.put(config.getPerturbacao()[i]+"", novo);
+			omegaSetup.put(config.getPerturbacao()[i]+"", novo);
 		}
 		
 		this.acceptanceCriterion=new AcceptanceCriterion(instance,config,executionMaximumLimit);
@@ -106,9 +106,9 @@ public class AILSII
 		{
 			for (int i = 0; i < perturbadores.length; i++) 
 			{
-				this.perturbadores[i]=(Perturbacao) Class.forName("Perturbation."+config.getPerturbacao()[i]).
+				this.perturbadores[i]=(Perturbation) Class.forName("Perturbation."+config.getPerturbacao()[i]).
 				getConstructor(Instance.class,Config.class,HashMap.class,IntraLocalSearch.class).
-				newInstance(instance,config,configuradoresOmega,intraLocalSearch);
+				newInstance(instance,config,omegaSetup,intraLocalSearch);
 			}
 			
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
@@ -123,31 +123,31 @@ public class AILSII
 	{
 		iterator=0;
 		first=System.currentTimeMillis();
-		solucaoReferencia.numRoutes=instance.getMinNumberRoutes();
-		construtorSolucao.construir(solucaoReferencia);
+		referenceSolution.numRoutes=instance.getMinNumberRoutes();
+		construtorSolucao.construir(referenceSolution);
 
-		factibilizador.makeFeasible(solucaoReferencia);
-		localSearch.localSearch(solucaoReferencia,true);
-		melhorSolucao.clone(solucaoReferencia);
+		factibilizador.makeFeasible(referenceSolution);
+		localSearch.localSearch(referenceSolution,true);
+		melhorSolucao.clone(referenceSolution);
 		while(!criterioParada())
 		{
 			iterator++;
 
-			solution.clone(solucaoReferencia);
+			solution.clone(referenceSolution);
 			
 			perturbacaoEscolhida=perturbadores[rand.nextInt(perturbadores.length)];
-			perturbacaoEscolhida.perturbar(solution);
+			perturbacaoEscolhida.applyPerturbation(solution);
 			factibilizador.makeFeasible(solution);
 			localSearch.localSearch(solution,true);
-			distanciaBL=distEntreSolucoes.pairwiseSolutionDistance(solution,solucaoReferencia);
+			distanciaBL=distEntreSolucoes.pairwiseSolutionDistance(solution,referenceSolution);
 			
 			analisaSolucao();
 			distAdjustment.distAdjustment();
 			
-			perturbacaoEscolhida.getConfiguradorOmegaEscolhido().setDistancia(distanciaBL);//update
+			perturbacaoEscolhida.getChosenOmega().setDistancia(distanciaBL);//update
 			
 			if(acceptanceCriterion.aceitaSolucao(solution))
-				solucaoReferencia.clone(solution);
+				referenceSolution.clone(solution);
 		}
 		
 		tempoTotal=(double)(System.currentTimeMillis()-first)/1000;
@@ -238,12 +238,12 @@ public class AILSII
 		String str="";
 		for (int i = 0; i < perturbadores.length; i++) 
 		{
-			str+="\n"+configuradoresOmega.get(this.perturbadores[i].perturbationType+""+solucaoReferencia.numRoutes);
+			str+="\n"+omegaSetup.get(this.perturbadores[i].perturbationType+""+referenceSolution.numRoutes);
 		}
 		return str;
 	}
 	
-	public Perturbacao[] getPerturbadores() {
+	public Perturbation[] getPerturbadores() {
 		return perturbadores;
 	}
 	

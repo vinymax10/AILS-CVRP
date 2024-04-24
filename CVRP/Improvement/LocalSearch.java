@@ -80,7 +80,7 @@ public class LocalSearch
 		topBest=0;
 			
 		for (int i = 0; i < numRoutes; i++) 
-			routes[i].setDemandaAcumulada();
+			routes[i].setAccumulatedDemand();
 		
 		for (int i = 0; i < numRoutes; i++) 
 		{
@@ -111,8 +111,8 @@ public class LocalSearch
 			intraLocalSearch(routeA);
 			intraLocalSearch(routeB);
 			
-			routeA.setDemandaAcumulada();
-			routeB.setDemandaAcumulada();
+			routeA.setAccumulatedDemand();
+			routeB.setAccumulatedDemand();
 			
 			activeNodesCounter=0;
 			for (int k = 0; k < topBest; k++) 
@@ -147,7 +147,7 @@ public class LocalSearch
 		auxRouteI=route.first.next;
 		do
 		{
-			if(auxRouteI.alterado)
+			if(auxRouteI.modified)
 			{
 				for (int j = 0; j < limitAdj; j++) 
 				{
@@ -167,7 +167,7 @@ public class LocalSearch
 								if(!improvedNode.active)
 									improvedMoves[topBest++]=improvedNode;
 								
-								improvedNode.setImprovedNode(cost, MovementType.SWAPEstrela, auxRouteI, auxRouteJ,bestPrevNoRouteI, bestPrevNoRouteJ, cost);
+								improvedNode.setImprovedNode(cost, MovementType.SWAPStar, auxRouteI, auxRouteJ,bestPrevNoRouteI, bestPrevNoRouteJ, cost);
 							}
 						}
 					}
@@ -184,7 +184,7 @@ public class LocalSearch
 		auxRouteI=route.first.next;
 		do
 		{
-			if(auxRouteI.alterado)
+			if(auxRouteI.modified)
 			{
 				for (int j = 0; j < limitAdj; j++) 
 				{
@@ -255,7 +255,7 @@ public class LocalSearch
 		auxRouteI=route.first;
 		do
 		{
-			if(auxRouteI.alterado)
+			if(auxRouteI.modified)
 			{
 				for (int j = 0; j < limitAdj; j++) 
 				{

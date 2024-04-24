@@ -201,8 +201,8 @@ public class Instance
 	private void readDistMatrix(BufferedReader in)
 	{
 		//calculando Distancias
-		int limiteKnn=Math.min(config.getKnnLimit(), size-1);
-		knn=new int[size][limiteKnn];
+		int limitKnn=Math.min(config.getKnnLimit(), size-1);
+		knn=new int[size][limitKnn];
 		neighKnn=new NodeKnn[size-1];
 		
 		for (int i = 0; i < neighKnn.length; i++) 
@@ -256,7 +256,7 @@ public class Instance
 			
 			Arrays.sort(neighKnn);
 			
-			for (int j = 0; j < limiteKnn; j++) 
+			for (int j = 0; j < limitKnn; j++) 
 				knn[i][j]=neighKnn[j].name;
 			
 		}

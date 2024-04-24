@@ -11,7 +11,7 @@ public class Route implements Comparable<Route>
 	public Node first;
 	public boolean podeMelhorar;
 	public boolean modified;
-	public int demandaTotal=0;
+	public int totalDemand=0;
 	public double fRoute=0,prevF;
 	double acrescimoF;
 	public int numElements=0;
@@ -24,8 +24,8 @@ public class Route implements Comparable<Route>
 	Node aux;
 	
 	//------------------------------------------------
-	public double cost,custoRemocao;
-	public Node bestCusto;
+	public double cost,costRemocao;
+	public Node bestCost;
 	public double distancia,menorDist;
 	//------------------------------------------------
 	public boolean update;
@@ -46,7 +46,7 @@ public class Route implements Comparable<Route>
 	
     public Node findBestPosition(Node no)
 	{
-		bestCusto=first;
+		bestCost=first;
 		aux=first.next;
 		lowestCost=instance.dist(first.name,no.name)+instance.dist(no.name,first.next.name)-instance.dist(first.name,first.next.name);
 		do
@@ -55,17 +55,17 @@ public class Route implements Comparable<Route>
 			if(cost<lowestCost)
 			{
 				lowestCost=cost;
-				bestCusto=aux;
+				bestCost=aux;
 			}
 			aux=aux.next;
 		}
 		while(aux!=first);
-		return bestCusto;
+		return bestCost;
 	}
     
     public Node findBestPositionExceto(Node no,Node excecao)
   	{
-  		bestCusto=first;
+  		bestCost=first;
   		aux=first.next;
   		
   		lowestCost=instance.dist(first.name,no.name)+instance.dist(no.name,first.next.name)-instance.dist(first.name,first.next.name);
@@ -75,42 +75,42 @@ public class Route implements Comparable<Route>
   			if(cost<lowestCost&&aux.name!=excecao.name)
   			{
   				lowestCost=cost;
-  				bestCusto=aux;
+  				bestCost=aux;
   			}
   			aux=aux.next;
   		}
   		while(aux!=first);
-  		return bestCusto;
+  		return bestCost;
   	}
     
-    public Node findBestPositionExcetoKNN(Node no,Node excecao, Node solution[])
+    public Node findBestPositionExcetoKNN(Node node,Node excecao, Node solution[])
    	{
     	lowestCost=Double.MAX_VALUE;
     	
-   		bestCusto=first;
+   		bestCost=first;
    		
    		if(numElements>limitAdj)
    		{
    			for (int j = 0; j < limitAdj; j++) 
    			{
-   	   			if(no.getKnn()[j]==0)
+   	   			if(node.getKnn()[j]==0)
    	   			{
    	   				aux=first;
-   	   				cost=instance.dist(aux.name,no.name)+instance.dist(no.name,aux.next.name)-instance.dist(aux.name,aux.next.name);
+   	   				cost=instance.dist(aux.name,node.name)+instance.dist(node.name,aux.next.name)-instance.dist(aux.name,aux.next.name);
    	   				if(cost<lowestCost)
    	   				{
    	   					lowestCost=cost;
-   	   					bestCusto=aux;
+   	   					bestCost=aux;
    	   				}   				
    	   			}
-   	   			else if(no.getKnn()[j]!=excecao.name&&solution[no.getKnn()[j]-1].route==this)
+   	   			else if(node.getKnn()[j]!=excecao.name&&solution[node.getKnn()[j]-1].route==this)
    	   			{
-   	   				aux=solution[no.getKnn()[j]-1];
-   	   				cost=instance.dist(aux.name,no.name)+instance.dist(no.name,aux.next.name)-instance.dist(aux.name,aux.next.name);
+   	   				aux=solution[node.getKnn()[j]-1];
+   	   				cost=instance.dist(aux.name,node.name)+instance.dist(node.name,aux.next.name)-instance.dist(aux.name,aux.next.name);
    	   				if(cost<lowestCost)
    	   				{
    	   					lowestCost=cost;
-   	   					bestCusto=aux;
+   	   					bestCost=aux;
    	   				}
    	   			}
    	   			
@@ -118,10 +118,10 @@ public class Route implements Comparable<Route>
    		}
    		else
    		{
-   			findBestPositionExceto(no,excecao);
+   			findBestPositionExceto(node,excecao);
    		}
    		
-   		return bestCusto;
+   		return bestCost;
    	}
     
 	public void clean()
@@ -129,20 +129,20 @@ public class Route implements Comparable<Route>
 		first.prev=first;
 		first.next=first;
 		
-		demandaTotal=0;
+		totalDemand=0;
 		fRoute=0;
 		numElements=1;
 		modified=true;
 	}
 	
 	
-	public void setDemandaAcumulada()
+	public void setAccumulatedDemand()
 	{
-		first.demandaAcumulada=0;
+		first.accumulatedDemand=0;
 		aux=first.next;
 		do
 		{
-			aux.demandaAcumulada=aux.prev.demandaAcumulada+aux.demanda;
+			aux.accumulatedDemand=aux.prev.accumulatedDemand+aux.demand;
 			aux=aux.next;
 		}
 		while(aux!=first);
@@ -167,23 +167,23 @@ public class Route implements Comparable<Route>
 	public double F()
 	{
 		double f=0;
-		Node no=first;
-		Node next=no.next;
+		Node node=first;
+		Node next=node.next;
 		do
 		{
-			f+=instance.dist(no.name,next.name);
-			no=next;
-			next=no.next;
+			f+=instance.dist(node.name,next.name);
+			node=next;
+			next=node.next;
 		}
 		while(next!=first);
 		
-		f+=instance.dist(no.name,next.name);
+		f+=instance.dist(node.name,next.name);
 		return f;
 	}
 	
 	public void findErro()
 	{
-		int cont=0;
+		int count=0;
 		Node aux=first;
 		
 		do
@@ -196,15 +196,13 @@ public class Route implements Comparable<Route>
 			if(aux.route!=this)
 				System.out.println("Erro no : "+aux+" com route Errada:\n"+this.toString());
 
-			cont++;
+			count++;
 			aux=aux.next;
 		}
 		while(aux!=first);
-		if(cont!=numElements)
+		if(count!=numElements)
 			System.out.println("Erro no numElements \n"+this.toString());
 
-//		if(cont==0)
-//			System.out.println("Erro so tem um elemento\n"+this.toString());
 	}
 	
 	//------------------------Visualizacao-------------------------
@@ -246,14 +244,14 @@ public class Route implements Comparable<Route>
 	
 	public boolean isFeasible()
 	{
-		if((capacidade-demandaTotal)>=0)
+		if((capacidade-totalDemand)>=0)
 			return true;
 		return false;
 	}
 	
 	public int availableCapacity()
 	{
-		return capacidade-demandaTotal;
+		return capacidade-totalDemand;
 	}
 	
 	public void setAcrescimoF(int acrescimoF) {
@@ -274,95 +272,91 @@ public class Route implements Comparable<Route>
 		return nomeRoute-x.nomeRoute;
 	}
 
-	public double remove(Node no) 
+	public double remove(Node node) 
 	{
-		double cost=no.custoRemocao();
+		double cost=node.costRemocao();
 		
-		if(no==first)
-			first=no.prev;
+		if(node==first)
+			first=node.prev;
 		
 		modified=true;
-		no.alterado=true;
-		no.next.alterado=true;
-		no.prev.alterado=true;
+		node.modified=true;
+		node.next.modified=true;
+		node.prev.modified=true;
 		
-		no.jaInserido=false;
+		node.nodeBelong=false;
 		
 		fRoute+=cost;
 		numElements--;
 		
-		prev=no.prev;
-		next=no.next;
+		prev=node.prev;
+		next=node.next;
 		
 		prev.next=next;
 		next.prev=prev;
 		
-		demandaTotal-=no.demanda;
+		totalDemand-=node.demand;
 		
-		no.route=null;
-		no.prev=null;
-		no.next=null;
-		
-//		setDemandaAcumulada();
+		node.route=null;
+		node.prev=null;
+		node.next=null;
 		
 		return cost;
 	}
 
 	//------------------------Add No-------------------------
 	
-	public double addNoFinal(Node no)
+	public double addNoFinal(Node node)
 	{
-		no.route=this;
+		node.route=this;
 		if(first==null)
 		{
-			first=no;
-			first.prev=no;
-			first.next=no;
+			first=node;
+			first.prev=node;
+			first.next=node;
 			numElements++;
-			demandaTotal=0;
+			totalDemand=0;
 			fRoute=0;
 			return 0;
 		}
-		else if(no.name==0)
+		else if(node.name==0)
 		{
 			aux=first.prev;
-			first=no;
-			return addDepois(no, aux); 
+			first=node;
+			return addDepois(node, aux); 
 		}
 		else 
 		{
 			aux=first.prev;
-			return addDepois(no, aux); 
+			return addDepois(node, aux); 
 		}
 	}
 	
-	public double addDepois(Node no1, Node no2) 
+	public double addDepois(Node node1, Node node2) 
 	{
-		acrescimoF=no1.custoInserirApos(no2);
+		acrescimoF=node1.costInserirApos(node2);
 		modified=true;
-		no1.jaInserido=true;
-		no1.alterado=true;
-		no2.next.alterado=true;
-		no2.prev.alterado=true;
+		node1.nodeBelong=true;
+		node1.modified=true;
+		node2.next.modified=true;
+		node2.prev.modified=true;
 		
 		numElements++;
 		fRoute+=acrescimoF;
 		
-		demandaTotal+=no1.demanda;
+		totalDemand+=node1.demand;
 
-		no1.route=this;
+		node1.route=this;
 		
-		next=no2.next;
-		no2.next=no1;
-		no1.prev=no2;
+		next=node2.next;
+		node2.next=node1;
+		node1.prev=node2;
 		
-		next.prev=no1;
-		no1.next=next;
+		next.prev=node1;
+		node1.next=next;
 		
-		if(no1.name==0)
-			first=no1;
-		
-//		setDemandaAcumulada();
+		if(node1.name==0)
+			first=node1;
 		
 		return acrescimoF;
 	}

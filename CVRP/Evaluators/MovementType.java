@@ -6,13 +6,13 @@ public enum MovementType
 	SHIFT(1),
 	Cross(2),
 	CrossInverted(3),
-	SWAPEstrela(4),
+	SWAPStar(4),
 	TwoOpt(5);
 	
-	final int tipo;
+	final int type;
 	
-	MovementType(int tipo)
+	MovementType(int type)
 	{
-		this.tipo=tipo;
+		this.type=type;
 	}
 }

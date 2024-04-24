@@ -115,11 +115,11 @@ public class CandidateNode implements Comparable<CandidateNode>
 	public String toString() 
 	{
 		if(active)
-			return "CandidateNode [active=" + active + ", custo=" + cost + ", evaluationCost=" + evaluationCost + ", moveType="
+			return "CandidateNode [active=" + active + ", cost=" + cost + ", evaluationCost=" + evaluationCost + ", moveType="
 				+ moveType + ", a=" + a + ", b=" + b + ", nomeRouteA=" + a.route.nomeRoute + ", nomeRouteB=" + b.route.nomeRoute
 				+ ", intra=" + intra + ", gain=" + gain + "]";
 		else
-			return "CandidateNode [active=" + active + ", custo=" + cost + ", evaluationCost=" + evaluationCost;
+			return "CandidateNode [active=" + active + ", cost=" + cost + ", evaluationCost=" + evaluationCost;
 	}
 
 	public int compareTo(CandidateNode x) 

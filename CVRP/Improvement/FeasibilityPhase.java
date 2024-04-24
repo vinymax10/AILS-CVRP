@@ -98,7 +98,7 @@ public class FeasibilityPhase
 		{
 			topBest=0;
 			for (int i = 0; i < numRoutes; i++) 
-				routes[i].setDemandaAcumulada();
+				routes[i].setAccumulatedDemand();
 			
 			for (int i = 0; i < numRoutes; i++) 
 			{
@@ -142,8 +142,8 @@ public class FeasibilityPhase
 			intraLocalSearch(routeA);
 			intraLocalSearch(routeB);
 			
-			routeA.setDemandaAcumulada();
-			routeB.setDemandaAcumulada();
+			routeA.setAccumulatedDemand();
+			routeB.setAccumulatedDemand();
 			
 			activeNodesCounter=0;
 			for (int k = 0; k < topBest; k++) 
@@ -186,7 +186,7 @@ public class FeasibilityPhase
 		auxSai=route.first.next;
 		do
 		{
-			if(auxSai.alterado)
+			if(auxSai.modified)
 			{
 				for (int j = 0; j < limitAdj; j++) 
 				{
@@ -210,7 +210,7 @@ public class FeasibilityPhase
 								if(!improvedNode.active)
 									improvedMoves[topBest++]=improvedNode;
 								
-								improvedNode.setImprovedNode(cost, MovementType.SWAPEstrela, auxSai, auxEntra,bestPrevNoRouteI, bestPrevNoRouteJ, evaluationCost, gain);
+								improvedNode.setImprovedNode(cost, MovementType.SWAPStar, auxSai, auxEntra,bestPrevNoRouteI, bestPrevNoRouteJ, evaluationCost, gain);
 							}
 						}
 					}
@@ -226,7 +226,7 @@ public class FeasibilityPhase
 		auxSai=route.first.next;
 		do
 		{
-			if(auxSai.alterado)
+			if(auxSai.modified)
 			{
 				for (int i = 0; i < numRoutes; i++) 
 				{
@@ -306,7 +306,7 @@ public class FeasibilityPhase
 		auxSai=route.first;
 		do
 		{
-			if(auxSai.alterado)
+			if(auxSai.modified)
 			{
 				for (int i = 0; i < numRoutes; i++) 
 				{

@@ -11,17 +11,17 @@ import Solution.Solution;
 
 //Remocao sequencial todos de uma vez depois adiciona o restante
 
-public class Sequential extends Perturbacao
+public class Sequential extends Perturbation
 {
 	
 	public Sequential(Instance instance, Config config, 
-	HashMap<String, OmegaAdjustment> configuradoresOmega, IntraLocalSearch intraLocalSearch)
+	HashMap<String, OmegaAdjustment> omegaSetup, IntraLocalSearch intraLocalSearch)
 	{
-		super(instance, config,configuradoresOmega,intraLocalSearch);
+		super(instance, config,omegaSetup,intraLocalSearch);
 		this.perturbationType=PerturbationType.Sequential;
 	}
 
-	public void perturbar(Solution s)
+	public void applyPerturbation(Solution s)
 	{
 		setSolution(s);
 		
@@ -30,39 +30,39 @@ public class Sequential extends Perturbacao
 		double sizeString;
 		Node noInicial;
 		
-		while(contCandidatos<(int)omega)
+		while(countCandidates<(int)omega)
 		{
-			sizeString=Math.min(Math.max(1, size),(int)omega-contCandidatos);
+			sizeString=Math.min(Math.max(1, size),(int)omega-countCandidates);
 			
-			no=solution[rand.nextInt(size)];
-			while(!no.jaInserido)
-				no=solution[rand.nextInt(size)];
+			node=solution[rand.nextInt(size)];
+			while(!node.nodeBelong)
+				node=solution[rand.nextInt(size)];
 			
-			noInicial=no;
+			noInicial=node;
 			
 			contSizeString=0;
 			do
 			{
 				contSizeString++;
-				no=noInicial.next;
-				if(no.name==0)
-					no=no.next;
+				node=noInicial.next;
+				if(node.name==0)
+					node=node.next;
 				
-				candidatos[contCandidatos++]=no;
+				candidates[countCandidates++]=node;
 				
-				no.prevOld=no.prev;
-				no.nextOld=no.next;
+				node.prevOld=node.prev;
+				node.nextOld=node.next;
 				
-				f+=no.route.remove(no);
+				f+=node.route.remove(node);
 			}
-			while(noInicial.name!=no.name&&contSizeString<sizeString);
+			while(noInicial.name!=node.name&&contSizeString<sizeString);
 		}
 		
-		estabelecerOrdem();
+		setOrder();
 		
-		adicionarCandidatos();
+		addCandidates();
 		
-		passaSolucao(s);
+		assignSolution(s);
 	}
 
 }

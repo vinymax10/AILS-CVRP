@@ -9,40 +9,39 @@ import SearchMethod.Config;
 import Solution.Node;
 import Solution.Solution;
 
-//Remocao concentrica todos de uma vez e depois adiciona todos
-
-public class Concentric extends Perturbacao
+//Concentric removal removes all nodes at once and then adds them into the route
+public class Concentric extends Perturbation
 {
 	public Concentric(Instance instance, Config config,
-	HashMap<String, OmegaAdjustment> configuradoresOmega, IntraLocalSearch intraLocalSearch)
+	HashMap<String, OmegaAdjustment> omegaSetup, IntraLocalSearch intraLocalSearch)
 	{
-		super(instance, config, configuradoresOmega,intraLocalSearch);
+		super(instance, config, omegaSetup,intraLocalSearch);
 		this.perturbationType=PerturbationType.Concentric;
 	}
 
-	public void perturbar(Solution s)
+	public void applyPerturbation(Solution s)
 	{
 		setSolution(s);
 		
 //		---------------------------------------------------------------------
-		Node referencia=solution[rand.nextInt(solution.length)];
-		for (int i = 0; i < omega&&i < referencia.knn.length&&contCandidatos<omega; i++) 
+		Node reference=solution[rand.nextInt(solution.length)];
+		for (int i = 0; i < omega&&i < reference.knn.length&&countCandidates<omega; i++) 
 		{
-			if(referencia.knn[i]!=0)
+			if(reference.knn[i]!=0)
 			{
-				no=solution[referencia.knn[i]-1];
-				candidatos[contCandidatos]=no;
-				contCandidatos++;
-				no.prevOld=no.prev;
-				no.nextOld=no.next;
-				f+=no.route.remove(no);
+				node=solution[reference.knn[i]-1];
+				candidates[countCandidates]=node;
+				countCandidates++;
+				node.prevOld=node.prev;
+				node.nextOld=node.next;
+				f+=node.route.remove(node);
 			}
 		}
 		
-		estabelecerOrdem();
+		setOrder();
 		
-		adicionarCandidatos();
+		addCandidates();
 		
-		passaSolucao(s);
+		assignSolution(s);
 	}
 }

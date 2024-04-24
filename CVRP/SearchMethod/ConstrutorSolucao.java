@@ -53,7 +53,7 @@ public class ConstrutorSolucao
 			routes[i].clean();
 		
 		int index;
-		Node no,bestNo;
+		Node node,bestNode;
 		f=0;
 		
 		for (int i = 0; i < size; i++) 
@@ -64,19 +64,19 @@ public class ConstrutorSolucao
 			index=rand.nextInt(contNaoInseridos);
 			f+=routes[i].addNoFinal(naoInseridos[index]);
 			
-			no=naoInseridos[index];
+			node=naoInseridos[index];
 			naoInseridos[index]=naoInseridos[contNaoInseridos-1];
-			naoInseridos[--contNaoInseridos]=no;
+			naoInseridos[--contNaoInseridos]=node;
 		}
 		
 		while(contNaoInseridos>0) 
 		{
 			index=rand.nextInt(contNaoInseridos);
-			no=naoInseridos[index];
-			bestNo=getBestNoRoutes(no);
-			f+=bestNo.route.addDepois(no, bestNo);
+			node=naoInseridos[index];
+			bestNode=getBestNoRoutes(node);
+			f+=bestNode.route.addDepois(node, bestNode);
 			naoInseridos[index]=naoInseridos[contNaoInseridos-1];
-			naoInseridos[--contNaoInseridos]=no;
+			naoInseridos[--contNaoInseridos]=node;
 		}
 		
 		assignResult(s);
@@ -85,47 +85,47 @@ public class ConstrutorSolucao
 	
 	protected Node getBestKNNNo(Node no)
 	{
-		double bestCusto=Double.MAX_VALUE;
-		Node aux,bestNo=null;
+		double bestCost=Double.MAX_VALUE;
+		Node aux,bestNode=null;
 		double cost,costPrev;
 		
 		for (int i = 0; i < solution.length; i++) 
 		{
 			aux=solution[i];
-			if(aux.jaInserido)
+			if(aux.nodeBelong)
 			{
 				cost=instance.dist(aux.name,no.name)+instance.dist(no.name,aux.next.name)-instance.dist(aux.name,aux.next.name);
-				if(cost<bestCusto)
+				if(cost<bestCost)
 				{
-					bestCusto=cost;
-					bestNo=aux;
+					bestCost=cost;
+					bestNode=aux;
 				}
 			}
 		}
-		cost=instance.dist(bestNo.name,no.name)+instance.dist(no.name,bestNo.next.name)-instance.dist(bestNo.name,bestNo.next.name);
-		costPrev=instance.dist(bestNo.prev.name,no.name)+instance.dist(no.name,bestNo.name)-instance.dist(bestNo.prev.name,bestNo.name);
+		cost=instance.dist(bestNode.name,no.name)+instance.dist(no.name,bestNode.next.name)-instance.dist(bestNode.name,bestNode.next.name);
+		costPrev=instance.dist(bestNode.prev.name,no.name)+instance.dist(no.name,bestNode.name)-instance.dist(bestNode.prev.name,bestNode.name);
 		if(cost<costPrev)
-			return bestNo;
+			return bestNode;
 		
-		return bestNo.prev;
+		return bestNode.prev;
 	}
 	
 	protected Node getBestNoRoutes(Node no)
 	{
-		double bestCusto=Double.MAX_VALUE;
-		Node aux,bestNo=null;
+		double bestCost=Double.MAX_VALUE;
+		Node aux,bestNode=null;
 		
 		for (int i = 0; i < numRoutes; i++) 
 		{
 			aux=routes[i].findBestPosition(no);
-			if(routes[i].lowestCost<bestCusto)
+			if(routes[i].lowestCost<bestCost)
 			{
-				bestCusto=routes[i].lowestCost;
-				bestNo=aux;
+				bestCost=routes[i].lowestCost;
+				bestNode=aux;
 			}
 		}
 		
-		return bestNo;
+		return bestNode;
 	}
 	
 }

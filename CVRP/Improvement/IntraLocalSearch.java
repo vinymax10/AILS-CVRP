@@ -53,7 +53,7 @@ public class IntraLocalSearch
 			auxSai=first;
 			do
 			{
-				if(auxSai.alterado)
+				if(auxSai.modified)
 				{
 					for (int j = 0; j < limitAdj; j++) 
 					{

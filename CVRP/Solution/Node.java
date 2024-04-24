@@ -10,16 +10,16 @@ public class Node implements Cloneable
 	
 	public Route route;
 	public int name;
-	public int demanda;
+	public int demand;
 
 	public int knn[];
-	public int demandaAcumulada=0;
-	public boolean jaInserido;
+	public int accumulatedDemand=0;
+	public boolean nodeBelong;
 	public boolean fixoRoute;
 	public boolean fixoPos;
 	Point ponto;
 	Instance instance;
-	public boolean alterado;
+	public boolean modified;
 	
 	public int nomeRouteDestino;
 	public int nomeRouteOrigem;
@@ -31,7 +31,7 @@ public class Node implements Cloneable
 		this.ponto=ponto;
 		this.instance=instance;
 		this.name = ponto.name;
-		this.demanda = ponto.demand;
+		this.demand = ponto.demand;
 
 		this.next=null;
 		this.prev=null;
@@ -46,7 +46,7 @@ public class Node implements Cloneable
 	
 	public void clean()
 	{
-		this.jaInserido=false;
+		this.nodeBelong=false;
 		this.route=null;
 	}
 	
@@ -59,27 +59,27 @@ public class Node implements Cloneable
 		 return clone; 
 	 }
 	
-	 public double custoRemocao()
+	 public double costRemocao()
 	 {
 		 return instance.dist(prev.name,next.name)-instance.dist(name,prev.name)-instance.dist(name,next.name);
 	 }
 	 
-	 public double custoInserirApos(Node no)
+	 public double costInserirApos(Node node)
 	 {
-		 if(no==null)
+		 if(node==null)
 			 System.out.println("no null");
 		 
-		 return -instance.dist(no.name,no.next.name)+instance.dist(name,no.name)+instance.dist(name,no.next.name);
+		 return -instance.dist(node.name,node.next.name)+instance.dist(name,node.name)+instance.dist(name,node.next.name);
 	 }
 	 
 	@Override
 	public String toString() 
 	{
-		return "|n: "+name+" d: "+demanda+"|";
+		return "|n: "+name+" d: "+demand+"|";
 	}
 
-	public int getDemanda() {
-		return demanda;
+	public int getDemand() {
+		return demand;
 	}
 
 	public int[] getKnn() {

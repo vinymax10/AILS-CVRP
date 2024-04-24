@@ -52,64 +52,64 @@ public class Solution
 		for(int i = 0; i < routes.length; i++)
 			routes[i] = new Route(instance, config, this.deposito, i);
 
-		int cont = 0;
+		int count = 0;
 		for(int i = 0; i < (solution.length + 1); i++)
 		{
 			if(i != deposito)
 			{
-				solution[cont] = new Node(pontos[i], instance);
-				cont++;
+				solution[count] = new Node(pontos[i], instance);
+				count++;
 			}
 		}
 	}
 
-	public void clone(Solution referencia)
+	public void clone(Solution reference)
 	{
-		this.numRoutes = referencia.numRoutes;
-		this.f = referencia.f;
+		this.numRoutes = reference.numRoutes;
+		this.f = reference.f;
 
 		for(int i = 0; i < routes.length; i++)
 		{
 			routes[i].nomeRoute = i;
-			referencia.routes[i].nomeRoute = i;
+			reference.routes[i].nomeRoute = i;
 		}
 
 		for(int i = 0; i < routes.length; i++)
 		{
-			routes[i].demandaTotal = referencia.routes[i].demandaTotal;
-			routes[i].fRoute = referencia.routes[i].fRoute;
-			routes[i].numElements = referencia.routes[i].numElements;
-			routes[i].modified = referencia.routes[i].modified;
+			routes[i].totalDemand = reference.routes[i].totalDemand;
+			routes[i].fRoute = reference.routes[i].fRoute;
+			routes[i].numElements = reference.routes[i].numElements;
+			routes[i].modified = reference.routes[i].modified;
 
-			if(referencia.routes[i].first.prev == null)
+			if(reference.routes[i].first.prev == null)
 				routes[i].first.prev = null;
-			else if(referencia.routes[i].first.prev.name == 0)
+			else if(reference.routes[i].first.prev.name == 0)
 				routes[i].first.prev = routes[i].first;
 			else
-				routes[i].first.prev = solution[referencia.routes[i].first.prev.name - 1];
+				routes[i].first.prev = solution[reference.routes[i].first.prev.name - 1];
 
-			if(referencia.routes[i].first.next == null)
+			if(reference.routes[i].first.next == null)
 				routes[i].first.next = null;
-			else if(referencia.routes[i].first.next.name == 0)
+			else if(reference.routes[i].first.next.name == 0)
 				routes[i].first.next = routes[i].first;
 			else
-				routes[i].first.next = solution[referencia.routes[i].first.next.name - 1];
+				routes[i].first.next = solution[reference.routes[i].first.next.name - 1];
 		}
 
 		for(int i = 0; i < solution.length; i++)
 		{
-			solution[i].route = routes[referencia.solution[i].route.nomeRoute];
-			solution[i].jaInserido = referencia.solution[i].jaInserido;
+			solution[i].route = routes[reference.solution[i].route.nomeRoute];
+			solution[i].nodeBelong = reference.solution[i].nodeBelong;
 
-			if(referencia.solution[i].prev.name == 0)
-				solution[i].prev = routes[referencia.solution[i].prev.route.nomeRoute].first;
+			if(reference.solution[i].prev.name == 0)
+				solution[i].prev = routes[reference.solution[i].prev.route.nomeRoute].first;
 			else
-				solution[i].prev = solution[referencia.solution[i].prev.name - 1];
+				solution[i].prev = solution[reference.solution[i].prev.name - 1];
 
-			if(referencia.solution[i].next.name == 0)
-				solution[i].next = routes[referencia.solution[i].next.route.nomeRoute].first;
+			if(reference.solution[i].next.name == 0)
+				solution[i].next = routes[reference.solution[i].next.route.nomeRoute].first;
 			else
-				solution[i].next = solution[referencia.solution[i].next.name - 1];
+				solution[i].next = solution[reference.solution[i].next.name - 1];
 		}
 	}
 
@@ -147,13 +147,13 @@ public class Solution
 
 	public int infactibilidade()
 	{
-		int infac = 0;
+		int capViolation = 0;
 		for(int i = 0; i < numRoutes; i++)
 		{
 			if(routes[i].availableCapacity() < 0)
-				infac += routes[i].availableCapacity();
+				capViolation += routes[i].availableCapacity();
 		}
-		return infac;
+		return capViolation;
 	}
 
 	public boolean auditoria(String local, boolean factibildiade, boolean routeVazia)

@@ -37,12 +37,12 @@ public class ExecuteMovement
 		else
 		{
 			Node myPrev = a.prev;
-			Node noPrev = b.prev;
+			Node nodePrev = b.prev;
 
 			aRoute.remove(a);
 			bRoute.remove(b);
 
-			bRoute.addDepois(a, noPrev);
+			bRoute.addDepois(a, nodePrev);
 			aRoute.addDepois(b, myPrev);
 		}
 	}
@@ -83,7 +83,7 @@ public class ExecuteMovement
 		aux.prev = prev;
 
 		a.route.fRoute += cost;
-		a.route.setDemandaAcumulada();
+		a.route.setAccumulatedDemand();
 		a.route.modified = true;
 	}
 
@@ -127,30 +127,30 @@ public class ExecuteMovement
 		Cross(a, b.prev);
 	}
 
-	public double aplicar(CandidateNode no)
+	public double aplicar(CandidateNode node)
 	{
-		switch(no.moveType) {
+		switch(node.moveType) {
 		case SWAP:
-			SWAP(no.a, no.b);
+			SWAP(node.a, node.b);
 			break;
 		case SHIFT:
-			SHIFT(no.a, no.b);
+			SHIFT(node.a, node.b);
 			break;
 		case TwoOpt:
-			execute2Opt(no.a, no.b);
+			execute2Opt(node.a, node.b);
 			break;
 		case Cross:
-			Cross(no.a, no.b);
+			Cross(node.a, node.b);
 			break;
 		case CrossInverted:
-			CrossInverted(no.a, no.b);
+			CrossInverted(node.a, node.b);
 			break;
-		case SWAPEstrela:
-			SHIFT(no.a, no.prevA);
-			SHIFT(no.b, no.prevB);
+		case SWAPStar:
+			SHIFT(node.a, node.prevA);
+			SHIFT(node.b, node.prevB);
 			break;
 
 		}
-		return no.cost;
+		return node.cost;
 	}
 }

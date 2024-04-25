@@ -154,12 +154,12 @@ public class InputParameters
 		return dMin;
 	}
 	
-	public StoppingCriterionType getStoppingCriterion(String texo)
+	public StoppingCriterionType getStoppingCriterion(String text)
 	{
 		StoppingCriterionType stoppingCriterion=StoppingCriterionType.Time;
 		try 
 		{
-			stoppingCriterion=StoppingCriterionType.valueOf(texo);
+			stoppingCriterion=StoppingCriterionType.valueOf(text);
 		} 
 		catch (java.lang.IllegalArgumentException e) 
 		{

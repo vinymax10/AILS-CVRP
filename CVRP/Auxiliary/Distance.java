@@ -36,12 +36,12 @@ public class Distance
 		this.solutionB=b.getSolution();
 		this.solutionA=a.getSolution();
 		
-		int viz;
+		int getDynamicAverage;
 		int dist=0;
 		for (int i = 0; i < solutionA.length &&dist<minDist; i++)
 		{
-			viz=solutionA[i].next.name;
-			if(solutionB[i].next.name!=viz&&viz!=solutionB[i].prev.name)
+			getDynamicAverage=solutionA[i].next.name;
+			if(solutionB[i].next.name!=getDynamicAverage&&getDynamicAverage!=solutionB[i].prev.name)
 				dist++;
 
 			if(solutionA[i].prev.name==0)

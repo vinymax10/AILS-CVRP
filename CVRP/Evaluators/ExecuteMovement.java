@@ -127,7 +127,7 @@ public class ExecuteMovement
 		Cross(a, b.prev);
 	}
 
-	public double aplicar(CandidateNode node)
+	public double apply(CandidateNode node)
 	{
 		switch(node.moveType) {
 		case SWAP:

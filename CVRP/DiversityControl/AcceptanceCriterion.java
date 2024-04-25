@@ -79,7 +79,7 @@ public class AcceptanceCriterion
 		eta*=alpha;
 		eta=Math.max(eta, etaMin);
 		
-		thresholdOF=(int)(upperLimit+(eta*(averageLSfunction.getMediaDinam()-upperLimit)));
+		thresholdOF=(int)(upperLimit+(eta*(averageLSfunction.getDynamicAverage()-upperLimit)));
 		if(solution.f<=thresholdOF)
 			return true;
 		else

@@ -30,11 +30,11 @@ public class Mean
 		return "D: " + deci2.format(dynamicAverage) + " G: " + deci2.format(globalAverage);
 	}
 
-	public double getMediaDinam() {
+	public double getDynamicAverage() {
 		return dynamicAverage;
 	}
 
-	public double getMediaGlobal() {
+	public double getGlobalAverage() {
 		return globalAverage;
 	}
 }

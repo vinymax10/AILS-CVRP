@@ -27,7 +27,7 @@ public class FeasibilityPhase
 
 	double f=0;
 	
-	Node auxSai,auxEntra;
+	Node auxOut,auxIn;
 	int gain;
 	double cost;
 	double evaluationCost;
@@ -137,7 +137,7 @@ public class FeasibilityPhase
 			
 			routeA=improvedMoves[0].routeA;
 			routeB=improvedMoves[0].routeB;
-			f+=executeMovement.aplicar(improvedMoves[0]);
+			f+=executeMovement.apply(improvedMoves[0]);
 			
 			intraLocalSearch(routeA);
 			intraLocalSearch(routeB);
@@ -183,69 +183,69 @@ public class FeasibilityPhase
 	
 	private void searchBestSwapStarKnn(Route route)
 	{
-		auxSai=route.first.next;
+		auxOut=route.first.next;
 		do
 		{
-			if(auxSai.modified)
+			if(auxOut.modified)
 			{
 				for (int j = 0; j < limitAdj; j++) 
 				{
-					if(auxSai.getKnn()[j]!=0&&auxSai.route.isFeasible()^solution[auxSai.getKnn()[j]-1].route.isFeasible())
+					if(auxOut.getKnn()[j]!=0&&auxOut.route.isFeasible()^solution[auxOut.getKnn()[j]-1].route.isFeasible())
 					{
-						auxEntra=solution[auxSai.getKnn()[j]-1];
-						gain=feasibilityEvaluation.gainSWAP(auxSai, auxEntra);
+						auxIn=solution[auxOut.getKnn()[j]-1];
+						gain=feasibilityEvaluation.gainSWAP(auxOut, auxIn);
 						if(gain>0)
 						{
 							
-							bestPrevNoRouteI=auxEntra.route.findBestPositionExceptAfterNodeKNN(auxSai,auxEntra,solution);
-							bestPrevNoRouteJ=auxSai.route.findBestPositionExceptAfterNodeKNN(auxEntra,auxSai,solution);
+							bestPrevNoRouteI=auxIn.route.findBestPositionExceptAfterNodeKNN(auxOut,auxIn,solution);
+							bestPrevNoRouteJ=auxOut.route.findBestPositionExceptAfterNodeKNN(auxIn,auxOut,solution);
 							
-							cost=evaluateCost.costSwapStar(auxSai,auxEntra,bestPrevNoRouteI,bestPrevNoRouteJ);
+							cost=evaluateCost.costSwapStar(auxOut,auxIn,bestPrevNoRouteI,bestPrevNoRouteJ);
 							calculateCost();
 							
-							improvedNode=improvedMatrix[auxSai.route.nameRoute][auxEntra.route.nameRoute];
+							improvedNode=improvedMatrix[auxOut.route.nameRoute][auxIn.route.nameRoute];
 							
 							if(evaluationCost<improvedNode.evaluationCost)
 							{
 								if(!improvedNode.active)
 									improvedMoves[topBest++]=improvedNode;
 								
-								improvedNode.setImprovedNode(cost, MovementType.SWAPStar, auxSai, auxEntra,bestPrevNoRouteI, bestPrevNoRouteJ, evaluationCost, gain);
+								improvedNode.setImprovedNode(cost, MovementType.SWAPStar, auxOut, auxIn,bestPrevNoRouteI, bestPrevNoRouteJ, evaluationCost, gain);
 							}
 						}
 					}
 				}
 			}
-			auxSai=auxSai.next;
+			auxOut=auxOut.next;
 		}
-		while(auxSai!=route.first);
+		while(auxOut!=route.first);
 	}
 	
 	private void searchBestSHIFT(Route route)
 	{
-		auxSai=route.first.next;
+		auxOut=route.first.next;
 		do
 		{
-			if(auxSai.modified)
+			if(auxOut.modified)
 			{
 				for (int i = 0; i < numRoutes; i++) 
 				{
-					if(!auxSai.route.isFeasible()&&routes[i].isFeasible())
+					if(!auxOut.route.isFeasible()&&routes[i].isFeasible())
 					{
-						auxEntra=routes[i].first;
-						gain=feasibilityEvaluation.gainSHIFT(auxSai, auxEntra);
+						auxIn=routes[i].first;
+						gain=feasibilityEvaluation.gainSHIFT(auxOut, auxIn);
 						if(gain>0)
 						{
-							cost=evaluateCost.costSHIFT(auxSai, auxEntra);
+							cost=evaluateCost.costSHIFT(auxOut, auxIn);
 							calculateCost();
-							improvedNode=improvedMatrix[auxSai.route.nameRoute][auxEntra.route.nameRoute];
+							improvedNode=improvedMatrix[auxOut.route.nameRoute][auxIn.route.nameRoute];
 							
 							if(evaluationCost<improvedNode.evaluationCost)
 							{
 								if(!improvedNode.active)
 									improvedMoves[topBest++]=improvedNode;
 								
-								improvedNode.setImprovedNode(cost, MovementType.SHIFT, auxSai, auxEntra,evaluationCost,gain);
+								improvedNode.setImprovedNode(cost, MovementType.SHIFT, auxOut, auxIn,evaluationCost,gain);
 							}
 						}
 					}
@@ -253,97 +253,97 @@ public class FeasibilityPhase
 				
 				for (int j = 0; j < limitAdj; j++) 
 				{
-					if(auxSai.getKnn()[j]!=0&&!auxSai.route.isFeasible()&&solution[auxSai.getKnn()[j]-1].route.isFeasible())
+					if(auxOut.getKnn()[j]!=0&&!auxOut.route.isFeasible()&&solution[auxOut.getKnn()[j]-1].route.isFeasible())
 					{
-						auxEntra=solution[auxSai.getKnn()[j]-1];
-						gain=feasibilityEvaluation.gainSHIFT(auxSai, auxEntra);
+						auxIn=solution[auxOut.getKnn()[j]-1];
+						gain=feasibilityEvaluation.gainSHIFT(auxOut, auxIn);
 						if(gain>0)
 						{
-							cost=evaluateCost.costSHIFT(auxSai, auxEntra);
+							cost=evaluateCost.costSHIFT(auxOut, auxIn);
 							calculateCost();
-							improvedNode=improvedMatrix[auxSai.route.nameRoute][auxEntra.route.nameRoute];
+							improvedNode=improvedMatrix[auxOut.route.nameRoute][auxIn.route.nameRoute];
 							
 							if(evaluationCost<improvedNode.evaluationCost)
 							{
 								if(!improvedNode.active)
 									improvedMoves[topBest++]=improvedNode;
 								
-								improvedNode.setImprovedNode(cost, MovementType.SHIFT, auxSai, auxEntra,evaluationCost,gain);
+								improvedNode.setImprovedNode(cost, MovementType.SHIFT, auxOut, auxIn,evaluationCost,gain);
 							}
 						}
 					}
 					
-					if(auxSai.getKnn()[j]!=0&&auxSai.route.isFeasible()&&!solution[auxSai.getKnn()[j]-1].route.isFeasible())
+					if(auxOut.getKnn()[j]!=0&&auxOut.route.isFeasible()&&!solution[auxOut.getKnn()[j]-1].route.isFeasible())
 					{
-						auxEntra=solution[auxSai.getKnn()[j]-1];
-						gain=feasibilityEvaluation.gainSHIFT(auxEntra, auxSai);
+						auxIn=solution[auxOut.getKnn()[j]-1];
+						gain=feasibilityEvaluation.gainSHIFT(auxIn, auxOut);
 						if(gain>0)
 						{
-							cost=evaluateCost.costSHIFT(auxEntra, auxSai);
+							cost=evaluateCost.costSHIFT(auxIn, auxOut);
 							calculateCost();
 							
-							improvedNode=improvedMatrix[auxSai.route.nameRoute][auxEntra.route.nameRoute];
+							improvedNode=improvedMatrix[auxOut.route.nameRoute][auxIn.route.nameRoute];
 							
 							if(evaluationCost<improvedNode.evaluationCost)
 							{
 								if(!improvedNode.active)
 									improvedMoves[topBest++]=improvedNode;
 								
-								improvedNode.setImprovedNode(cost, MovementType.SHIFT, auxEntra ,auxSai ,evaluationCost,gain);
+								improvedNode.setImprovedNode(cost, MovementType.SHIFT, auxIn ,auxOut ,evaluationCost,gain);
 							}
 						}
 					}
 				}
 			}
-			auxSai=auxSai.next;
+			auxOut=auxOut.next;
 		}
-		while(auxSai!=route.first);
+		while(auxOut!=route.first);
 	}
 	
 	
 	private void searchBestCross(Route route)
 	{
-		auxSai=route.first;
+		auxOut=route.first;
 		do
 		{
-			if(auxSai.modified)
+			if(auxOut.modified)
 			{
 				for (int i = 0; i < numRoutes; i++) 
 				{
-					if(auxSai.route.isFeasible()^routes[i].isFeasible())
+					if(auxOut.route.isFeasible()^routes[i].isFeasible())
 					{
-						auxEntra=routes[i].first;
-						gain=feasibilityEvaluation.gainCross(auxSai, auxEntra);
+						auxIn=routes[i].first;
+						gain=feasibilityEvaluation.gainCross(auxOut, auxIn);
 						if(gain>0)
 						{
-							cost=evaluateCost.costCross(auxSai, auxEntra);
+							cost=evaluateCost.costCross(auxOut, auxIn);
 							calculateCost();
 							
-							improvedNode=improvedMatrix[auxSai.route.nameRoute][auxEntra.route.nameRoute];
+							improvedNode=improvedMatrix[auxOut.route.nameRoute][auxIn.route.nameRoute];
 							
 							if(evaluationCost<improvedNode.evaluationCost)
 							{
 								if(!improvedNode.active)
 									improvedMoves[topBest++]=improvedNode;
 								
-								improvedNode.setImprovedNode(cost, MovementType.Cross, auxSai, auxEntra,evaluationCost,gain);
+								improvedNode.setImprovedNode(cost, MovementType.Cross, auxOut, auxIn,evaluationCost,gain);
 							}
 							
 						}
-						gain=feasibilityEvaluation.gainCrossInverted(auxSai, auxEntra);
+						gain=feasibilityEvaluation.gainCrossInverted(auxOut, auxIn);
 						if(gain>0)
 						{
-							cost=evaluateCost.inversedCostCross(auxSai, auxEntra);
+							cost=evaluateCost.inversedCostCross(auxOut, auxIn);
 							calculateCost();
 							
-							improvedNode=improvedMatrix[auxSai.route.nameRoute][auxEntra.route.nameRoute];
+							improvedNode=improvedMatrix[auxOut.route.nameRoute][auxIn.route.nameRoute];
 							
 							if(evaluationCost<improvedNode.evaluationCost)
 							{
 								if(!improvedNode.active)
 									improvedMoves[topBest++]=improvedNode;
 								
-								improvedNode.setImprovedNode(cost, MovementType.CrossInverted, auxSai, auxEntra,evaluationCost,gain);
+								improvedNode.setImprovedNode(cost, MovementType.CrossInverted, auxOut, auxIn,evaluationCost,gain);
 							}
 						}
 					}
@@ -351,45 +351,45 @@ public class FeasibilityPhase
 				
 				for (int j = 0; j < limitAdj; j++) 
 				{
-					if(auxSai.getKnn()[j]!=0&&auxSai.route.isFeasible()^solution[auxSai.getKnn()[j]-1].route.isFeasible())
+					if(auxOut.getKnn()[j]!=0&&auxOut.route.isFeasible()^solution[auxOut.getKnn()[j]-1].route.isFeasible())
 					{
-						auxEntra=solution[auxSai.getKnn()[j]-1];
-						gain=feasibilityEvaluation.gainCross(auxSai, auxEntra);
+						auxIn=solution[auxOut.getKnn()[j]-1];
+						gain=feasibilityEvaluation.gainCross(auxOut, auxIn);
 						if(gain>0)
 						{
-							cost=evaluateCost.costCross(auxSai, auxEntra);
+							cost=evaluateCost.costCross(auxOut, auxIn);
 							calculateCost();
-							improvedNode=improvedMatrix[auxSai.route.nameRoute][auxEntra.route.nameRoute];
+							improvedNode=improvedMatrix[auxOut.route.nameRoute][auxIn.route.nameRoute];
 							
 							if(evaluationCost<improvedNode.evaluationCost)
 							{
 								if(!improvedNode.active)
 									improvedMoves[topBest++]=improvedNode;
 								
-								improvedNode.setImprovedNode(cost, MovementType.Cross, auxSai, auxEntra,evaluationCost,gain);
+								improvedNode.setImprovedNode(cost, MovementType.Cross, auxOut, auxIn,evaluationCost,gain);
 							}
 						}
-						gain=feasibilityEvaluation.gainCrossInverted(auxSai, auxEntra);
+						gain=feasibilityEvaluation.gainCrossInverted(auxOut, auxIn);
 						if(gain>0)
 						{
-							cost=evaluateCost.inversedCostCross(auxSai, auxEntra);
+							cost=evaluateCost.inversedCostCross(auxOut, auxIn);
 							calculateCost();
-							improvedNode=improvedMatrix[auxSai.route.nameRoute][auxEntra.route.nameRoute];
+							improvedNode=improvedMatrix[auxOut.route.nameRoute][auxIn.route.nameRoute];
 							
 							if(evaluationCost<improvedNode.evaluationCost)
 							{
 								if(!improvedNode.active)
 									improvedMoves[topBest++]=improvedNode;
 								
-								improvedNode.setImprovedNode(cost, MovementType.CrossInverted, auxSai, auxEntra,evaluationCost,gain);
+								improvedNode.setImprovedNode(cost, MovementType.CrossInverted, auxOut, auxIn,evaluationCost,gain);
 							}
 						}
 					}
 				}
 			}
-			auxSai=auxSai.next;
+			auxOut=auxOut.next;
 		}
-		while(auxSai!=route.first);
+		while(auxOut!=route.first);
 	}
 	
 	private void intraLocalSearch(Route route)

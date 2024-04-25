@@ -106,7 +106,7 @@ public class LocalSearch
 			routeA=improvedMoves[0].routeA;
 			routeB=improvedMoves[0].routeB;
 			
-			f+=executeMovement.aplicar(improvedMoves[0]);
+			f+=executeMovement.apply(improvedMoves[0]);
 
 			intraLocalSearch(routeA);
 			intraLocalSearch(routeB);

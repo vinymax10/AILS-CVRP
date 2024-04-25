@@ -17,7 +17,7 @@ public class IntraLocalSearch
 	int iterator;
 	double lowestCost;
 	double prevF;
-	Node auxSai,auxEntra;
+	Node auxOut,auxIn;
 	double cost;
 	boolean changeFlag=false;
 	CostEvaluation evaluateCost;
@@ -50,67 +50,67 @@ public class IntraLocalSearch
 			iterator++;
 			changeFlag=false;
 			lowestCost=0;
-			auxSai=first;
+			auxOut=first;
 			do
 			{
-				if(auxSai.modified)
+				if(auxOut.modified)
 				{
 					for (int j = 0; j < limitAdj; j++) 
 					{
-						if(auxSai.getKnn()[j]==0)
-							auxEntra=first;
+						if(auxOut.getKnn()[j]==0)
+							auxIn=first;
 						else
-							auxEntra=solution[auxSai.getKnn()[j]-1];
+							auxIn=solution[auxOut.getKnn()[j]-1];
 						
-						if(auxSai.route.nameRoute==auxEntra.route.nameRoute)
+						if(auxOut.route.nameRoute==auxIn.route.nameRoute)
 						{
 							//2Opt
-							if(auxSai!=auxEntra&&auxEntra!=auxSai.next)
+							if(auxOut!=auxIn&&auxIn!=auxOut.next)
 							{
-								cost=evaluateCost.cost2Opt(auxSai,auxEntra);
+								cost=evaluateCost.cost2Opt(auxOut,auxIn);
 								if(lowestCost>cost)
 								{
 									lowestCost=cost;
 									moveType=MovementType.TwoOpt;
-									improve.setImprovedNode(lowestCost, moveType, auxSai, auxEntra,0,0,lowestCost);
+									improve.setImprovedNode(lowestCost, moveType, auxOut, auxIn,0,0,lowestCost);
 									changeFlag=true;
 								}
 							}
 							
 							//SHIFT
-							if(numElements>2&&auxSai!=auxEntra&&auxSai!=auxEntra.next)
+							if(numElements>2&&auxOut!=auxIn&&auxOut!=auxIn.next)
 							{
-								cost=evaluateCost.costSHIFT(auxSai,auxEntra);
+								cost=evaluateCost.costSHIFT(auxOut,auxIn);
 								if(lowestCost>cost)
 								{
 									lowestCost=cost;
 									moveType=MovementType.SHIFT;
-									improve.setImprovedNode(lowestCost, moveType, auxSai, auxEntra,0,0,lowestCost);
+									improve.setImprovedNode(lowestCost, moveType, auxOut, auxIn,0,0,lowestCost);
 									changeFlag=true;
 								}
 								
-								if(auxEntra!=auxSai.next)
+								if(auxIn!=auxOut.next)
 								{
-									cost=evaluateCost.costSHIFT(auxEntra,auxSai);
+									cost=evaluateCost.costSHIFT(auxIn,auxOut);
 									if(lowestCost>cost)
 									{
 										lowestCost=cost;
 										moveType=MovementType.SHIFT;
-										improve.setImprovedNode(lowestCost, moveType, auxEntra, auxSai,0,0,lowestCost);
+										improve.setImprovedNode(lowestCost, moveType, auxIn, auxOut,0,0,lowestCost);
 										changeFlag=true;
 									}
 								}
 							}
 							
 							//SWAP
-							if(numElements>2&&auxEntra!=auxSai&&auxEntra.next!=auxSai)
+							if(numElements>2&&auxIn!=auxOut&&auxIn.next!=auxOut)
 							{
-								cost=evaluateCost.costSWAP(auxSai,auxEntra);
+								cost=evaluateCost.costSWAP(auxOut,auxIn);
 								if(lowestCost>cost)
 								{
 									lowestCost=cost;
 									moveType=MovementType.SWAP;
-									improve.setImprovedNode(lowestCost, moveType, auxSai, auxEntra,0,0,lowestCost);
+									improve.setImprovedNode(lowestCost, moveType, auxOut, auxIn,0,0,lowestCost);
 									changeFlag=true;
 								}
 							}
@@ -118,12 +118,12 @@ public class IntraLocalSearch
 					}
 				}
 				
-				auxSai=auxSai.next;
+				auxOut=auxOut.next;
 			}
-			while(auxSai!=first);
+			while(auxOut!=first);
 			
 			if(changeFlag)
-				executeMovement.aplicar(improve);
+				executeMovement.apply(improve);
 		}
 		
 		return route.fRoute-prevF;

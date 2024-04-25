@@ -38,7 +38,7 @@ public class OmegaAdjustment
 	
 	public void setupOmega()
 	{
-		obtainedDist=meanLSDist.getMediaDinam();
+		obtainedDist=meanLSDist.getDynamicAverage();
 
 		omega+=((omega/obtainedDist*idealDist.idealDist)-omega);
 

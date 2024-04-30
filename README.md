@@ -16,6 +16,25 @@ A hybrid adaptive iterated local search with diversification control to the capa
 An adaptive iterated local search heuristic for the Heterogeneous Fleet Vehicle Routing Problem. Computers & Operations Research, Volume 148, p. 105954.
 https://doi.org/10.1016/j.cor.2022.105954 (also available at [aXiv](https://arxiv.org/abs/2111.12821)).
 
+## Cite
+
+To cite the contents of this repository, please cite this the paper and this repo.
+AILS-II: An Adaptive Iterated Local Search Heuristic for the Large-scale Capacitated Vehicle Routing Problem. Under Review. (available at [HEC repository](https://chairelogistique.hec.ca/wp-content/uploads/2023/12/IJOC_Maximoetal2023_withouthighlights.pdf)).
+
+Below is the BibTex for citing this snapshot of the respoitory.
+
+```
+@misc{Maximoetal2024,
+  author =        {V. R. Máximo and J.-F.Courdeau and M. C. V. Nascimento},
+  publisher =     {INFORMS Journal on Computing},
+  title =         {AILS-II: An Adaptive Iterated Local Search Heuristic for the Large-scale Capacitated Routing Problem},
+  year =          {2024},
+  doi =           {10.1287/ijoc.2023.0106.cd},
+  url =           {https://github.com/INFORMSJoC/2023.0106},
+  note =          {Available for download at https://github.com/INFORMSJoC/2023.0106},
+}  
+```
+
 ## To run the algorithm
 
 ```console

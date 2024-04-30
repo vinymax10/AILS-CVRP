@@ -19,6 +19,7 @@ https://doi.org/10.1016/j.cor.2022.105954 (also available at [aXiv](https://arxi
 ## Cite
 
 To cite the contents of this repository, please cite this the paper and this repo.
+
 AILS-II: An Adaptive Iterated Local Search Heuristic for the Large-scale Capacitated Vehicle Routing Problem. Under Review. (available at [HEC repository](https://chairelogistique.hec.ca/wp-content/uploads/2023/12/IJOC_Maximoetal2023_withouthighlights.pdf)).
 
 Below is the BibTex for citing this snapshot of the respoitory.

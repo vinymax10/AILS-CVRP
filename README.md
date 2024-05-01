@@ -1,28 +1,20 @@
 # AILS-II: An Adaptive Iterated Local Search Heuristic for the Large-scale Capacitated Vehicle Routing Problem
 
-AILS-II is an Adaptive Iterated Local Search (AILS) meta-heuristic that embeds adaptive strategies to tune  diversity control parameters. These parameters are the perturbation degree and the acceptance criterion. They are key parameters to ensure that the method escapes from local optima and keeps an adequate level of exploitation and exploration of the method. Its implementation is in JAVA language.
+This archive is distributed in association with the INFORMS Journal on Computing under the MIT License.
 
-## References
+The software and data in this repository are a snapshot of the software and data that were used in the research reported on in the paper AILS-II: An Adaptive Iterated Local Search Heuristic for the Large-Scale Capacitated Vehicle Routing Problem by V. R. Máximo, J. F. Cordeau and M. C. V. Nascimento. 
 
-Those interested in using any part of this algorithm in academic works must cite the following references:
-
-[1] Máximo, Vinícius R., Cordeau, Jean-François, Nascimento, Mariá C.V. (2023).
-AILS-II: An Adaptive Iterated Local Search Heuristic for the Large-scale Capacitated Vehicle Routing Problem. Under Review. (available at [HEC repository](https://chairelogistique.hec.ca/wp-content/uploads/2023/12/IJOC_Maximoetal2023_withouthighlights.pdf)).
-
-[2] Máximo, Vinícius R., Nascimento, Mariá C.V. (2021).
-A hybrid adaptive iterated local search with diversification control to the capacitated vehicle routing problem. European Journal of Operational Research, Volume 294, p. 1108-1119, https://doi.org/10.1016/j.ejor.2021.02.024 (also available at [aXiv](https://arxiv.org/abs/2012.11021)).
-
-[3] Máximo, Vinícius R., Cordeau, Jean-François, Nascimento, Mariá C.V. (2022).
-An adaptive iterated local search heuristic for the Heterogeneous Fleet Vehicle Routing Problem. Computers & Operations Research, Volume 148, p. 105954.
-https://doi.org/10.1016/j.cor.2022.105954 (also available at [aXiv](https://arxiv.org/abs/2111.12821)).
+Important: This code is being developed on an on-going basis at [https://github.com/vinymax10/AILS-CVRP](https://github.com/vinymax10/AILS-CVRP). Please go there if you would like to get a more recent version or would like support
 
 ## Cite
 
-To cite the contents of this repository, please cite this the paper and this repo.
+To cite the contents of this repository, please cite this the paper and this repo, using their respective DOIs.
 
-AILS-II: An Adaptive Iterated Local Search Heuristic for the Large-scale Capacitated Vehicle Routing Problem. (available at [HEC repository](https://chairelogistique.hec.ca/wp-content/uploads/2023/12/IJOC_Maximoetal2023_withouthighlights.pdf)).
+https://doi.org/10.1287/ijoc.2023.0106
 
-Below is the BibTex for citing this snapshot of the respoitory.
+https://doi.org/10.1287/ijoc.2023.0106.cd
+
+Below is the BibTex for citing this snapshot of the repository.
 
 ```
 @misc{Maximoetal2024,
@@ -35,6 +27,26 @@ Below is the BibTex for citing this snapshot of the respoitory.
   note =          {Available for download at https://github.com/INFORMSJoC/2023.0106},
 }  
 ```
+## Other References
+
+Those interested in using any part of this algorithm in academic works must cite the following references:
+
+[1] Máximo, Vinícius R., Cordeau, Jean-François, Nascimento, Mariá C.V. (2024).
+AILS-II: An Adaptive Iterated Local Search Heuristic for the Large-scale Capacitated Vehicle Routing Problem. INFORMS Journal on Computing. https://doi.org/10.1287/ijoc.2023.0106. available at [HEC repository](https://chairelogistique.hec.ca/wp-content/uploads/2023/12/IJOC_Maximoetal2023_withouthighlights.pdf)).
+
+[2] Máximo, Vinícius R., Cordeau, Jean-François, Nascimento, Mariá C.V. (2024).
+AILS-II: An Adaptive Iterated Local Search Heuristic for the Large-scale Capacitated Vehicle Routing Problem. INFORMS Journal on Computing. https://doi.org/10.1287/ijoc.2023.0106. available at [HEC repository](https://chairelogistique.hec.ca/wp-content/uploads/2023/12/IJOC_Maximoetal2023_withouthighlights.pdf)).
+
+[3] Máximo, Vinícius R., Nascimento, Mariá C.V. (2021).
+A hybrid adaptive iterated local search with diversification control to the capacitated vehicle routing problem. European Journal of Operational Research, Volume 294, p. 1108-1119, https://doi.org/10.1016/j.ejor.2021.02.024 (also available at [aXiv](https://arxiv.org/abs/2012.11021)).
+
+[4] Máximo, Vinícius R., Cordeau, Jean-François, Nascimento, Mariá C.V. (2022).
+An adaptive iterated local search heuristic for the Heterogeneous Fleet Vehicle Routing Problem. Computers & Operations Research, Volume 148, p. 105954.
+https://doi.org/10.1016/j.cor.2022.105954 (also available at [aXiv](https://arxiv.org/abs/2111.12821)).
+
+## Description
+
+AILS-II is an Adaptive Iterated Local Search (AILS) meta-heuristic that embeds adaptive strategies to tune  diversity control parameters. These parameters are the perturbation degree and the acceptance criterion. They are key parameters to ensure that the method escapes from local optima and keeps an adequate level of exploitation and exploration of the method. Its implementation is in JAVA language.
 
 ## To run the algorithm
 

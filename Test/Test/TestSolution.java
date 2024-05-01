@@ -111,29 +111,5 @@ public class TestSolution
 
 		assertEquals((sumNumElements - solution.numRoutes), solution.getSize());
 	}
-	
-	
-	
-//	
-//	@Test
-//	public void testObjectFuntionInRoute()
-//	{
-//		Solution solution =constructSolution();
-//		
-//		for(int i = 0; i < solution.numRoutes; i++)
-//		{
-//			assertEquals(solution.routes[i].F(), solution.routes[i].fRoute);
-//		}
-//	}
-//	
-//	@Test
-//	public void testObjectFuntionInRoute()
-//	{
-//		Solution solution =constructSolution();
-//		
-//		for(int i = 0; i < solution.numRoutes; i++)
-//		{
-//			assertEquals(solution.routes[i].F(), solution.routes[i].fRoute);
-//		}
-//	}
+
 }

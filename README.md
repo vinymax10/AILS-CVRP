@@ -71,9 +71,3 @@ Run the AILSII class that has the following parameters:
 
 **-dMin** : Final Reference distance between the reference solution and the solution obtained after the local search. The default value is 15.
 
-## License
-
-[![License](http://img.shields.io/:license-mit-blue.svg?style=flat-square)](http://badges.mit-license.org)
-
-- **[MIT license](https://opensource.org/licenses/MIT)**
-- Copyright(c) 2022 Vinícius R. Máximo

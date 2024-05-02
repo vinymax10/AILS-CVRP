@@ -46,7 +46,7 @@ AILS-II is an Adaptive Iterated Local Search (AILS) meta-heuristic that embeds a
 ## To run the algorithm
 
 ```console
-java -jar AILSII.jar -file Instances/X-n214-k11.vrp -rounded true -best 10856 -limit 100 -stoppingCriterion Time 
+java -jar AILSII.jar -file data/X-n214-k11.vrp -rounded true -best 10856 -limit 100 -stoppingCriterion Time 
 ```
 
 Run the AILSII class that has the following parameters:

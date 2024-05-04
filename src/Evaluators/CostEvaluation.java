@@ -52,8 +52,6 @@ public class CostEvaluation
 		{
 			if(prevA.next.name==b.name&&prevB.next.name!=a.name)
 			{
-//				return Double.MAX_VALUE;
-				
 				return	-instance.dist(prevA.name,b.name)
 						-instance.dist(b.name,b.next.name)
 						+instance.dist(prevA.name,a.name)
@@ -85,9 +83,8 @@ public class CostEvaluation
 						+instance.dist(b.prev.name,b.next.name);
 			}
 			
-			costSWAP(a, b);
+			return costSWAP(a, b);
 		}
-		return Double.MAX_VALUE;
 	}
 	
 //		-------------------------------CROSS------------------------------

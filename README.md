@@ -1,7 +1,7 @@
 ![](https://camo.githubusercontent.com/1b8f04b8ff248ffd132c13343858d070c4805406bbd4c4651f9b27e9c2f01a58/68747470733a2f2f494e464f524d534a6f432e6769746875622e696f2f6c6f676f732f494e464f524d535f4a6f75726e616c5f6f6e5f436f6d707574696e675f4865616465722e6a7067) 
 # AILS-II: An Adaptive Iterated Local Search Heuristic for the Large-scale Capacitated Vehicle Routing Problem
 
-This archive is distributed in association with the [INFORMS Journal on Computing](https://pubsonline.informs.org/journal/ijoc) under the [MIT License](https://github.com/INFORMSJoC/2019.0000/blob/master/LICENSE).
+This archive is distributed in association with the [INFORMS Journal on Computing](https://pubsonline.informs.org/journal/ijoc) under the [MIT License](LICENSE).
 
 The software and data in this repository are a snapshot of the software and data that were used in the research reported on in the paper AILS-II: An Adaptive Iterated Local Search Heuristic for the Large-Scale Capacitated Vehicle Routing Problem by V. R. Máximo, J. F. Cordeau and M. C. V. Nascimento. 
 
@@ -70,4 +70,12 @@ Run the AILSII class that has the following parameters:
 **-dMax** : Initial reference distance between the reference solution and the  solution obtained after the local search. The default value is 30.
 
 **-dMin** : Final Reference distance between the reference solution and the solution obtained after the local search. The default value is 15.
+
+## Data
+
+The folder data contains all literature instances tested (files with extension .vrp). The files with the extension .sol refer to the Best Known Solutions (BKSs) used to calculate the gaps.
+
+## Results
+
+The folder results contain all tables and figures elaborated after carrying out the experiments using the instances found in the folder data. To achieve the results presented in [Table 2](results/Table2.png) and [Table 3 (part 1)](results/Table3_1.png), [Table 3 (part 2)](results/Table3_2.png) and [Table 3 (part 3)](results/Table3_3.png), we ran the scripts in folder [scripts](scripts). The script [scriptAilsIIUCHOA.sh](scripts/scriptAilsIIUCHOA.sh) refer to the tests performed with the X instances, whereas the script [scriptAilsIIArnold.sh](scripts/scriptAilsIIArnold.sh) run the remainder instances. 
 

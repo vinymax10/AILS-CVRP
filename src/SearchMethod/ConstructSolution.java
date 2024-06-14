@@ -55,6 +55,7 @@ public class ConstructSolution
 		int index;
 		Node node,bestNode;
 		f=0;
+		countNotInserted=0;
 		
 		for (int i = 0; i < size; i++) 
 			notInserted[countNotInserted++]=solution[i];

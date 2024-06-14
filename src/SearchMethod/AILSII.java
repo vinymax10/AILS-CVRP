@@ -125,7 +125,7 @@ public class AILSII
 		first=System.currentTimeMillis();
 		referenceSolution.numRoutes=instance.getMinNumberRoutes();
 		constructSolution.construct(referenceSolution);
-
+		
 		feasibilityOperator.makeFeasible(referenceSolution);
 		localSearch.localSearch(referenceSolution,true);
 		bestSolution.clone(referenceSolution);
